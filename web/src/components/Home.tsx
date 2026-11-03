@@ -64,7 +64,7 @@ export function Home({ t }: { t: Dict }) {
               `} />
               <CodeBlock lang="bash" caption="CLI" {...copy} code={dedent`
                 $ anaksor scan.pdf -o scan.docx
-                # ${t.lang === "km" ? "ឬ PDF" : "searchable PDF"}
+                # searchable PDF
                 $ anaksor scan.pdf -o scan-searchable.pdf
               `} />
               {t.accuracy ? <DocsLink t={t} /> : null}

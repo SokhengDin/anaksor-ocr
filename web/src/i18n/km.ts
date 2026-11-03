@@ -14,10 +14,10 @@ export const km: Dict = {
   meta: {
     title: "អានអក្សរ: កម្មវិធីអានអក្សរខ្មែរពីរូបថត ឯកសារស្កេន និង PDF",
     description:
-      "អានអក្សរខ្មែរពីរូបថត ឯកសារស្កេន និង PDF តាមលំដាប់នៃការអាន។ សាកល្បងក្នុងកម្មវិធីរុករក ឬដំឡើងដោយ pip install anaksor-ocr។",
+      "អានអក្សរខ្មែរពីរូបថត ឯកសារស្កេន និង PDF តាមលំដាប់នៃការអាន។ សាកល្បងក្នុង browser ឬដំឡើងដោយ pip install anaksor-ocr។",
     docsTitle: "ឯកសារណែនាំ: អានអក្សរ",
     docsDescription:
-      "របៀបដំឡើង anaksor-ocr អានទំព័រ និង PDF នាំចេញ (Export)ជា ឬ PDF ឬឯកសារ Word ហើយដំណើរការលើ ONNX Runtime ឬ PyTorch។",
+      "របៀបដំឡើង anaksor-ocr អានទំព័រ និង PDF, export ជា searchable PDF ឬឯកសារ Word ហើយ run លើ ONNX Runtime ឬ PyTorch។",
   },
   nav: { demo: "សាកល្បង", docs: "ឯកសារណែនាំ", source: "កូដប្រភព", otherLang: "English", otherLangName: "ភាសាអង់គ្លេស", skip: "រំលងទៅខ្លឹមសារ" },
   hero: {
@@ -57,7 +57,7 @@ export const km: Dict = {
     copied: "បានចម្លង",
     download: "ទាញយក .txt",
     exportDocx: "ឯកសារ Word",
-    exportPdf: "ឬ PDF",
+    exportPdf: "Searchable PDF",
     exporting: "កំពុងរៀបចំ…",
     seconds: (s) => `${kh(s.toFixed(2))} វិនាទី`,
     linesCount: (n) => `${kh(n)} បន្ទាត់`,
@@ -71,11 +71,11 @@ export const km: Dict = {
       server: "API OCR មានបញ្ហាជាមួយឯកសារនេះ។ សូមព្យាយាមម្តងទៀត ឬសាកល្បងឯកសារផ្សេង។",
       unsupported: "សូមជ្រើសរើសរូបភាព (JPEG, PNG, WEBP, BMP, TIFF) ឬ PDF។",
       fileTooBig: (mb) => `ឯកសារធំជាង ${kh(mb)} MB។`,
-      exportFailed: (detail) => `ការនាំចេញ (Export)មិនបានសម្រេចទេ៖ ${detail}`,
+      exportFailed: (detail) => `Export មិនបានសម្រេចទេ៖ ${detail}`,
     },
   },
   features: {
-    title: "អ្វីដែល ម៉ូឌែលអាច ធ្វើបាន",
+    title: "អ្វីដែលម៉ូដែលអាចធ្វើបាន",
     items: [
       {
         term: "តាមលំដាប់នៃការអាន",
@@ -86,12 +86,12 @@ export const km: Dict = {
         text: "ជើង ស្រៈ និងសញ្ញា នៅជាមួយព្យញ្ជនៈរបស់វា ទោះបីបន្ទាត់វែងត្រូវបានអានជាផ្នែកៗ ហើយភ្ជាប់គ្នាវិញក៏ដោយ។",
       },
       {
-        term: "នាំចេញ (Export)",
-        text: "អត្ថបទធម្មតា JSON ដែលមានទីតាំង និងភាពជឿជាក់នៃបន្ទាត់នីមួយៗ ឬ PDF ឬជាមួយឯកសារ Word។",
+        term: "Export",
+        text: "អត្ថបទធម្មតា, JSON ដែលមាន box និង confidence score នៃបន្ទាត់នីមួយៗ, searchable PDF ឬឯកសារ Word។",
       },
       {
         term: "នៅលើកុំព្យូទ័ររបស់អ្នក",
-        text: "pip install anaksor-ocr ដំណើរការលើ ONNX Runtime ដោយមិនត្រូវការ PyTorch។ បន្ថែម PyTorch ដើម្បីប្រើ CUDA ឬ GPU របស់ Apple។",
+        text: "pip install anaksor-ocr run លើ ONNX Runtime ដោយមិនត្រូវការ PyTorch។ បន្ថែម PyTorch ដើម្បីប្រើ CUDA ឬ Apple GPU (MPS)។",
       },
     ],
   },
@@ -106,20 +106,20 @@ export const km: Dict = {
     items: {
       document: { title: "លិខិត", text: "លិខិតស្កេន អានតាមលំដាប់។" },
       receipt:  { title: "វិក្កយបត្រ", text: "តម្លៃនីមួយៗនៅជាមួយមុខទំនិញរបស់វា។" },
-      sign:     { title: "ស្លាកសញ្ញា", text: "ផ្លាកសញ្ញាតាមផ្លូវ ថតដោយទូរស័ព្ទ។" },
+      sign:     { title: "ផ្លាកសញ្ញា", text: "ផ្លាកសញ្ញាតាមផ្លូវ ថតដោយទូរស័ព្ទ។" },
     },
   },
   accuracy: null,
   quickstart: {
     title: "ប្រើពី Python",
-    text: "ម៉ូដែលដដែលនេះដំណើរការក្នុងកញ្ចប់ នៅលើម៉ាស៊ីនរបស់អ្នកផ្ទាល់។",
+    text: "ម៉ូដែលដដែលនេះ run ក្នុង Python package នៅលើម៉ាស៊ីនរបស់អ្នកផ្ទាល់។",
     docsLink: "ព័ត៌មានផ្សេងទៀតមាននៅក្នុងឯកសារណែនាំ",
   },
   footer: {
     licence:
-      "anaksor-ocr ចេញផ្សាយក្រោមអាជ្ញាប័ណ្ណ Apache 2.0។ ម៉ូដែលត្រូវបានសរសេរដោយខ្លួនឯង ពីឯកសារស្រាវជ្រាវ (papers)៖ RepViT + DBNet សម្រាប់ការរកបន្ទាត់ (detection) និង SVTRv2 សម្រាប់ការអាន (recognition)។",
+      "anaksor-ocr ចេញផ្សាយក្រោម license Apache 2.0។ ម៉ូដែលត្រូវបាន implement ដោយខ្លួនឯងពី papers៖ RepViT + DBNet សម្រាប់ detection និង SVTRv2 សម្រាប់ recognition។",
     fonts: "ប្រើពុម្ពអក្សរ Battambang (SIL Open Font License) និង Khmer OS Muol Light (GNU LGPL)។",
-    weights: "ទម្ងន់ម៉ូដែល (Weights)",
+    weights: "Weights របស់ម៉ូដែល",
   },
   docs: { onThisPage: "នៅលើទំព័រនេះ", backHome: "ទំព័រដើម" },
   copyCode: "ចម្លងកូដ",

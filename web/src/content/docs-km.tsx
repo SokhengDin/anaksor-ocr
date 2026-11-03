@@ -5,7 +5,7 @@ import { REPO_URL } from "@/lib/config";
 const cb = { copyLabel: "ចម្លងកូដ", copiedLabel: "បានចម្លង" };
 
 export const title = "ឯកសារណែនាំ";
-export const intro = "ដំឡើង anaksor-ocr អានរូបថត ឯកសារស្កេន និង PDF ហើយនាំចេញ (Export)នូវអ្វីដែលវាអាន ឬ ស្កេនបាន។";
+export const intro = "ដំឡើង anaksor-ocr អានរូបថត ឯកសារស្កេន និង PDF ហើយ export អ្វីដែលវាអានបាន។";
 
 export const sections: DocSection[] = [
   {
@@ -18,11 +18,11 @@ export const sections: DocSection[] = [
             $ pip install anaksor-ocr
             # បន្ថែម PyTorch៖ CUDA, Apple MPS និងក្បាលអាន SMTR
             $ pip install "anaksor-ocr[torch]"
-            # PyTorch ការអាន PDF និងការនាំចេញ (Export) Word
+            # PyTorch, ការអាន PDF និង export ជា Word
             $ pip install "anaksor-ocr[all]"
           `} />
         <p>
-          ត្រូវការ Python 3.11 ឬថ្មីជាងនេះ។ ឯកសារទម្ងន់ម៉ូដែល (ប្រហែល 95 MB) ទាញយកទៅ <code>~/.cache/anaksor</code> នៅពេលអ្នកអានទំព័រដំបូង។
+          ត្រូវការ Python 3.11 ឬថ្មីជាងនេះ។ Weights របស់ម៉ូដែល (ប្រហែល 95 MB) download ទៅ <code>~/.cache/anaksor</code> នៅពេលអ្នកអានទំព័រដំបូង។
         </p>
         <div className="table">
           <table>
@@ -59,8 +59,8 @@ export const sections: DocSection[] = [
           </table>
         </div>
         <p>
-          ទាំងពីរបៀបអាចរអានបានប្រសិទ្ធ ដូចគ្នាបេះបិទ។ anaksor ប្រើ PyTorch ពេលដំឡើង បើមិនដូច្នោះទេ យើងអាចប្រើ ONNX Runtime។ ការរើសយក{" "}
-          <code>backend=&quot;torch&quot;</code> ឬ <code>&quot;onnx&quot;</code> ឬ <code>--backend</code>។ លើ CPU, PyTorch អាចជំរុញឲ្យ Inference លឿនជាងបន្តិច។
+          backend ទាំងពីរផ្តល់ boxes និងអត្ថបទដូចគ្នាបេះបិទ។ anaksor ប្រើ PyTorch បើវាត្រូវបាន install រួច បើមិនដូច្នោះទេ វាប្រើ ONNX Runtime។ អ្នកអាចជ្រើសរើសដោយ{" "}
+          <code>backend=&quot;torch&quot;</code> ឬ <code>&quot;onnx&quot;</code> (ឬ <code>--backend</code> នៅលើ command line)។ លើ CPU, PyTorch ធ្វើ inference លឿនជាងបន្តិច។
         </p>
       </>
     ),
@@ -118,11 +118,11 @@ export const sections: DocSection[] = [
   },
   {
     id: "documents",
-    title: "PDF និងការនាំចេញ (Export)",
+    title: "PDF និង Export",
     body: (
       <>
         <CodeBlock lang="python" {...cb} code={dedent`
-            # រាល់លទ្ធផលមួយក្នុងមួយទំព័រ អាចយកចេញបានជា (Export) PDF
+            # លទ្ធផលមួយក្នុងមួយទំព័រ ហើយ export ជា PDF
             pages = ocr.read("report.pdf", pages=[1, 2, 3], keep_images=True)
 
             from anaksor import export
@@ -146,7 +146,7 @@ export const sections: DocSection[] = [
               <tr>
                 <th>ជម្រើស</th>
                 <th>លំនាំដើម</th>
-                <th>អ្វីដែល ម៉ូឌែលអាច ធ្វើបាន</th>
+                <th>អ្វីដែលវាធ្វើ</th>
               </tr>
             </thead>
             <tbody>
@@ -207,7 +207,7 @@ export const sections: DocSection[] = [
               <tr>
                 <th>ជម្រើស</th>
                 <th>លំនាំដើម</th>
-                <th>អ្វីដែល ម៉ូឌែលអាច ធ្វើបាន</th>
+                <th>អ្វីដែលវាធ្វើ</th>
               </tr>
             </thead>
             <tbody>
@@ -255,7 +255,7 @@ export const sections: DocSection[] = [
             $ anaksor scan.pdf --pages 1-3,7 -o scan.docx
             # ឯកសារ JSON មួយក្នុងមួយរូបភាព
             $ anaksor photos/*.jpg -o out/ -f json
-            # ទាញយកទម្ងន់ម៉ូដែលទុកជាមុន
+            # download weights ទុកជាមុន
             $ anaksor --fetch-models
           `} />
         <div className="table">
@@ -263,7 +263,7 @@ export const sections: DocSection[] = [
             <thead>
               <tr>
                 <th>ជម្រើស</th>
-                <th>អ្វីដែល ម៉ូឌែលអាច ធ្វើបាន</th>
+                <th>អ្វីដែលវាធ្វើ</th>
               </tr>
             </thead>
             <tbody>
@@ -305,7 +305,7 @@ export const sections: DocSection[] = [
                 <td>
                   <code>--det-weights</code>, <code>--rec-weights</code>
                 </td>
-                <td>ប្រើឯកសារទម្ងន់ម៉ូដែលផ្ទាល់ខ្លួន ឬអ្នកបាន Train ផ្ទាល់ (Weights)</td>
+                <td>ប្រើ weights ផ្ទាល់ខ្លួន ឬ weights ដែលអ្នកបាន train ផ្ទាល់</td>
               </tr>
               <tr>
                 <td>
@@ -363,13 +363,17 @@ export const sections: DocSection[] = [
           </table>
         </div>
         <p>
-          KhmerST ដាក់ស្លាកតែលើអត្ថបទមួយចំនួនក្នុងរូបថតនីមួយៗ ដូច្នេះសម្រាប់ការរកបន្ទាត់ អត្ថបទគ្មានស្លាកដែលម៉ូដែលរកបន្ទាត់ផ្សេងរកឃើញ ត្រូវបានរាប់ថា &quot;មិនពាក់ព័ន្ធ&quot; ដែលធ្វើឱ្យភាពច្បាស់លាស់មើលទៅល្អជាងការពិតបន្តិច។
+          KhmerST ដាក់ label តែលើអត្ថបទមួយចំនួនក្នុងរូបថតនីមួយៗ។ ដូច្នេះ សម្រាប់ detection អត្ថបទដែលគ្មាន label ប៉ុន្តែ detector ផ្សេងរកឃើញ ត្រូវបានរាប់ជា
+          &quot;don&apos;t care&quot; ដែលធ្វើឱ្យ precision មើលទៅខ្ពស់ជាងការពិតបន្តិច។
         </p>
         <ul>
-          <li>អក្សរខ្មែរបោះពុម្ព ឯកសារ វិក្កយបត្រ និងផ្លាកសញ្ញា អានបានល្អបំផុត។</li>
-          <li>អក្សរអង់គ្លេស និងអក្សរឡាតាំងផ្សេងទៀតលើរូបថតនៅខ្សោយ៖ ម៉ូដែលរកបន្ទាត់អាចរំលងវានៅលើផ្លាកសញ្ញា ហើយម៉ូដែលអានបានឃើញអក្សរអង់គ្លេសពិតតិចតួច។</li>
+          <li>អក្សរខ្មែរបោះពុម្ព (printed) ឯកសារ វិក្កយបត្រ និងផ្លាកសញ្ញា អានបានល្អបំផុត។</li>
           <li>
-            អក្សរសរសេរដៃ និងអក្សរតុបតែង នៅខ្សោយ។ សូមពិនិត្យ <code>rec_score</code> នៃបន្ទាត់នីមួយៗ ឬប្រើ <code>--highlight-low</code> សម្រាប់លទ្ធផល Word។
+            អក្សរអង់គ្លេស និងអក្សរ Latin ផ្សេងទៀតលើរូបថតនៅខ្សោយ៖ detector អាចរំលងវានៅលើផ្លាកសញ្ញា ហើយ recognizer បានឃើញអក្សរអង់គ្លេសពិតៗតិចតួចពេល train។
+          </li>
+          <li>
+            អក្សរសរសេរដៃ (handwriting) និងអក្សរតុបតែង (decorative) នៅខ្សោយ។ សូមពិនិត្យ <code>rec_score</code> នៃបន្ទាត់នីមួយៗ ឬប្រើ{" "}
+            <code>--highlight-low</code> សម្រាប់ output Word។
           </li>
         </ul>
       </>
@@ -377,27 +381,27 @@ export const sections: DocSection[] = [
   },
   {
     id: "weights",
-    title: "ឯកសារទម្ងន់ម៉ូដែល",
+    title: "Weights របស់ម៉ូដែល",
     body: (
       <>
         <p>
-          ម៉ូដែលនីមួយៗមានជាក្រាហ្វ ONNX (<code>.onnx</code> សម្រាប់ ONNX Runtime) និងជាទម្ងន់ PyTorch (<code>.safetensors</code>)។ មានតែឯកសារដែល backend
-          របស់អ្នកត្រូវការប៉ុណ្ណោះ ដែលត្រូវបានទាញយក ពីកន្លែងទីមួយក្នុងចំណោម៖
+          ម៉ូដែលនីមួយៗមានឯកសារពីរ៖ ONNX graph (<code>.onnx</code> សម្រាប់ ONNX Runtime) និង PyTorch weights (<code>.safetensors</code>)។ anaksor
+          download តែឯកសារដែល backend របស់អ្នកត្រូវការប៉ុណ្ណោះ ហើយរកវាតាមលំដាប់នេះ៖
         </p>
         <ol className="steps">
           <li>
-            ផ្លូវដែលអ្នកបានផ្តល់ (<code>det_weights=</code>, <code>rec_weights=</code> ឬ <code>--det-weights</code>);
+            path ដែលអ្នកផ្តល់ឱ្យ (<code>det_weights=</code>, <code>rec_weights=</code> ឬ <code>--det-weights</code>);
           </li>
           <li>
-            ឯកសារក្នុងថតដែលកំណត់ដោយ <code>ANAKSOR_WEIGHTS_DIR</code>;
+            folder ដែលកំណត់ដោយ <code>ANAKSOR_WEIGHTS_DIR</code>;
           </li>
           <li>
-            ឃ្លាំងសម្ងាត់ក្នុង <code>~/.cache/anaksor</code> (ឬ <code>ANAKSOR_HOME</code>) ដែលទាញយកម្តងពី Hugging Face ហើយផ្ទៀងផ្ទាត់ជាមួយ SHA-256 របស់វា។
+            cache ក្នុង <code>~/.cache/anaksor</code> (ឬ <code>ANAKSOR_HOME</code>) ដែល download ម្តងពី Hugging Face ហើយ verify ជាមួយ SHA-256 របស់វា។
           </li>
         </ol>
         <p>
-          ទម្រង់ទាំងពីរមិនអាចដំណើរការកូដនៅពេលផ្ទុកបានទេ។ នៅលើម៉ាស៊ីនដែលគ្មានអ៊ីនធឺណិត សូមរត់ <code>anaksor --fetch-models</code> នៅកន្លែងផ្សេង ហើយចម្លងឯកសារពីរសម្រាប់ backend
-          របស់អ្នកទៅក្នុង <code>ANAKSOR_WEIGHTS_DIR</code>។
+          Weights ទាំងពីរ format មិនអាច run កូដនៅពេល load បានទេ។ សម្រាប់ម៉ាស៊ីនដែលគ្មានអ៊ីនធឺណិត (offline) សូម run <code>anaksor --fetch-models</code>{" "}
+          លើម៉ាស៊ីនផ្សេង ហើយ copy ឯកសារពីរសម្រាប់ backend របស់អ្នកទៅក្នុង folder <code>ANAKSOR_WEIGHTS_DIR</code>។
         </p>
       </>
     ),
@@ -432,7 +436,7 @@ export const sections: DocSection[] = [
             $ git clone ${REPO_URL} && cd anaksor-ocr
             $ uv venv && uv pip install torch --index-url https://download.pytorch.org/whl/cpu
             $ uv pip install -e ".[all]" pytest ruff pip-audit onnx onnxscript
-            # មិនត្រូវការទម្ងន់ម៉ូដែល ឬអ៊ីនធឺណិតទេ
+            # មិនត្រូវការ weights ឬអ៊ីនធឺណិតទេ
             $ pytest
           `} />
         <p>

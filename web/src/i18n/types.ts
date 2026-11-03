@@ -9,7 +9,7 @@ export interface Dict {
   htmlLang: string;
   meta: { title: string; description: string; docsTitle: string; docsDescription: string };
   nav: { demo: string; docs: string; source: string; otherLang: string; otherLangName: string; skip: string };
-  hero: { reading: string; lead: string; tryIt: string; readDocs: string };
+  hero: { reading: string; lead: string; install: string; readDocs: string };
   demo: {
     title: string;
     intro: string;
@@ -59,6 +59,10 @@ export interface Dict {
     title: string;
     /** Shown on a print until its photo is added (public/showcase/). */
     placeholder: string;
+    /** Label of a print's link: it opens the print and its result in the demo. */
+    open: string;
+    /** Under a print's title: how many lines the models read on it. */
+    lines: (n: number) => string;
     items: Record<ShowcaseId, { title: string; text: string }>;
   };
   /** null: the page has no accuracy table (the Khmer page leaves it to the docs). */

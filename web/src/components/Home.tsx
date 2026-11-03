@@ -22,10 +22,6 @@ export function Home({ t }: { t: Dict }) {
             <p className="lead">{t.hero.lead}</p>
             <div className="actions">
               <CodeBlock lang="bash" className="install" {...copy} code="$ pip install anaksor-ocr" />
-              <a href="#demo">
-                <Icon name="scan" />
-                {t.hero.tryIt}
-              </a>
               <Link href={localePath(t.lang, "/docs/")}>
                 <Icon name="file" />
                 {t.hero.readDocs}
@@ -35,6 +31,7 @@ export function Home({ t }: { t: Dict }) {
           <HeroShots t={t} />
         </div>
 
+        {/* The upload comes right after the hero: most visitors come to read a page. */}
         <Demo lang={t.lang} />
 
         <section className="band" aria-labelledby="h-features">

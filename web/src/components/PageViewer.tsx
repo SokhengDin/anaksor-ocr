@@ -7,13 +7,13 @@ import type { OcrPage, Quad } from "@/lib/types";
 
 const pts = (q: Quad) => q.map(([x, y]) => `${x},${y}`).join(" ");
 
-/** The page as it was read, with every detected line outlined and numbered in reading order. */
 export function PageViewer({
   page,
   src,
   active,
   onActive,
   fresh,
+  numbered,
   number,
   label,
 }: {
@@ -22,6 +22,7 @@ export function PageViewer({
   active: number | null;
   onActive: (i: number | null) => void;
   fresh: boolean;
+  numbered: boolean;
   number: (n: number) => string;
   label: string;
 }) {
@@ -48,19 +49,21 @@ export function PageViewer({
             </g>
           );
         })}
-        {page.lines.map((line, i) => {
-          const [x, y] = line.box[0];
-          const cx = Math.max(x - r * 0.9, r + 2);
-          const cy = Math.max(y + r * 0.2, r + 2);
-          return (
-            <g key={i} className="num" style={{ "--i": i } as CSSProperties}>
-              <circle cx={cx} cy={cy} r={r} />
-              <text x={cx} y={cy} fontSize={r * 1.05}>
-                {number(i + 1)}
-              </text>
-            </g>
-          );
-        })}
+        {numbered
+          ? page.lines.map((line, i) => {
+              const [x, y] = line.box[0];
+              const cx = Math.max(x - r * 0.9, r + 2);
+              const cy = Math.max(y + r * 0.2, r + 2);
+              return (
+                <g key={i} className="num" style={{ "--i": i } as CSSProperties}>
+                  <circle cx={cx} cy={cy} r={r} />
+                  <text x={cx} y={cy} fontSize={r * 1.05}>
+                    {number(i + 1)}
+                  </text>
+                </g>
+              );
+            })
+          : null}
       </svg>
     </div>
   );

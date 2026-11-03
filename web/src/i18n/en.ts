@@ -15,7 +15,7 @@ export const en: Dict = {
   hero: {
     reading: "anaksor, “read the letters”",
     lead: "Khmer OCR for Python. Give it a photo, a scan or a PDF and get the text back in reading order.",
-    tryIt: "Read a page now",
+    install: "Install",
     readDocs: "Read the documentation",
   },
   demo: {
@@ -25,7 +25,7 @@ export const en: Dict = {
     drop: "Drop a photo or PDF here",
     choose: "Choose a file",
     paste: "or paste an image",
-    limits: `Images up to ${MAX_IMAGE_MB} MB, PDFs up to ${MAX_PDF_MB} MB (${MAX_PDF_PAGES} pages). Files are sent to the OCR server to be read.`,
+    limits: `Images up to ${MAX_IMAGE_MB} MB, PDFs up to ${MAX_PDF_MB} MB (${MAX_PDF_PAGES} pages). Files are sent to the OCR API to be read.`,
     reading: "Reading…",
     readingPage: (page, total) => `Reading page ${page} of ${total}…`,
     pageLabel: (page) => `Page ${page}`,
@@ -34,7 +34,7 @@ export const en: Dict = {
     pageFailed: (page) => `Page ${page} couldn't be read.`,
     readAnother: "Read another file",
     cancel: "Stop",
-    status: { checking: "Connecting to the OCR server", ok: "OCR server ready", loading: "OCR server is starting", offline: "OCR server unreachable" },
+    status: { checking: "Connecting to the OCR API", ok: "OCR API ready", loading: "OCR API is starting", offline: "OCR API unreachable" },
     text: "Text",
     lines: "Lines",
     linesHint: "Point at a line to find it on the page.",
@@ -50,12 +50,12 @@ export const en: Dict = {
     linesCount: (n) => (n === 1 ? "1 line" : `${n} lines`),
     pageImage: "The page with the detected lines",
     errors: {
-      network: "Can't reach the OCR server. Check your connection and try again.",
+      network: "Can't reach the OCR API. Check your connection and try again.",
       too_large: `The file is too large: images up to ${MAX_IMAGE_MB} MB, PDFs up to ${MAX_PDF_MB} MB.`,
       rate_limited: "Too many requests in a short time. Wait a minute, then try again.",
-      unavailable: "The OCR server is starting. Try again in a moment.",
-      rejected: (detail) => `The server couldn't read this file: ${detail}`,
-      server: "The OCR server had a problem with this file. Try again, or try another file.",
+      unavailable: "The OCR API is starting. Try again in a moment.",
+      rejected: (detail) => `The API couldn't read this file: ${detail}`,
+      server: "The OCR API had a problem with this file. Try again, or try another file.",
       unsupported: "Choose an image (JPEG, PNG, WEBP, BMP, TIFF) or a PDF.",
       fileTooBig: (mb) => `The file is larger than ${mb} MB.`,
       exportFailed: (detail) => `The export didn't work: ${detail}`,
@@ -79,6 +79,8 @@ export const en: Dict = {
   showcase: {
     title: "Real pages the models were tested on",
     placeholder: "Photo to come",
+    open: "see what was read",
+    lines: (n) => `${n} lines`,
     items: {
       document: { title: "A letter", text: "A scanned letter, read in reading order." },
       receipt:  { title: "A receipt", text: "Each price stays on its item's line." },

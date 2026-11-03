@@ -4,21 +4,26 @@ import { type DragEvent, useCallback, useEffect, useRef, useState } from "react"
 
 import { ApiError, exportResult, getHealth, readImage, readPdf } from "@/lib/api";
 import { asset, LOW_SCORE, MAX_IMAGE_MB, MAX_PDF_MB } from "@/lib/config";
+import { type RecordedPage, SHOW_PAGE_EVENT } from "@/lib/showcase";
 import type { ExportFormat, OcrPage } from "@/lib/types";
 import { dicts, kh, type Lang } from "@/i18n";
 import { Icon } from "./Icon";
 import { PageViewer } from "./PageViewer";
 
-const SAMPLE = { json: "/sample/khmer-notice.json", image: "/sample/khmer-notice.png", name: "khmer-notice.png" };
+const SAMPLE: RecordedPage = { json: "/sample/khmer-notice.json", image: "/sample/khmer-notice.png", name: "khmer-notice.png", type: "image/png" };
 const IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp", "image/bmp", "image/tiff"];
 
 type Health = "checking" | "ok" | "loading" | "offline";
 type Slot = { page: number; result?: OcrPage; failed?: boolean };
-/** What is on screen: the sample, or a file the visitor gave. */
-type Source = { kind: "sample" } | { kind: "file"; file: File; isPdf: boolean };
+/** What is on screen: a recorded page (the sample, a showcase print), or a file the visitor gave. */
+type Source = { kind: "sample"; sample: RecordedPage } | { kind: "file"; file: File; isPdf: boolean };
 
 function isPdf(f: File) {
   return f.type === "application/pdf" || f.name.toLowerCase().endsWith(".pdf");
+}
+
+async function fetchRecorded(sample: RecordedPage, signal?: AbortSignal): Promise<OcrPage> {
+  return (await (await fetch(asset(sample.json), { signal })).json()) as OcrPage;
 }
 
 function download(blob: Blob, name: string) {
@@ -40,7 +45,7 @@ export function Demo({ lang }: { lang: Lang }) {
   const num = useCallback((n: number) => (t.lang === "km" ? kh(n) : String(n)), [t.lang]);
 
   const [health, setHealth] = useState<Health>("checking");
-  const [source, setSource] = useState<Source>({ kind: "sample" });
+  const [source, setSource] = useState<Source>({ kind: "sample", sample: SAMPLE });
   const [slots, setSlots] = useState<Slot[]>([]);
   const [current, setCurrent] = useState(0);
   const [total, setTotal] = useState(0);
@@ -49,22 +54,31 @@ export function Demo({ lang }: { lang: Lang }) {
   const [truncated, setTruncated] = useState<string | null>(null);
   const [active, setActive] = useState<number | null>(null);
   const [fresh, setFresh] = useState(false);
-  const [view, setView] = useState<"lines" | "text">("lines");
+  const [view, setView] = useState<"lines" | "text">("text");
   const [copied, setCopied] = useState(false);
   const [exporting, setExporting] = useState<ExportFormat | null>(null);
   const [over, setOver] = useState(false);
   const inflight = useRef<AbortController | null>(null);
   const input = useRef<HTMLInputElement>(null);
 
-  // the sample: a real result recorded from the API, shown until the visitor reads their own file
+
+  const showRecorded = useCallback((sample: RecordedPage, page: OcrPage, draw: boolean) => {
+    inflight.current?.abort();
+    setSource({ kind: "sample", sample });
+    setSlots([{ page: 1, result: page }]);
+    setCurrent(0);
+    setTotal(1);
+    setError(null);
+    setTruncated(null);
+    setActive(null);
+    setFresh(draw);
+  }, []);
+
+
   useEffect(() => {
     const ctl = new AbortController();
-    fetch(asset(SAMPLE.json), { signal: ctl.signal })
-      .then((r) => r.json() as Promise<OcrPage>)
-      .then((page) => {
-        setSlots([{ page: 1, result: page }]);
-        setTotal(1);
-      })
+    fetchRecorded(SAMPLE, ctl.signal)
+      .then((page) => showRecorded(SAMPLE, page, false))
       .catch(() => {});
     getHealth(ctl.signal)
       .then((h) => setHealth(h.status === "ok" ? "ok" : h.status === "loading" ? "loading" : "offline"))
@@ -72,7 +86,18 @@ export function Demo({ lang }: { lang: Lang }) {
         if (!(e instanceof DOMException && e.name === "AbortError")) setHealth("offline");
       });
     return () => ctl.abort();
-  }, []);
+  }, [showRecorded]);
+
+  useEffect(() => {
+    const onShow = (e: Event) => {
+      const sample = (e as CustomEvent<RecordedPage>).detail;
+      fetchRecorded(sample)
+        .then((page) => showRecorded(sample, page, true))
+        .catch(() => {});
+    };
+    window.addEventListener(SHOW_PAGE_EVENT, onShow);
+    return () => window.removeEventListener(SHOW_PAGE_EVENT, onShow);
+  }, [showRecorded]);
 
   const explain = useCallback(
     (e: unknown): string => {
@@ -174,9 +199,9 @@ export function Demo({ lang }: { lang: Lang }) {
   const page = slot?.result;
   const done = slots.filter((s) => s.result).length;
   const pages = slots.map((s) => s.result).filter((p): p is OcrPage => Boolean(p));
-  const imageSrc = page?.image ? `data:image/jpeg;base64,${page.image}` : source.kind === "sample" ? asset(SAMPLE.image) : "";
+  const imageSrc = page?.image ? `data:image/jpeg;base64,${page.image}` : source.kind === "sample" ? asset(source.sample.image) : "";
   const fullText = page?.text ?? "";
-  const baseName = source.kind === "file" ? source.file.name.replace(/\.[^.]+$/, "") : "khmer-notice";
+  const baseName = (source.kind === "file" ? source.file.name : source.sample.name).replace(/\.[^.]+$/, "");
 
   async function copyText() {
     try {
@@ -193,7 +218,9 @@ export function Demo({ lang }: { lang: Lang }) {
     setError(null);
     try {
       const file =
-        source.kind === "file" ? source.file : new File([await (await fetch(asset(SAMPLE.image))).blob()], SAMPLE.name, { type: "image/png" });
+        source.kind === "file"
+          ? source.file
+          : new File([await (await fetch(asset(source.sample.image))).blob()], source.sample.name, { type: source.sample.type });
       const blob = await exportResult(file, file.name, source.kind === "file" && source.isPdf ? pages : pages.slice(0, 1), format);
       download(blob, `${baseName}.${format}`);
     } catch (e) {
@@ -205,18 +232,10 @@ export function Demo({ lang }: { lang: Lang }) {
 
   const status = d.status[health];
 
-  return (
-    <section id="demo" className="wrap demo" aria-labelledby="h-demo" onDragOver={(e) => e.preventDefault()} onDrop={onDrop}>
-      <div className="demo-head">
-        <h2 id="h-demo">{d.title}</h2>
-        <span className="status" data-state={health} role="status">
-          {status}
-        </span>
-      </div>
-      <p className="hint" style={{ marginBottom: "1rem" }}>
-        {d.intro}
-      </p>
-
+  // Beside the result once there is one (above the page it read), on its own before that.
+  // One row: icon, what to do, the button. The limits sit in small print under the box.
+  const dropZone = (
+    <div className="drop-wrap">
       <label
         className="drop"
         data-over={over ? "" : undefined}
@@ -228,12 +247,16 @@ export function Demo({ lang }: { lang: Lang }) {
         }}
         onDrop={onDrop}
       >
-        <Icon name="upload" />
-        <strong>{d.drop}</strong>
-        <span className="btn quiet" aria-hidden="true">
+        <span className="drop-icon" aria-hidden="true">
+          <Icon name="upload" />
+        </span>
+        <span className="drop-text">
+          <strong>{d.drop}</strong>
+          <span>{d.paste}</span>
+        </span>
+        <span className="btn" aria-hidden="true">
           {d.choose}
         </span>
-        <span className="hint">{d.paste}</span>
         <input
           ref={input}
           type="file"
@@ -245,8 +268,24 @@ export function Demo({ lang }: { lang: Lang }) {
           }}
           aria-label={d.choose}
         />
-        <p className="limits">{d.limits}</p>
       </label>
+      <p className="limits">{d.limits}</p>
+    </div>
+  );
+
+  return (
+    <section id="demo" className="wrap demo" aria-labelledby="h-demo" onDragOver={(e) => e.preventDefault()} onDrop={onDrop}>
+      <div className="demo-head">
+        <h2 id="h-demo">{d.title}</h2>
+        <span className="status" data-state={health} role="status">
+          {status}
+        </span>
+      </div>
+      <p className="hint" style={{ marginBottom: ".75rem" }}>
+        {d.intro}
+      </p>
+
+      {page ? null : dropZone}
 
       {error ? (
         <p className="notice error" role="alert">
@@ -287,8 +326,11 @@ export function Demo({ lang }: { lang: Lang }) {
 
       {page ? (
         <div className="reader">
-          <div className="mat">
-            <PageViewer page={page} src={imageSrc} active={active} onActive={setActive} fresh={fresh} number={num} label={d.pageImage} />
+          <div className="reader-side">
+            {dropZone}
+            <div className="mat">
+              <PageViewer page={page} src={imageSrc} active={active} onActive={setActive} fresh={fresh} numbered={view === "lines"} number={num} label={d.pageImage} />
+            </div>
           </div>
 
           <div className="panel">

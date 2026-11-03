@@ -102,6 +102,9 @@ try {
   await page.goto(`${BASE}/`);
   await page.waitForSelector(".viewer .line polygon");
   check("html lang is km", (await page.getAttribute("html", "lang")) === "km");
+  check("result opens as text, page without numbers",
+    (await page.locator(".fulltext").count()) === 1 && (await page.locator(".viewer .num").count()) === 0);
+  await page.click('button[aria-pressed]:has-text("បន្ទាត់")');
   check("sample: 11 boxes and 11 rows",
     (await page.locator(".viewer g.line").count()) === 11 && (await page.locator(".lines li").count()) === 11);
   await page.waitForSelector('.status[data-state="ok"]', { timeout: 10000 });
@@ -117,6 +120,12 @@ try {
 
   // the rest of the Khmer page: real pages, no accuracy table, highlighted code
   check("hero: 3 real-page prints", (await page.locator(".hero-shots > li").count()) === 3);
+  check("hero: the prints show their detected lines", (await page.locator(".shot-photo polygon").count()) > 50);
+  // a print opens in the demo with its recorded result (no API call)
+  const receiptLines = (JSON.parse(readFileSync(join(web, "public/showcase/receipt.json"), "utf8")) as { lines: unknown[] }).lines.length;
+  await page.click(".shot-receipt a.shot-link");
+  await page.waitForFunction((n) => document.querySelectorAll(".lines li").length === n, receiptLines, { timeout: 5000 });
+  check(`print opens in the demo: receipt, ${receiptLines} rows`, (await page.locator(".viewer img").getAttribute("src"))?.endsWith("/showcase/receipt.jpg"));
   check("Khmer page has no accuracy table", (await page.locator("#h-features ~ * table, .band table").count()) === 0);
   check("code is highlighted", (await page.locator("pre.shiki span[style*=color]").count()) > 5);
 

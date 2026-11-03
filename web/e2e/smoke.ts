@@ -125,7 +125,7 @@ try {
   const receiptLines = (JSON.parse(readFileSync(join(web, "public/showcase/receipt.json"), "utf8")) as { lines: unknown[] }).lines.length;
   await page.click(".shot-receipt a.shot-link");
   await page.waitForFunction((n) => document.querySelectorAll(".lines li").length === n, receiptLines, { timeout: 5000 });
-  check(`print opens in the demo: receipt, ${receiptLines} rows`, (await page.locator(".viewer img").getAttribute("src"))?.endsWith("/showcase/receipt.jpg"));
+  check(`print opens in the demo: receipt, ${receiptLines} rows`, /\/showcase\/receipt\.jpg\?v=[0-9a-f]{12}$/.test((await page.locator(".viewer img").getAttribute("src")) ?? ""));
   check("Khmer page has no accuracy table", (await page.locator("#h-features ~ * table, .band table").count()) === 0);
   check("code is highlighted", (await page.locator("pre.shiki span[style*=color]").count()) > 5);
 

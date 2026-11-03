@@ -81,6 +81,9 @@ export const en: Dict = {
     placeholder: "Photo to come",
     open: "see what was read",
     lines: (n) => `${n} lines`,
+    credit:
+      "The letter is a public government document; the receipt and sign photos were found through web search and belong to their owners, shown only to illustrate the OCR output.",
+    creditLink: "Yours? Ask for credit or removal",
     items: {
       document: { title: "A letter", text: "A scanned letter, read in reading order." },
       receipt:  { title: "A receipt", text: "Each price stays on its item's line." },

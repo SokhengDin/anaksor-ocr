@@ -117,6 +117,9 @@ a.shot-link { cursor: pointer; }
 .shot figcaption { display: flex; justify-content: space-between; align-items: baseline; gap: .5rem;
                    padding: .35rem .15rem .25rem; font-size: .85rem; color: var(--ink-soft); }
 .shot-meta { font-size: .75rem; color: var(--jade-deep); white-space: nowrap; }
+.hero-side { min-width: 0; }
+.shot-credit { margin: 1.25rem 0 0; font-size: .72rem; line-height: 1.55; color: var(--ink-soft); }
+html[lang="km"] .shot-credit { line-height: 1.8; }
 a.shot-link:hover .shot-meta { text-decoration: underline; }
 .shot .marker { left: -.7rem; top: -.7rem; }
 @media (prefers-reduced-motion: no-preference) {

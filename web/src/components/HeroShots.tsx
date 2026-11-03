@@ -1,9 +1,10 @@
+import { createHash } from "node:crypto";
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 
 import { type Dict, kh } from "@/i18n";
 import type { ShowcaseId } from "@/i18n/types";
-import { asset } from "@/lib/config";
+import { asset, REPO_URL } from "@/lib/config";
 import type { RecordedPage } from "@/lib/showcase";
 import type { OcrPage, Quad } from "@/lib/types";
 import { Icon } from "./Icon";
@@ -31,16 +32,22 @@ interface Shot {
 }
 
 /** Looked up at build time: public/showcase/<id>.<ext>, and <id>.json when it has been read. */
+function versioned(file: string, bytes: Buffer): string {
+  return `/showcase/${file}?v=${createHash("sha256").update(bytes).digest("hex").slice(0, 12)}`;
+}
+
 function shot(id: ShowcaseId): Shot | null {
   const ext = EXTENSIONS.find((e) => existsSync(join(DIR, `${id}${e}`)));
   if (!ext) return null;
-  const src = asset(`/showcase/${id}${ext}`);
-  const json = join(DIR, `${id}.json`);
-  if (!existsSync(json)) return { src, page: null, width: 0, height: 0, quads: [], lines: 0 };
-  const result = JSON.parse(readFileSync(json, "utf8")) as OcrPage;
+  const image = versioned(`${id}${ext}`, readFileSync(join(DIR, `${id}${ext}`)));
+  const src = asset(image);
+  const jsonPath = join(DIR, `${id}.json`);
+  if (!existsSync(jsonPath)) return { src, page: null, width: 0, height: 0, quads: [], lines: 0 };
+  const raw = readFileSync(jsonPath);
+  const result = JSON.parse(raw.toString("utf8")) as OcrPage;
   return {
     src,
-    page:   { json: `/showcase/${id}.json`, image: `/showcase/${id}${ext}`, name: `${id}${ext}`, type: TYPES[ext] ?? "image/jpeg" },
+    page:   { json: versioned(`${id}.json`, raw), image, name: `${id}${ext}`, type: TYPES[ext] ?? "image/jpeg" },
     width:  result.width,
     height: result.height,
     quads:  result.lines.flatMap((l) => l.quads),
@@ -58,6 +65,7 @@ const points = (q: Quad) => q.map(([x, y]) => `${x},${y}`).join(" ");
 export function HeroShots({ t }: { t: Dict }) {
   const dev = process.env.NODE_ENV !== "production";
   return (
+    <div className="hero-side">
     <ul className="hero-shots" aria-label={t.showcase.title}>
       {IDS.map((id, i) => {
         const s    = shot(id);
@@ -105,6 +113,10 @@ export function HeroShots({ t }: { t: Dict }) {
         );
       })}
     </ul>
+    <p className="shot-credit">
+      {t.showcase.credit} <a href={`${REPO_URL}/issues`}>{t.showcase.creditLink}</a>
+    </p>
+    </div>
   );
 }
 

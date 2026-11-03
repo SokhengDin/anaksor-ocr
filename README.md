@@ -1,11 +1,68 @@
 # anaksor-ocr
 
+[![PyPI](https://img.shields.io/pypi/v/anaksor-ocr)](https://pypi.org/project/anaksor-ocr/)
+[![Python](https://img.shields.io/pypi/pyversions/anaksor-ocr)](https://pypi.org/project/anaksor-ocr/)
+[![CI](https://github.com/SokhengDin/anaksor-ocr/actions/workflows/ci.yml/badge.svg)](https://github.com/SokhengDin/anaksor-ocr/actions/workflows/ci.yml)
+[![License](https://img.shields.io/pypi/l/anaksor-ocr)](LICENSE)
+[![Models](https://img.shields.io/badge/%F0%9F%A4%97%20models-Sokheng%2Fanaksor--ocr-yellow)](https://huggingface.co/Sokheng/anaksor-ocr)
+
 **អានអក្សរ**: Khmer OCR for photos, scans and PDFs. It finds the text lines, reads them,
 puts them in reading order (columns, receipts, paragraphs) and exports plain text, JSON, a
 searchable PDF or a Word file.
 
-Website, with a live demo and the documentation in Khmer and English:
-**[ocr.sokhengdin.dev](https://ocr.sokhengdin.dev)**.
+**[Try it in the browser →](https://ocr.sokhengdin.dev)** Drop a photo or PDF and see every line it
+finds. Documentation in [Khmer](https://ocr.sokhengdin.dev/docs/) and
+[English](https://ocr.sokhengdin.dev/en/docs/).
+
+```bash
+pip install anaksor-ocr
+anaksor photo.jpg
+```
+
+## What it reads
+
+Real pages read by the released models. Each box is one detected line; red marks a line read
+with low confidence.
+
+<table>
+  <tr>
+    <td width="34%"><img src="https://raw.githubusercontent.com/SokhengDin/anaksor-ocr/master/docs/images/document.jpg" alt="A scanned Khmer government document with 35 detected lines boxed"></td>
+    <td width="33%"><img src="https://raw.githubusercontent.com/SokhengDin/anaksor-ocr/master/docs/images/receipt.jpg" alt="A phone photo of a Khmer restaurant receipt with printed and handwritten lines boxed"></td>
+    <td width="33%"><img src="https://raw.githubusercontent.com/SokhengDin/anaksor-ocr/master/docs/images/sign.jpg" alt="A green road sign in Khmer and English with each place name boxed"></td>
+  </tr>
+  <tr>
+    <td>A scanned letter: 35 lines, in reading order, in about 1 s</td>
+    <td>A receipt photo: 38 lines; printed text reads well, handwriting less so</td>
+    <td>A road sign: 7 lines, Khmer and English, in 0.2 s</td>
+  </tr>
+</table>
+
+<sub>Image credits: the letter is a public Cambodian government document from an open documents
+site; the receipt and road sign photos were found through web search and belong to their
+owners. They are shown only to illustrate the OCR output and are not covered by this
+project's licence. If one of them is yours and you want it credited or removed, please
+[open an issue](https://github.com/SokhengDin/anaksor-ocr/issues).</sub>
+
+The sign, as text:
+
+```console
+$ anaksor sign.jpg
+បន្ទាយស្រី
+
+BANTEAY SREI
+
+ភ្នំពេញ
+
+PHNOM PENH
+
+67 អន្លង់វែង
+
+ANLONG VENG
+
+ចំការឫស្សី ផាយ សុខុម
+```
+
+## How it works
 
 | | |
 |---|---|
@@ -192,15 +249,16 @@ Layout of the package:
 
 ### Releasing
 
-1. CI: move `.github/workflows-pending/` to `.github/workflows/` (see the README there).
-2. Weights: `python tools/convert_weights.py best.pth` for each model, then
+1. New weights only: `python tools/convert_weights.py best.pth` for each model, then
    `python tools/export_onnx.py --det ... --rec ...`; upload the `.safetensors` and `.onnx`
    files to the Hugging Face repo and put the printed SHA-256s into `src/anaksor/data/*.yml`
-   (`weights.sha256`, `weights.onnx_sha256`). Add a model card to the Hugging Face repo:
+   (`weights.sha256`, `weights.onnx_sha256`). Update the model card on the Hugging Face repo:
    training data, its licences, and the evaluation results above.
-3. Bump `version` in `pyproject.toml`, update `CHANGELOG.md`, then tag `vX.Y.Z`.
-   The release workflow audits the dependencies, builds, and publishes to PyPI through
-   trusted publishing.
+2. Bump the version (`uv version --bump patch`), update `CHANGELOG.md`, commit and push.
+3. Tag and push: `git tag -a vX.Y.Z -m "anaksor-ocr X.Y.Z" && git push origin vX.Y.Z`.
+   The release workflow checks the tag against the version, audits the dependencies, builds,
+   then waits for approval of the `pypi` environment before publishing through trusted
+   publishing.
 
 ## Credits and licence
 

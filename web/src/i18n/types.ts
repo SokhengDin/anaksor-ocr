@@ -63,6 +63,8 @@ export interface Dict {
     open: string;
     /** Under a print's title: how many lines the models read on it. */
     lines: (n: number) => string;
+    credit: string;
+    creditLink: string;
     items: Record<ShowcaseId, { title: string; text: string }>;
   };
   /** null: the page has no accuracy table (the Khmer page leaves it to the docs). */

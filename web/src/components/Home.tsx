@@ -8,11 +8,13 @@ import { Icon } from "./Icon";
 import { HeroShots } from "./HeroShots";
 import { SiteFooter } from "./SiteFooter";
 import { SiteHeader } from "./SiteHeader";
+import { StructuredData } from "./StructuredData";
 
 export function Home({ t }: { t: Dict }) {
   const copy = { copyLabel: t.copyCode, copiedLabel: t.copiedCode };
   return (
     <>
+      <StructuredData t={t} />
       <SiteHeader t={t} page="home" />
       <main id="content">
         <div className="wrap hero">

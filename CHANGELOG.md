@@ -1,6 +1,15 @@
 # Changelog
 
-## 0.1.0 (unreleased)
+## 0.1.1 (2026-11-03)
+
+No code changes: the package is the same as 0.1.0.
+
+- README: badges, a quick start, examples of real pages read by the released models (line
+  boxes drawn on each photo, the text of a road sign), and image credits.
+- Release steps in the README match the release workflow: bump, tag, then approve the `pypi`
+  environment.
+
+## 0.1.0 (2026-11-03)
 
 First release, extracted from the Alpha-OCR project that serves https://ocr.sokhengdin.dev.
 

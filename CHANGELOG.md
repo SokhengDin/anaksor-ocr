@@ -41,3 +41,4 @@ First release, extracted from the Alpha-OCR project that serves https://ocr.sokh
   Specs name the graph in `weights.onnx` (+ `onnx_sha256`).
 - Batch norms and RepViT's re-parameterisable branches are folded into single convolutions
   when a model loads (`fuse=True`): same output, detection about 2.5x faster on CPU.
+

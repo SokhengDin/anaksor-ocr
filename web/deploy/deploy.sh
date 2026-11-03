@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # The CI key's forced command (installed as /usr/local/bin/anaksor-site-deploy): only
-# `deploy <full sha>` and `status`. It builds the website image from a commit on main, read from the
+# `deploy <full sha>` and `status`. It builds the website image from a commit on master, read from the
 # public repo, checks it, and runs it as the anaksor-web container. Nothing sent over SSH is used but the sha.
 set -euo pipefail
 umask 022
@@ -8,7 +8,7 @@ export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin LC_ALL=
 
 CONF=/etc/anaksor-site-deploy.conf
 REPO_URL=https://github.com/SokhengDin/anaksor-ocr.git  # public: read over HTTPS, no key on the server
-BRANCH=main
+BRANCH=master
 STATE_DIR=/var/lib/anaksor-site-deploy                   # repo mirror, build contexts, logs, lock
 DEPLOY_USER=anaksor-deploy
 COMPOSE_FILE=/etc/anaksor-web/docker-compose.yml         # root-owned copy; never taken from a commit

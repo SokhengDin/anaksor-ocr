@@ -1,10 +1,10 @@
 # Deploying the website
 
-A push to `main` that touches `web/` runs the `web` workflow: lint, typecheck, the browser smoke test, a
+A push to `master` that touches `web/` runs the `web` workflow: lint, typecheck, the browser smoke test, a
 production build and a dependency scan. When they pass, the `deploy` job SSHes into the server with a key that
 can run only `/usr/local/bin/anaksor-site-deploy` (`deploy.sh`). That script:
 
-1. fetches `main` from the public repo and checks the commit is on it;
+1. fetches `master` from the public repo and checks the commit is on it;
 2. builds the image `anaksor-web:<sha>` from a clean export of `web/` at that commit (`Dockerfile`: Bun builds
    the static site, the unprivileged nginx image serves it);
 3. checks the new image (`nginx -t`, `index.html` present) before touching the live site;
@@ -26,7 +26,7 @@ roll back, re-run an older workflow run: the last 5 images are kept, so it needs
    `docker-compose.yml` in `/etc/anaksor-web/`, and prints the host key line for step 5. `--port 8089` publishes
    another port than 8088.
 4. In the Cloudflare dashboard, add a route to the tunnel: `ocr.sokhengdin.dev` → `http://localhost:8088`.
-5. GitHub > anaksor-ocr > Settings > Environments: create `production`, deployment branches: `main` only
+5. GitHub > anaksor-ocr > Settings > Environments: create `production`, deployment branches: `master` only
    (a required reviewer is optional). Add these **environment** secrets (not repository secrets):
 
    | Secret | Value |
@@ -37,8 +37,8 @@ roll back, re-run an older workflow run: the last 5 images are kept, so it needs
    | `DEPLOY_USER` | `anaksor-deploy` |
    | `DEPLOY_KNOWN_HOSTS` | the host key line `install.sh` printed, with your host in front (`[host]:port` if not 22) |
 
-6. The first deploy: push to `main`, re-run the latest `web` run, or on the server
-   `sudo -u anaksor-deploy SSH_ORIGINAL_COMMAND="deploy <sha on main>" /usr/local/bin/anaksor-site-deploy`.
+6. The first deploy: push to `master`, re-run the latest `web` run, or on the server
+   `sudo -u anaksor-deploy SSH_ORIGINAL_COMMAND="deploy <sha on master>" /usr/local/bin/anaksor-site-deploy`.
 
 Moving from the earlier Bun-on-the-host setup: run `install.sh` again (it says so if the old host nginx site is
 still there), then remove that site (`/etc/nginx/sites-enabled/anaksor-site`, `sites-available/anaksor-site`,
@@ -47,10 +47,10 @@ reload nginx) and `/srv/anaksor-site`. The port and the Cloudflare route stay th
 ## Because the repository is public
 
 - **Fork pull requests run the checks only.** They get a read-only token and no secrets, and the deploy job
-  requires a push to `main` in the `production` environment. Never add `pull_request_target` workflows.
+  requires a push to `master` in the `production` environment. Never add `pull_request_target` workflows.
 - In Settings > Actions > General: *Fork pull request workflows*: require approval for all outside
   collaborators; *Workflow permissions*: read repository contents only.
-- Protect `main` (no force pushes, PRs before merging): whoever can push to `main` can deploy.
+- Protect `master` (no force pushes, PRs before merging): whoever can push to `master` can deploy.
 - Actions are pinned to commit SHAs, the osv-scanner download is checked against its published SHA-256, and
   the base images are pinned by digest.
 
@@ -58,7 +58,7 @@ reload nginx) and `/srv/anaksor-site`. The port and the Cloudflare route stay th
 
 - The CI key is `restrict,command=…` in a root-owned `authorized_keys`: no shell, no TTY, no forwarding. With
   `--sshd`, sshd also forces the same command for that user and allows keys only.
-- The gate accepts only `deploy <40-hex sha>` or `status`, and deploys only commits on `main`, fetched by the
+- The gate accepts only `deploy <40-hex sha>` or `status`, and deploys only commits on `master`, fetched by the
   server itself. CI can't send files or commands, only name a commit.
 - The repo is read over HTTPS: there is no GitHub key on the server to steal.
 - `anaksor-deploy` is in the `docker` group (like my-website's deploy user), which is root-equivalent, so the

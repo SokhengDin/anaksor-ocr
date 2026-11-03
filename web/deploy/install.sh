@@ -6,7 +6,7 @@ umask 022
 
 STATE_DIR=/var/lib/anaksor-site-deploy
 DEPLOY_USER=anaksor-deploy
-BRANCH=main
+BRANCH=master
 REPO_URL=https://github.com/SokhengDin/anaksor-ocr.git
 WEB_PORT=8088
 PORT_SET=0

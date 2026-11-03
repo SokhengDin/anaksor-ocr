@@ -1,17 +1,17 @@
 # The website (web/), on Bun: lint, typecheck, a static build and the browser smoke test on every change, a
-# dependency scan, and on main a deploy to the server behind ocr.sokhengdin.dev (web/deploy/README.md).
+# dependency scan, and on master a deploy to the server behind ocr.sokhengdin.dev (web/deploy/README.md).
 #
 # This repository is public, so:
 # - pull requests (forks too) run the checks only: no secrets, read-only token, no deploy;
-# - the deploy job runs only for pushes to main, in the `production` environment (restricted to main), whose
+# - the deploy job runs only for pushes to master, in the `production` environment (restricted to master), whose
 #   secrets fork code never sees;
-# - the server builds the commit itself after checking it is on main: the SSH key can name a commit, nothing else.
+# - the server builds the commit itself after checking it is on master: the SSH key can name a commit, nothing else.
 # Actions are pinned to full commit SHAs.
 name: web
 
 on:
   push:
-    branches: [main]
+    branches: [master]
     paths: ["web/**", ".github/workflows/web.yml"]
   pull_request:
     paths: ["web/**", ".github/workflows/web.yml"]
@@ -21,7 +21,7 @@ permissions:
 
 concurrency:
   group: web-${{ github.ref }}
-  # Never cancel a main run: it may be deploying.
+  # Never cancel a master run: it may be deploying.
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
@@ -105,7 +105,7 @@ jobs:
 
   deploy:
     needs: [build, scan]
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     environment: production
     timeout-minutes: 30

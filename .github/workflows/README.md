@@ -14,5 +14,5 @@ git commit -m "ci: enable workflows" && git push
   install of it.
 - `release.yml`: on a `vX.Y.Z` tag, audit, build, and publish to PyPI with trusted publishing.
 - `web.yml`: lint, typecheck, build, browser smoke test and dependency scan of the website
-  (`web/`, on Bun); on `main`, the deploy to the server behind ocr.sokhengdin.dev
+  (`web/`, on Bun); on `master`, the deploy to the server behind ocr.sokhengdin.dev
   (`web/deploy/README.md`: the `production` environment and its secrets).

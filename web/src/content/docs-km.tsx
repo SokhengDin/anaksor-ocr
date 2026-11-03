@@ -59,21 +59,22 @@ export const sections: DocSection[] = [
           </table>
         </div>
         <p>
-          backend ទាំងពីរផ្តល់ boxes និងអត្ថបទដូចគ្នាបេះបិទ។ anaksor ប្រើ PyTorch បើវាត្រូវបាន install រួច បើមិនដូច្នោះទេ វាប្រើ ONNX Runtime។ អ្នកអាចជ្រើសរើសដោយ{" "}
-          <code>backend=&quot;torch&quot;</code> ឬ <code>&quot;onnx&quot;</code> (ឬ <code>--backend</code> នៅលើ command line)។ លើ CPU, PyTorch ធ្វើ inference លឿនជាងបន្តិច។
+          Backend ទាំងពីរឲ្យលទ្ធផលដូចគ្នាទាំងស្រុង ទាំងប្រអប់បន្ទាត់ (box) និងអត្ថបទ។ ប្រសិនបើអ្នកបាន install PyTorch រួចហើយ anaksor នឹងប្រើ PyTorch។
+          បើមិនទាន់មានទេ វានឹងប្រើ ONNX Runtime ជំនួសវិញ។ អ្នកក៏អាចកំណត់ backend ដោយខ្លួនឯងបាន តាមរយៈ <code>backend=&quot;torch&quot;</code> ឬ{" "}
+          <code>&quot;onnx&quot;</code> (ឬ <code>--backend</code> នៅក្នុង command line)។ ពេល run លើ CPU, PyTorch លឿនជាង ONNX Runtime បន្តិច។
         </p>
       </>
     ),
   },
   {
     id: "read",
-    title: "អានទំព័រមួយ",
+    title: "អានមួយទំព័រ",
     body: (
       <>
         <CodeBlock lang="python" caption="Python" {...cb} code={dedent`
             import anaksor
 
-            # ប្រើ GPU ប្រសិនបើម៉ាសុីនរបស់អ្នកមាន ឬ យើងអាចប្រើ CPU បាន
+            # អាចប្រើ GPU ប្រសិនបើម៉ាសុីនរបស់អ្នកមាន ឬ យើងអាចប្រើ CPU បាន
             ocr = anaksor.OCR()
             result = ocr("letter.jpg")
 
@@ -385,23 +386,25 @@ export const sections: DocSection[] = [
     body: (
       <>
         <p>
-          ម៉ូដែលនីមួយៗមានឯកសារពីរ៖ ONNX graph (<code>.onnx</code> សម្រាប់ ONNX Runtime) និង PyTorch weights (<code>.safetensors</code>)។ anaksor
-          download តែឯកសារដែល backend របស់អ្នកត្រូវការប៉ុណ្ណោះ ហើយរកវាតាមលំដាប់នេះ៖
+          ម៉ូដែលនីមួយៗមានឯកសារពីរប្រភេទ៖ ONNX graph (<code>.onnx</code> សម្រាប់ ONNX Runtime) និង PyTorch weights (<code>.safetensors</code>)។
+          anaksor ទាញយកតែឯកសារដែល backend របស់អ្នកត្រូវការប៉ុណ្ណោះ ហើយស្វែងរកវាតាមលំដាប់ខាងក្រោម៖
         </p>
         <ol className="steps">
           <li>
-            path ដែលអ្នកផ្តល់ឱ្យ (<code>det_weights=</code>, <code>rec_weights=</code> ឬ <code>--det-weights</code>);
+            path ដែលអ្នកបានកំណត់ផ្ទាល់ (<code>det_weights=</code>, <code>rec_weights=</code> ឬ <code>--det-weights</code>);
           </li>
           <li>
-            folder ដែលកំណត់ដោយ <code>ANAKSOR_WEIGHTS_DIR</code>;
+            folder ដែលបានកំណត់ក្នុង <code>ANAKSOR_WEIGHTS_DIR</code>;
           </li>
           <li>
-            cache ក្នុង <code>~/.cache/anaksor</code> (ឬ <code>ANAKSOR_HOME</code>) ដែល download ម្តងពី Hugging Face ហើយ verify ជាមួយ SHA-256 របស់វា។
+            cache នៅក្នុង <code>~/.cache/anaksor</code> (ឬ <code>ANAKSOR_HOME</code>)។ ឯកសារត្រូវបានទាញយកពី Hugging Face តែម្តងគត់
+            ហើយត្រូវបានផ្ទៀងផ្ទាត់ជាមួយ SHA-256 មុនពេលប្រើ។
           </li>
         </ol>
         <p>
-          Weights ទាំងពីរ format មិនអាច run កូដនៅពេល load បានទេ។ សម្រាប់ម៉ាស៊ីនដែលគ្មានអ៊ីនធឺណិត (offline) សូម run <code>anaksor --fetch-models</code>{" "}
-          លើម៉ាស៊ីនផ្សេង ហើយ copy ឯកសារពីរសម្រាប់ backend របស់អ្នកទៅក្នុង folder <code>ANAKSOR_WEIGHTS_DIR</code>។
+          Weights ទាំងពីរប្រភេទនេះ មិនអាចដំណើរការកូដណាមួយ ពេលកំពុងផ្ទុក (load) បានឡើយ ដូច្នេះវាមានសុវត្ថិភាព។ សម្រាប់ម៉ាស៊ីនដែលគ្មានអ៊ីនធឺណិត សូមដំណើរការ{" "}
+          <code>anaksor --fetch-models</code> នៅលើម៉ាស៊ីនមួយផ្សេងទៀតជាមុនសិន រួចចម្លងឯកសារទាំងពីរសម្រាប់ backend របស់អ្នក ទៅដាក់ក្នុង folder{" "}
+          <code>ANAKSOR_WEIGHTS_DIR</code>។
         </p>
       </>
     ),

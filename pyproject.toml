@@ -1,0 +1,89 @@
+[build-system]
+requires = ["hatchling>=1.25"]
+build-backend = "hatchling.build"
+
+[project]
+name = "anaksor-ocr"
+version = "0.1.0"
+description = "Khmer OCR: photos, scans and PDFs to Khmer text, with layout, searchable PDF and Word export"
+readme = "README.md"
+license = "Apache-2.0"
+license-files = ["LICENSE", "NOTICE"]
+authors = [{ name = "Sokheng Din" }]
+requires-python = ">=3.11"  # Pillow 13 needs 3.11
+keywords = ["khmer", "ocr", "cambodia", "text-recognition", "text-detection", "pdf", "document-ai"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering :: Image Recognition",
+    "Topic :: Text Processing :: Linguistic",
+]
+# Floors exclude versions with known high-severity CVEs (see SECURITY.md); CI runs
+# pip-audit on the lock file and fails on any known vulnerability.
+# The default install runs the exported ONNX graphs in ONNX Runtime (CPU; onnxruntime-gpu
+# for CUDA). [torch] adds the PyTorch backend: CUDA / Apple MPS, the SMTR head, .pth and
+# .safetensors weights, and the ONNX export ([export]).
+dependencies = [
+    "numpy>=1.26",
+    "onnxruntime>=1.20",
+    "opencv-python-headless>=4.10.0.84",
+    "pillow>=13.0.0",
+    "pyclipper>=1.3.0.post6",
+    "pyyaml>=6.0.2",
+    "shapely>=2.0.6",
+]
+
+[project.optional-dependencies]
+torch = ["torch>=2.13", "safetensors>=0.4.5"]
+export = ["anaksor-ocr[torch]", "onnx>=1.22", "onnxscript>=0.2"]
+pdf = ["pypdfium2>=4.30"]
+docx = ["python-docx>=1.1.2"]
+all = ["anaksor-ocr[torch,pdf,docx]"]
+
+[project.scripts]
+anaksor = "anaksor.cli:main"
+
+[project.urls]
+Homepage = "https://ocr.sokhengdin.dev"
+Documentation = "https://sokhengdin.github.io/anaksor-ocr/"
+Repository = "https://github.com/SokhengDin/anaksor-ocr"
+Issues = "https://github.com/SokhengDin/anaksor-ocr/issues"
+
+[dependency-groups]
+dev = [
+    "pytest>=9.0.3",
+    "ruff>=0.8",
+    "pip-audit>=2.7",
+    "onnx>=1.22",
+    "onnxscript>=0.2",
+    "build>=1.2",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/anaksor"]
+
+[tool.hatch.build.targets.sdist]
+include = ["src/anaksor", "tests", "tools", "README.md", "LICENSE", "NOTICE", "CHANGELOG.md", "SECURITY.md"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
+markers = ["weights: needs real model weights (set ANAKSOR_TEST_WEIGHTS)"]
+
+[tool.ruff]
+line-length = 130
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "S"]
+ignore = ["S101", "E741", "B905"]  # zip of a list with its own tail is deliberate
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["S", "B"]
+"tools/*" = ["S"]

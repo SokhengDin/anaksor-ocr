@@ -1,0 +1,33 @@
+# Khmer text detection v2: RepViT backbone + DBNet (KhmerST + synthetic pages).
+# Architecture block as in Alpha-OCR configs/repvit_db_khmer_v2.yml (training-only keys are ignored).
+name: det-repvit-db-v2
+kind: det
+weights:
+  file: khmer_det_repvit_db_v2.safetensors
+  sha256: null            # set when the release weights are published
+  onnx: khmer_det_repvit_db_v2.onnx   # tools/export_onnx.py; the default (torch-free) install runs this
+  onnx_sha256: null
+input:
+  limit_side_len: 1280    # long side resized down to this (small document text needs 1280+)
+  min_side_len: 736       # smaller images are upscaled
+  mean: [0.485, 0.456, 0.406]
+  std: [0.229, 0.224, 0.225]
+architecture:
+  algorithm: DB_mobile
+  Backbone:
+    name: RepSVTR_det
+  Neck:
+    name: RSEFPN
+    out_channels: 96
+    shortcut: true
+  Head:
+    name: DBHead
+    k: 50
+postprocess:
+  name: DBPostProcess
+  thresh: 0.3
+  box_thresh: 0.5
+  max_candidates: 1000
+  unclip_ratio: 1.5
+  score_mode: slow
+  use_dilation: false     # dilating at inference glues tightly spaced Khmer lines together

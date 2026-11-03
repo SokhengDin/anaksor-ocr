@@ -1,0 +1,4346 @@
+{
+"cppd_arch": {
+"Decoder": {
+"ds": true,
+"max_len": 140,
+"name": "CPPDDecoder",
+"num_layer": 2,
+"pos_len": false,
+"rec_layer": 1
+},
+"Encoder": {
+"depths": [
+6,
+6,
+6
+],
+"dims": [
+128,
+256,
+384
+],
+"feat2d": false,
+"kernel_sizes": [
+[
+5,
+5,
+5,
+5,
+5,
+5
+],
+[
+5,
+5,
+5,
+5,
+5,
+5
+],
+[
+-1
+]
+],
+"last_stage": false,
+"mixer": [
+[
+"Conv",
+"Conv",
+"Conv",
+"Conv",
+"Conv",
+"Conv"
+],
+[
+"Conv",
+"Conv",
+"FGlobal",
+"Global",
+"Global",
+"Global"
+],
+[
+"Global",
+"Global",
+"Global",
+"Global",
+"Global",
+"Global"
+]
+],
+"name": "SVTRv2LNConvTwo33",
+"num_convs": [
+[
+1,
+1,
+1,
+1,
+1,
+1
+],
+[
+1,
+1,
+1,
+1,
+1,
+1
+],
+[
+-1
+]
+],
+"num_heads": [
+4,
+8,
+12
+],
+"pope_bias": true,
+"sub_k": [
+[
+1,
+1
+],
+[
+2,
+1
+],
+[
+-1,
+-1
+]
+],
+"use_pos_embed": false
+},
+"algorithm": "CPPD",
+"in_channels": 3,
+"model_type": "rec"
+},
+"models": {
+"det_v2": {
+"backbone.features.0.0.bn.bias": [
+24
+],
+"backbone.features.0.0.bn.num_batches_tracked": [],
+"backbone.features.0.0.bn.running_mean": [
+24
+],
+"backbone.features.0.0.bn.running_var": [
+24
+],
+"backbone.features.0.0.bn.weight": [
+24
+],
+"backbone.features.0.0.c.weight": [
+24,
+3,
+3,
+3
+],
+"backbone.features.0.2.bn.bias": [
+48
+],
+"backbone.features.0.2.bn.num_batches_tracked": [],
+"backbone.features.0.2.bn.running_mean": [
+48
+],
+"backbone.features.0.2.bn.running_var": [
+48
+],
+"backbone.features.0.2.bn.weight": [
+48
+],
+"backbone.features.0.2.c.weight": [
+48,
+24,
+3,
+3
+],
+"backbone.features.1.channel_mixer.m.0.bn.bias": [
+96
+],
+"backbone.features.1.channel_mixer.m.0.bn.num_batches_tracked": [],
+"backbone.features.1.channel_mixer.m.0.bn.running_mean": [
+96
+],
+"backbone.features.1.channel_mixer.m.0.bn.running_var": [
+96
+],
+"backbone.features.1.channel_mixer.m.0.bn.weight": [
+96
+],
+"backbone.features.1.channel_mixer.m.0.c.weight": [
+96,
+48,
+1,
+1
+],
+"backbone.features.1.channel_mixer.m.2.bn.bias": [
+48
+],
+"backbone.features.1.channel_mixer.m.2.bn.num_batches_tracked": [],
+"backbone.features.1.channel_mixer.m.2.bn.running_mean": [
+48
+],
+"backbone.features.1.channel_mixer.m.2.bn.running_var": [
+48
+],
+"backbone.features.1.channel_mixer.m.2.bn.weight": [
+48
+],
+"backbone.features.1.channel_mixer.m.2.c.weight": [
+48,
+96,
+1,
+1
+],
+"backbone.features.1.token_mixer.0.bn.bias": [
+48
+],
+"backbone.features.1.token_mixer.0.bn.num_batches_tracked": [],
+"backbone.features.1.token_mixer.0.bn.running_mean": [
+48
+],
+"backbone.features.1.token_mixer.0.bn.running_var": [
+48
+],
+"backbone.features.1.token_mixer.0.bn.weight": [
+48
+],
+"backbone.features.1.token_mixer.0.conv.bn.bias": [
+48
+],
+"backbone.features.1.token_mixer.0.conv.bn.num_batches_tracked": [],
+"backbone.features.1.token_mixer.0.conv.bn.running_mean": [
+48
+],
+"backbone.features.1.token_mixer.0.conv.bn.running_var": [
+48
+],
+"backbone.features.1.token_mixer.0.conv.bn.weight": [
+48
+],
+"backbone.features.1.token_mixer.0.conv.c.weight": [
+48,
+1,
+3,
+3
+],
+"backbone.features.1.token_mixer.0.conv1.bias": [
+48
+],
+"backbone.features.1.token_mixer.0.conv1.weight": [
+48,
+1,
+1,
+1
+],
+"backbone.features.1.token_mixer.1.fc1.bias": [
+16
+],
+"backbone.features.1.token_mixer.1.fc1.weight": [
+16,
+48,
+1,
+1
+],
+"backbone.features.1.token_mixer.1.fc2.bias": [
+48
+],
+"backbone.features.1.token_mixer.1.fc2.weight": [
+48,
+16,
+1,
+1
+],
+"backbone.features.10.channel_mixer.m.0.bn.bias": [
+384
+],
+"backbone.features.10.channel_mixer.m.0.bn.num_batches_tracked": [],
+"backbone.features.10.channel_mixer.m.0.bn.running_mean": [
+384
+],
+"backbone.features.10.channel_mixer.m.0.bn.running_var": [
+384
+],
+"backbone.features.10.channel_mixer.m.0.bn.weight": [
+384
+],
+"backbone.features.10.channel_mixer.m.0.c.weight": [
+384,
+192,
+1,
+1
+],
+"backbone.features.10.channel_mixer.m.2.bn.bias": [
+192
+],
+"backbone.features.10.channel_mixer.m.2.bn.num_batches_tracked": [],
+"backbone.features.10.channel_mixer.m.2.bn.running_mean": [
+192
+],
+"backbone.features.10.channel_mixer.m.2.bn.running_var": [
+192
+],
+"backbone.features.10.channel_mixer.m.2.bn.weight": [
+192
+],
+"backbone.features.10.channel_mixer.m.2.c.weight": [
+192,
+384,
+1,
+1
+],
+"backbone.features.10.token_mixer.0.bn.bias": [
+192
+],
+"backbone.features.10.token_mixer.0.bn.num_batches_tracked": [],
+"backbone.features.10.token_mixer.0.bn.running_mean": [
+192
+],
+"backbone.features.10.token_mixer.0.bn.running_var": [
+192
+],
+"backbone.features.10.token_mixer.0.bn.weight": [
+192
+],
+"backbone.features.10.token_mixer.0.conv.bn.bias": [
+192
+],
+"backbone.features.10.token_mixer.0.conv.bn.num_batches_tracked": [],
+"backbone.features.10.token_mixer.0.conv.bn.running_mean": [
+192
+],
+"backbone.features.10.token_mixer.0.conv.bn.running_var": [
+192
+],
+"backbone.features.10.token_mixer.0.conv.bn.weight": [
+192
+],
+"backbone.features.10.token_mixer.0.conv.c.weight": [
+192,
+1,
+3,
+3
+],
+"backbone.features.10.token_mixer.0.conv1.bias": [
+192
+],
+"backbone.features.10.token_mixer.0.conv1.weight": [
+192,
+1,
+1,
+1
+],
+"backbone.features.11.channel_mixer.m.0.bn.bias": [
+768
+],
+"backbone.features.11.channel_mixer.m.0.bn.num_batches_tracked": [],
+"backbone.features.11.channel_mixer.m.0.bn.running_mean": [
+768
+],
+"backbone.features.11.channel_mixer.m.0.bn.running_var": [
+768
+],
+"backbone.features.11.channel_mixer.m.0.bn.weight": [
+768
+],
+"backbone.features.11.channel_mixer.m.0.c.weight": [
+768,
+384,
+1,
+1
+],
+"backbone.features.11.channel_mixer.m.2.bn.bias": [
+384
+],
+"backbone.features.11.channel_mixer.m.2.bn.num_batches_tracked": [],
+"backbone.features.11.channel_mixer.m.2.bn.running_mean": [
+384
+],
+"backbone.features.11.channel_mixer.m.2.bn.running_var": [
+384
+],
+"backbone.features.11.channel_mixer.m.2.bn.weight": [
+384
+],
+"backbone.features.11.channel_mixer.m.2.c.weight": [
+384,
+768,
+1,
+1
+],
+"backbone.features.11.token_mixer.0.bn.bias": [
+192
+],
+"backbone.features.11.token_mixer.0.bn.num_batches_tracked": [],
+"backbone.features.11.token_mixer.0.bn.running_mean": [
+192
+],
+"backbone.features.11.token_mixer.0.bn.running_var": [
+192
+],
+"backbone.features.11.token_mixer.0.bn.weight": [
+192
+],
+"backbone.features.11.token_mixer.0.c.weight": [
+192,
+1,
+3,
+3
+],
+"backbone.features.11.token_mixer.2.bn.bias": [
+384
+],
+"backbone.features.11.token_mixer.2.bn.num_batches_tracked": [],
+"backbone.features.11.token_mixer.2.bn.running_mean": [
+384
+],
+"backbone.features.11.token_mixer.2.bn.running_var": [
+384
+],
+"backbone.features.11.token_mixer.2.bn.weight": [
+384
+],
+"backbone.features.11.token_mixer.2.c.weight": [
+384,
+192,
+1,
+1
+],
+"backbone.features.12.channel_mixer.m.0.bn.bias": [
+768
+],
+"backbone.features.12.channel_mixer.m.0.bn.num_batches_tracked": [],
+"backbone.features.12.channel_mixer.m.0.bn.running_mean": [
+768
+],
+"backbone.features.12.channel_mixer.m.0.bn.running_var": [
+768
+],
+"backbone.features.12.channel_mixer.m.0.bn.weight": [
+768
+],
+"backbone.features.12.channel_mixer.m.0.c.weight": [
+768,
+384,
+1,
+1
+],
+"backbone.features.12.channel_mixer.m.2.bn.bias": [
+384
+],
+"backbone.features.12.channel_mixer.m.2.bn.num_batches_tracked": [],
+"backbone.features.12.channel_mixer.m.2.bn.running_mean": [
+384
+],
+"backbone.features.12.channel_mixer.m.2.bn.running_var": [
+384
+],
+"backbone.features.12.channel_mixer.m.2.bn.weight": [
+384
+],
+"backbone.features.12.channel_mixer.m.2.c.weight": [
+384,
+768,
+1,
+1
+],
+"backbone.features.12.token_mixer.0.bn.bias": [
+384
+],
+"backbone.features.12.token_mixer.0.bn.num_batches_tracked": [],
+"backbone.features.12.token_mixer.0.bn.running_mean": [
+384
+],
+"backbone.features.12.token_mixer.0.bn.running_var": [
+384
+],
+"backbone.features.12.token_mixer.0.bn.weight": [
+384
+],
+"backbone.features.12.token_mixer.0.conv.bn.bias": [
+384
+],
+"backbone.features.12.token_mixer.0.conv.bn.num_batches_tracked": [],
+"backbone.features.12.token_mixer.0.conv.bn.running_mean": [
+384
+],
+"backbone.features.12.token_mixer.0.conv.bn.running_var": [
+384
+],
+"backbone.features.12.token_mixer.0.conv.bn.weight": [
+384
+],
+"backbone.features.12.token_mixer.0.conv.c.weight": [
+384,
+1,
+3,
+3
+],
+"backbone.features.12.token_mixer.0.conv1.bias": [
+384
+],
+"backbone.features.12.token_mixer.0.conv1.weight": [
+384,
+1,
+1,
+1
+],
+"backbone.features.12.token_mixer.1.fc1.bias": [
+96
+],
+"backbone.features.12.token_mixer.1.fc1.weight": [
+96,
+384,
+1,
+1
+],
+"backbone.features.12.token_mixer.1.fc2.bias": [
+384
+],
+"backbone.features.12.token_mixer.1.fc2.weight": [
+384,
+96,
+1,
+1
+],
+"backbone.features.13.channel_mixer.m.0.bn.bias": [
+768
+],
+"backbone.features.13.channel_mixer.m.0.bn.num_batches_tracked": [],
+"backbone.features.13.channel_mixer.m.0.bn.running_mean": [
+768
+],
+"backbone.features.13.channel_mixer.m.0.bn.running_var": [
+768
+],
+"backbone.features.13.channel_mixer.m.0.bn.weight": [
+768
+],
+"backbone.features.13.channel_mixer.m.0.c.weight": [
+768,
+384,
+1,
+1
+],
+"backbone.features.13.channel_mixer.m.2.bn.bias": [
+384
+],
+"backbone.features.13.channel_mixer.m.2.bn.num_batches_tracked": [],
+"backbone.features.13.channel_mixer.m.2.bn.running_mean": [
+384
+],
+"backbone.features.13.channel_mixer.m.2.bn.running_var": [
+384
+],
+"backbone.features.13.channel_mixer.m.2.bn.weight": [
+384
+],
+"backbone.features.13.channel_mixer.m.2.c.weight": [
+384,
+768,
+1,
+1
+],
+"backbone.features.13.token_mixer.0.bn.bias": [
+384
+],
+"backbone.features.13.token_mixer.0.bn.num_batches_tracked": [],
+"backbone.features.13.token_mixer.0.bn.running_mean": [
+384
+],
+"backbone.features.13.token_mixer.0.bn.running_var": [
+384
+],
+"backbone.features.13.token_mixer.0.bn.weight": [
+384
+],
+"backbone.features.13.token_mixer.0.conv.bn.bias": [
+384
+],
+"backbone.features.13.token_mixer.0.conv.bn.num_batches_tracked": [],
+"backbone.features.13.token_mixer.0.conv.bn.running_mean": [
+384
+],
+"backbone.features.13.token_mixer.0.conv.bn.running_var": [
+384
+],
+"backbone.features.13.token_mixer.0.conv.bn.weight": [
+384
+],
+"backbone.features.13.token_mixer.0.conv.c.weight": [
+384,
+1,
+3,
+3
+],
+"backbone.features.13.token_mixer.0.conv1.bias": [
+384
+],
+"backbone.features.13.token_mixer.0.conv1.weight": [
+384,
+1,
+1,
+1
+],
+"backbone.features.2.channel_mixer.m.0.bn.bias": [
+96
+],
+"backbone.features.2.channel_mixer.m.0.bn.num_batches_tracked": [],
+"backbone.features.2.channel_mixer.m.0.bn.running_mean": [
+96
+],
+"backbone.features.2.channel_mixer.m.0.bn.running_var": [
+96
+],
+"backbone.features.2.channel_mixer.m.0.bn.weight": [
+96
+],
+"backbone.features.2.channel_mixer.m.0.c.weight": [
+96,
+48,
+1,
+1
+],
+"backbone.features.2.channel_mixer.m.2.bn.bias": [
+48
+],
+"backbone.features.2.channel_mixer.m.2.bn.num_batches_tracked": [],
+"backbone.features.2.channel_mixer.m.2.bn.running_mean": [
+48
+],
+"backbone.features.2.channel_mixer.m.2.bn.running_var": [
+48
+],
+"backbone.features.2.channel_mixer.m.2.bn.weight": [
+48
+],
+"backbone.features.2.channel_mixer.m.2.c.weight": [
+48,
+96,
+1,
+1
+],
+"backbone.features.2.token_mixer.0.bn.bias": [
+48
+],
+"backbone.features.2.token_mixer.0.bn.num_batches_tracked": [],
+"backbone.features.2.token_mixer.0.bn.running_mean": [
+48
+],
+"backbone.features.2.token_mixer.0.bn.running_var": [
+48
+],
+"backbone.features.2.token_mixer.0.bn.weight": [
+48
+],
+"backbone.features.2.token_mixer.0.conv.bn.bias": [
+48
+],
+"backbone.features.2.token_mixer.0.conv.bn.num_batches_tracked": [],
+"backbone.features.2.token_mixer.0.conv.bn.running_mean": [
+48
+],
+"backbone.features.2.token_mixer.0.conv.bn.running_var": [
+48
+],
+"backbone.features.2.token_mixer.0.conv.bn.weight": [
+48
+],
+"backbone.features.2.token_mixer.0.conv.c.weight": [
+48,
+1,
+3,
+3
+],
+"backbone.features.2.token_mixer.0.conv1.bias": [
+48
+],
+"backbone.features.2.token_mixer.0.conv1.weight": [
+48,
+1,
+1,
+1
+],
+"backbone.features.3.channel_mixer.m.0.bn.bias": [
+192
+],
+"backbone.features.3.channel_mixer.m.0.bn.num_batches_tracked": [],
+"backbone.features.3.channel_mixer.m.0.bn.running_mean": [
+192
+],
+"backbone.features.3.channel_mixer.m.0.bn.running_var": [
+192
+],
+"backbone.features.3.channel_mixer.m.0.bn.weight": [
+192
+],
+"backbone.features.3.channel_mixer.m.0.c.weight": [
+192,
+96,
+1,
+1
+],
+"backbone.features.3.channel_mixer.m.2.bn.bias": [
+96
+],
+"backbone.features.3.channel_mixer.m.2.bn.num_batches_tracked": [],
+"backbone.features.3.channel_mixer.m.2.bn.running_mean": [
+96
+],
+"backbone.features.3.channel_mixer.m.2.bn.running_var": [
+96
+],
+"backbone.features.3.channel_mixer.m.2.bn.weight": [
+96
+],
+"backbone.features.3.channel_mixer.m.2.c.weight": [
+96,
+192,
+1,
+1
+],
+"backbone.features.3.token_mixer.0.bn.bias": [
+48
+],
+"backbone.features.3.token_mixer.0.bn.num_batches_tracked": [],
+"backbone.features.3.token_mixer.0.bn.running_mean": [
+48
+],
+"backbone.features.3.token_mixer.0.bn.running_var": [
+48
+],
+"backbone.features.3.token_mixer.0.bn.weight": [
+48
+],
+"backbone.features.3.token_mixer.0.c.weight": [
+48,
+1,
+3,
+3
+],
+"backbone.features.3.token_mixer.2.bn.bias": [
+96
+],
+"backbone.features.3.token_mixer.2.bn.num_batches_tracked": [],
+"backbone.features.3.token_mixer.2.bn.running_mean": [
+96
+],
+"backbone.features.3.token_mixer.2.bn.running_var": [
+96
+],
+"backbone.features.3.token_mixer.2.bn.weight": [
+96
+],
+"backbone.features.3.token_mixer.2.c.weight": [
+96,
+48,
+1,
+1
+],
+"backbone.features.4.channel_mixer.m.0.bn.bias": [
+192
+],
+"backbone.features.4.channel_mixer.m.0.bn.num_batches_tracked": [],
+"backbone.features.4.channel_mixer.m.0.bn.running_mean": [
+192
+],
+"backbone.features.4.channel_mixer.m.0.bn.running_var": [
+192
+],
+"backbone.features.4.channel_mixer.m.0.bn.weight": [
+192
+],
+"backbone.features.4.channel_mixer.m.0.c.weight": [
+192,
+96,
+1,
+1
+],
+"backbone.features.4.channel_mixer.m.2.bn.bias": [
+96
+],
+"backbone.features.4.channel_mixer.m.2.bn.num_batches_tracked": [],
+"backbone.features.4.channel_mixer.m.2.bn.running_mean": [
+96
+],
+"backbone.features.4.channel_mixer.m.2.bn.running_var": [
+96
+],
+"backbone.features.4.channel_mixer.m.2.bn.weight": [
+96
+],
+"backbone.features.4.channel_mixer.m.2.c.weight": [
+96,
+192,
+1,
+1
+],
+"backbone.features.4.token_mixer.0.bn.bias": [
+96
+],
+"backbone.features.4.token_mixer.0.bn.num_batches_tracked": [],
+"backbone.features.4.token_mixer.0.bn.running_mean": [
+96
+],
+"backbone.features.4.token_mixer.0.bn.running_var": [
+96
+],
+"backbone.features.4.token_mixer.0.bn.weight": [
+96
+],
+"backbone.features.4.token_mixer.0.conv.bn.bias": [
+96
+],
+"backbone.features.4.token_mixer.0.conv.bn.num_batches_tracked": [],
+"backbone.features.4.token_mixer.0.conv.bn.running_mean": [
+96
+],
+"backbone.features.4.token_mixer.0.conv.bn.running_var": [
+96
+],
+"backbone.features.4.token_mixer.0.conv.bn.weight": [
+96
+],
+"backbone.features.4.token_mixer.0.conv.c.weight": [
+96,
+1,
+3,
+3
+],
+"backbone.features.4.token_mixer.0.conv1.bias": [
+96
+],
+"backbone.features.4.token_mixer.0.conv1.weight": [
+96,
+1,
+1,
+1
+],
+"backbone.features.4.token_mixer.1.fc1.bias": [
+24
+],
+"backbone.features.4.token_mixer.1.fc1.weight": [
+24,
+96,
+1,
+1
+],
+"backbone.features.4.token_mixer.1.fc2.bias": [
+96
+],
+"backbone.features.4.token_mixer.1.fc2.weight": [
+96,
+24,
+1,
+1
+],
+"backbone.features.5.channel_mixer.m.0.bn.bias": [
+192
+],
+"backbone.features.5.channel_mixer.m.0.bn.num_batches_tracked": [],
+"backbone.features.5.channel_mixer.m.0.bn.running_mean": [
+192
+],
+"backbone.features.5.channel_mixer.m.0.bn.running_var": [
+192
+],
+"backbone.features.5.channel_mixer.m.0.bn.weight": [
+192
+],
+"backbone.features.5.channel_mixer.m.0.c.weight": [
+192,
+96,
+1,
+1
+],
+"backbone.features.5.channel_mixer.m.2.bn.bias": [
+96
+],
+"backbone.features.5.channel_mixer.m.2.bn.num_batches_tracked": [],
+"backbone.features.5.channel_mixer.m.2.bn.running_mean": [
+96
+],
+"backbone.features.5.channel_mixer.m.2.bn.running_var": [
+96
+],
+"backbone.features.5.channel_mixer.m.2.bn.weight": [
+96
+],
+"backbone.features.5.channel_mixer.m.2.c.weight": [
+96,
+192,
+1,
+1
+],
+"backbone.features.5.token_mixer.0.bn.bias": [
+96
+],
+"backbone.features.5.token_mixer.0.bn.num_batches_tracked": [],
+"backbone.features.5.token_mixer.0.bn.running_mean": [
+96
+],
+"backbone.features.5.token_mixer.0.bn.running_var": [
+96
+],
+"backbone.features.5.token_mixer.0.bn.weight": [
+96
+],
+"backbone.features.5.token_mixer.0.conv.bn.bias": [
+96
+],
+"backbone.features.5.token_mixer.0.conv.bn.num_batches_tracked": [],
+"backbone.features.5.token_mixer.0.conv.bn.running_mean": [
+96
+],
+"backbone.features.5.token_mixer.0.conv.bn.running_var": [
+96
+],
+"backbone.features.5.token_mixer.0.conv.bn.weight": [
+96
+],
+"backbone.features.5.token_mixer.0.conv.c.weight": [
+96,
+1,
+3,
+3
+],
+"backbone.features.5.token_mixer.0.conv1.bias": [
+96
+],
+"backbone.features.5.token_mixer.0.conv1.weight": [
+96,
+1,
+1,
+1
+],
+"backbone.features.6.channel_mixer.m.0.bn.bias": [
+384
+],
+"backbone.features.6.channel_mixer.m.0.bn.num_batches_tracked": [],
+"backbone.features.6.channel_mixer.m.0.bn.running_mean": [
+384
+],
+"backbone.features.6.channel_mixer.m.0.bn.running_var": [
+384
+],
+"backbone.features.6.channel_mixer.m.0.bn.weight": [
+384
+],
+"backbone.features.6.channel_mixer.m.0.c.weight": [
+384,
+192,
+1,
+1
+],
+"backbone.features.6.channel_mixer.m.2.bn.bias": [
+192
+],
+"backbone.features.6.channel_mixer.m.2.bn.num_batches_tracked": [],
+"backbone.features.6.channel_mixer.m.2.bn.running_mean": [
+192
+],
+"backbone.features.6.channel_mixer.m.2.bn.running_var": [
+192
+],
+"backbone.features.6.channel_mixer.m.2.bn.weight": [
+192
+],
+"backbone.features.6.channel_mixer.m.2.c.weight": [
+192,
+384,
+1,
+1
+],
+"backbone.features.6.token_mixer.0.bn.bias": [
+96
+],
+"backbone.features.6.token_mixer.0.bn.num_batches_tracked": [],
+"backbone.features.6.token_mixer.0.bn.running_mean": [
+96
+],
+"backbone.features.6.token_mixer.0.bn.running_var": [
+96
+],
+"backbone.features.6.token_mixer.0.bn.weight": [
+96
+],
+"backbone.features.6.token_mixer.0.c.weight": [
+96,
+1,
+3,
+3
+],
+"backbone.features.6.token_mixer.2.bn.bias": [
+192
+],
+"backbone.features.6.token_mixer.2.bn.num_batches_tracked": [],
+"backbone.features.6.token_mixer.2.bn.running_mean": [
+192
+],
+"backbone.features.6.token_mixer.2.bn.running_var": [
+192
+],
+"backbone.features.6.token_mixer.2.bn.weight": [
+192
+],
+"backbone.features.6.token_mixer.2.c.weight": [
+192,
+96,
+1,
+1
+],
+"backbone.features.7.channel_mixer.m.0.bn.bias": [
+384
+],
+"backbone.features.7.channel_mixer.m.0.bn.num_batches_tracked": [],
+"backbone.features.7.channel_mixer.m.0.bn.running_mean": [
+384
+],
+"backbone.features.7.channel_mixer.m.0.bn.running_var": [
+384
+],
+"backbone.features.7.channel_mixer.m.0.bn.weight": [
+384
+],
+"backbone.features.7.channel_mixer.m.0.c.weight": [
+384,
+192,
+1,
+1
+],
+"backbone.features.7.channel_mixer.m.2.bn.bias": [
+192
+],
+"backbone.features.7.channel_mixer.m.2.bn.num_batches_tracked": [],
+"backbone.features.7.channel_mixer.m.2.bn.running_mean": [
+192
+],
+"backbone.features.7.channel_mixer.m.2.bn.running_var": [
+192
+],
+"backbone.features.7.channel_mixer.m.2.bn.weight": [
+192
+],
+"backbone.features.7.channel_mixer.m.2.c.weight": [
+192,
+384,
+1,
+1
+],
+"backbone.features.7.token_mixer.0.bn.bias": [
+192
+],
+"backbone.features.7.token_mixer.0.bn.num_batches_tracked": [],
+"backbone.features.7.token_mixer.0.bn.running_mean": [
+192
+],
+"backbone.features.7.token_mixer.0.bn.running_var": [
+192
+],
+"backbone.features.7.token_mixer.0.bn.weight": [
+192
+],
+"backbone.features.7.token_mixer.0.conv.bn.bias": [
+192
+],
+"backbone.features.7.token_mixer.0.conv.bn.num_batches_tracked": [],
+"backbone.features.7.token_mixer.0.conv.bn.running_mean": [
+192
+],
+"backbone.features.7.token_mixer.0.conv.bn.running_var": [
+192
+],
+"backbone.features.7.token_mixer.0.conv.bn.weight": [
+192
+],
+"backbone.features.7.token_mixer.0.conv.c.weight": [
+192,
+1,
+3,
+3
+],
+"backbone.features.7.token_mixer.0.conv1.bias": [
+192
+],
+"backbone.features.7.token_mixer.0.conv1.weight": [
+192,
+1,
+1,
+1
+],
+"backbone.features.7.token_mixer.1.fc1.bias": [
+48
+],
+"backbone.features.7.token_mixer.1.fc1.weight": [
+48,
+192,
+1,
+1
+],
+"backbone.features.7.token_mixer.1.fc2.bias": [
+192
+],
+"backbone.features.7.token_mixer.1.fc2.weight": [
+192,
+48,
+1,
+1
+],
+"backbone.features.8.channel_mixer.m.0.bn.bias": [
+384
+],
+"backbone.features.8.channel_mixer.m.0.bn.num_batches_tracked": [],
+"backbone.features.8.channel_mixer.m.0.bn.running_mean": [
+384
+],
+"backbone.features.8.channel_mixer.m.0.bn.running_var": [
+384
+],
+"backbone.features.8.channel_mixer.m.0.bn.weight": [
+384
+],
+"backbone.features.8.channel_mixer.m.0.c.weight": [
+384,
+192,
+1,
+1
+],
+"backbone.features.8.channel_mixer.m.2.bn.bias": [
+192
+],
+"backbone.features.8.channel_mixer.m.2.bn.num_batches_tracked": [],
+"backbone.features.8.channel_mixer.m.2.bn.running_mean": [
+192
+],
+"backbone.features.8.channel_mixer.m.2.bn.running_var": [
+192
+],
+"backbone.features.8.channel_mixer.m.2.bn.weight": [
+192
+],
+"backbone.features.8.channel_mixer.m.2.c.weight": [
+192,
+384,
+1,
+1
+],
+"backbone.features.8.token_mixer.0.bn.bias": [
+192
+],
+"backbone.features.8.token_mixer.0.bn.num_batches_tracked": [],
+"backbone.features.8.token_mixer.0.bn.running_mean": [
+192
+],
+"backbone.features.8.token_mixer.0.bn.running_var": [
+192
+],
+"backbone.features.8.token_mixer.0.bn.weight": [
+192
+],
+"backbone.features.8.token_mixer.0.conv.bn.bias": [
+192
+],
+"backbone.features.8.token_mixer.0.conv.bn.num_batches_tracked": [],
+"backbone.features.8.token_mixer.0.conv.bn.running_mean": [
+192
+],
+"backbone.features.8.token_mixer.0.conv.bn.running_var": [
+192
+],
+"backbone.features.8.token_mixer.0.conv.bn.weight": [
+192
+],
+"backbone.features.8.token_mixer.0.conv.c.weight": [
+192,
+1,
+3,
+3
+],
+"backbone.features.8.token_mixer.0.conv1.bias": [
+192
+],
+"backbone.features.8.token_mixer.0.conv1.weight": [
+192,
+1,
+1,
+1
+],
+"backbone.features.9.channel_mixer.m.0.bn.bias": [
+384
+],
+"backbone.features.9.channel_mixer.m.0.bn.num_batches_tracked": [],
+"backbone.features.9.channel_mixer.m.0.bn.running_mean": [
+384
+],
+"backbone.features.9.channel_mixer.m.0.bn.running_var": [
+384
+],
+"backbone.features.9.channel_mixer.m.0.bn.weight": [
+384
+],
+"backbone.features.9.channel_mixer.m.0.c.weight": [
+384,
+192,
+1,
+1
+],
+"backbone.features.9.channel_mixer.m.2.bn.bias": [
+192
+],
+"backbone.features.9.channel_mixer.m.2.bn.num_batches_tracked": [],
+"backbone.features.9.channel_mixer.m.2.bn.running_mean": [
+192
+],
+"backbone.features.9.channel_mixer.m.2.bn.running_var": [
+192
+],
+"backbone.features.9.channel_mixer.m.2.bn.weight": [
+192
+],
+"backbone.features.9.channel_mixer.m.2.c.weight": [
+192,
+384,
+1,
+1
+],
+"backbone.features.9.token_mixer.0.bn.bias": [
+192
+],
+"backbone.features.9.token_mixer.0.bn.num_batches_tracked": [],
+"backbone.features.9.token_mixer.0.bn.running_mean": [
+192
+],
+"backbone.features.9.token_mixer.0.bn.running_var": [
+192
+],
+"backbone.features.9.token_mixer.0.bn.weight": [
+192
+],
+"backbone.features.9.token_mixer.0.conv.bn.bias": [
+192
+],
+"backbone.features.9.token_mixer.0.conv.bn.num_batches_tracked": [],
+"backbone.features.9.token_mixer.0.conv.bn.running_mean": [
+192
+],
+"backbone.features.9.token_mixer.0.conv.bn.running_var": [
+192
+],
+"backbone.features.9.token_mixer.0.conv.bn.weight": [
+192
+],
+"backbone.features.9.token_mixer.0.conv.c.weight": [
+192,
+1,
+3,
+3
+],
+"backbone.features.9.token_mixer.0.conv1.bias": [
+192
+],
+"backbone.features.9.token_mixer.0.conv1.weight": [
+192,
+1,
+1,
+1
+],
+"backbone.features.9.token_mixer.1.fc1.bias": [
+48
+],
+"backbone.features.9.token_mixer.1.fc1.weight": [
+48,
+192,
+1,
+1
+],
+"backbone.features.9.token_mixer.1.fc2.bias": [
+192
+],
+"backbone.features.9.token_mixer.1.fc2.weight": [
+192,
+48,
+1,
+1
+],
+"head.binarize.conv1.weight": [
+24,
+96,
+3,
+3
+],
+"head.binarize.conv2.bias": [
+24
+],
+"head.binarize.conv2.weight": [
+24,
+24,
+2,
+2
+],
+"head.binarize.conv3.bias": [
+1
+],
+"head.binarize.conv3.weight": [
+24,
+1,
+2,
+2
+],
+"head.binarize.conv_bn1.bias": [
+24
+],
+"head.binarize.conv_bn1.num_batches_tracked": [],
+"head.binarize.conv_bn1.running_mean": [
+24
+],
+"head.binarize.conv_bn1.running_var": [
+24
+],
+"head.binarize.conv_bn1.weight": [
+24
+],
+"head.binarize.conv_bn2.bias": [
+24
+],
+"head.binarize.conv_bn2.num_batches_tracked": [],
+"head.binarize.conv_bn2.running_mean": [
+24
+],
+"head.binarize.conv_bn2.running_var": [
+24
+],
+"head.binarize.conv_bn2.weight": [
+24
+],
+"head.thresh.conv1.weight": [
+24,
+96,
+3,
+3
+],
+"head.thresh.conv2.bias": [
+24
+],
+"head.thresh.conv2.weight": [
+24,
+24,
+2,
+2
+],
+"head.thresh.conv3.bias": [
+1
+],
+"head.thresh.conv3.weight": [
+24,
+1,
+2,
+2
+],
+"head.thresh.conv_bn1.bias": [
+24
+],
+"head.thresh.conv_bn1.num_batches_tracked": [],
+"head.thresh.conv_bn1.running_mean": [
+24
+],
+"head.thresh.conv_bn1.running_var": [
+24
+],
+"head.thresh.conv_bn1.weight": [
+24
+],
+"head.thresh.conv_bn2.bias": [
+24
+],
+"head.thresh.conv_bn2.num_batches_tracked": [],
+"head.thresh.conv_bn2.running_mean": [
+24
+],
+"head.thresh.conv_bn2.running_var": [
+24
+],
+"head.thresh.conv_bn2.weight": [
+24
+],
+"neck.inp_conv.0.in_conv.weight": [
+24,
+96,
+3,
+3
+],
+"neck.inp_conv.0.se_block.conv1.bias": [
+6
+],
+"neck.inp_conv.0.se_block.conv1.weight": [
+6,
+24,
+1,
+1
+],
+"neck.inp_conv.0.se_block.conv2.bias": [
+24
+],
+"neck.inp_conv.0.se_block.conv2.weight": [
+24,
+6,
+1,
+1
+],
+"neck.inp_conv.1.in_conv.weight": [
+24,
+96,
+3,
+3
+],
+"neck.inp_conv.1.se_block.conv1.bias": [
+6
+],
+"neck.inp_conv.1.se_block.conv1.weight": [
+6,
+24,
+1,
+1
+],
+"neck.inp_conv.1.se_block.conv2.bias": [
+24
+],
+"neck.inp_conv.1.se_block.conv2.weight": [
+24,
+6,
+1,
+1
+],
+"neck.inp_conv.2.in_conv.weight": [
+24,
+96,
+3,
+3
+],
+"neck.inp_conv.2.se_block.conv1.bias": [
+6
+],
+"neck.inp_conv.2.se_block.conv1.weight": [
+6,
+24,
+1,
+1
+],
+"neck.inp_conv.2.se_block.conv2.bias": [
+24
+],
+"neck.inp_conv.2.se_block.conv2.weight": [
+24,
+6,
+1,
+1
+],
+"neck.inp_conv.3.in_conv.weight": [
+24,
+96,
+3,
+3
+],
+"neck.inp_conv.3.se_block.conv1.bias": [
+6
+],
+"neck.inp_conv.3.se_block.conv1.weight": [
+6,
+24,
+1,
+1
+],
+"neck.inp_conv.3.se_block.conv2.bias": [
+24
+],
+"neck.inp_conv.3.se_block.conv2.weight": [
+24,
+6,
+1,
+1
+],
+"neck.ins_conv.0.in_conv.weight": [
+96,
+48,
+1,
+1
+],
+"neck.ins_conv.0.se_block.conv1.bias": [
+24
+],
+"neck.ins_conv.0.se_block.conv1.weight": [
+24,
+96,
+1,
+1
+],
+"neck.ins_conv.0.se_block.conv2.bias": [
+96
+],
+"neck.ins_conv.0.se_block.conv2.weight": [
+96,
+24,
+1,
+1
+],
+"neck.ins_conv.1.in_conv.weight": [
+96,
+96,
+1,
+1
+],
+"neck.ins_conv.1.se_block.conv1.bias": [
+24
+],
+"neck.ins_conv.1.se_block.conv1.weight": [
+24,
+96,
+1,
+1
+],
+"neck.ins_conv.1.se_block.conv2.bias": [
+96
+],
+"neck.ins_conv.1.se_block.conv2.weight": [
+96,
+24,
+1,
+1
+],
+"neck.ins_conv.2.in_conv.weight": [
+96,
+192,
+1,
+1
+],
+"neck.ins_conv.2.se_block.conv1.bias": [
+24
+],
+"neck.ins_conv.2.se_block.conv1.weight": [
+24,
+96,
+1,
+1
+],
+"neck.ins_conv.2.se_block.conv2.bias": [
+96
+],
+"neck.ins_conv.2.se_block.conv2.weight": [
+96,
+24,
+1,
+1
+],
+"neck.ins_conv.3.in_conv.weight": [
+96,
+384,
+1,
+1
+],
+"neck.ins_conv.3.se_block.conv1.bias": [
+24
+],
+"neck.ins_conv.3.se_block.conv1.weight": [
+24,
+96,
+1,
+1
+],
+"neck.ins_conv.3.se_block.conv2.bias": [
+96
+],
+"neck.ins_conv.3.se_block.conv2.weight": [
+96,
+24,
+1,
+1
+]
+},
+"rec_cppd": {
+"decoder.char_node_decoder.0.mixer.kv.bias": [
+768
+],
+"decoder.char_node_decoder.0.mixer.kv.weight": [
+768,
+384
+],
+"decoder.char_node_decoder.0.mixer.proj.bias": [
+384
+],
+"decoder.char_node_decoder.0.mixer.proj.weight": [
+384,
+384
+],
+"decoder.char_node_decoder.0.mixer.q.bias": [
+384
+],
+"decoder.char_node_decoder.0.mixer.q.weight": [
+384,
+384
+],
+"decoder.char_node_decoder.0.mlp.fc1.bias": [
+1536
+],
+"decoder.char_node_decoder.0.mlp.fc1.weight": [
+1536,
+384
+],
+"decoder.char_node_decoder.0.mlp.fc2.bias": [
+384
+],
+"decoder.char_node_decoder.0.mlp.fc2.weight": [
+384,
+1536
+],
+"decoder.char_node_decoder.0.norm1.bias": [
+384
+],
+"decoder.char_node_decoder.0.norm1.weight": [
+384
+],
+"decoder.char_node_decoder.0.norm2.bias": [
+384
+],
+"decoder.char_node_decoder.0.norm2.weight": [
+384
+],
+"decoder.char_node_decoder.1.mixer.kv.bias": [
+768
+],
+"decoder.char_node_decoder.1.mixer.kv.weight": [
+768,
+384
+],
+"decoder.char_node_decoder.1.mixer.proj.bias": [
+384
+],
+"decoder.char_node_decoder.1.mixer.proj.weight": [
+384,
+384
+],
+"decoder.char_node_decoder.1.mixer.q.bias": [
+384
+],
+"decoder.char_node_decoder.1.mixer.q.weight": [
+384,
+384
+],
+"decoder.char_node_decoder.1.mlp.fc1.bias": [
+1536
+],
+"decoder.char_node_decoder.1.mlp.fc1.weight": [
+1536,
+384
+],
+"decoder.char_node_decoder.1.mlp.fc2.bias": [
+384
+],
+"decoder.char_node_decoder.1.mlp.fc2.weight": [
+384,
+1536
+],
+"decoder.char_node_decoder.1.norm1.bias": [
+384
+],
+"decoder.char_node_decoder.1.norm1.weight": [
+384
+],
+"decoder.char_node_decoder.1.norm2.bias": [
+384
+],
+"decoder.char_node_decoder.1.norm2.weight": [
+384
+],
+"decoder.char_node_embed.embedding.weight": [
+213,
+384
+],
+"decoder.char_node_fc1.bias": [
+140
+],
+"decoder.char_node_fc1.weight": [
+140,
+384
+],
+"decoder.char_pos_embed": [
+1,
+141,
+384
+],
+"decoder.edge_decoder.0.mixer.kv.bias": [
+768
+],
+"decoder.edge_decoder.0.mixer.kv.weight": [
+768,
+384
+],
+"decoder.edge_decoder.0.mixer.proj.bias": [
+384
+],
+"decoder.edge_decoder.0.mixer.proj.weight": [
+384,
+384
+],
+"decoder.edge_decoder.0.mixer.q.bias": [
+384
+],
+"decoder.edge_decoder.0.mixer.q.weight": [
+384,
+384
+],
+"decoder.edge_decoder.0.mlp.fc1.bias": [
+1536
+],
+"decoder.edge_decoder.0.mlp.fc1.weight": [
+1536,
+384
+],
+"decoder.edge_decoder.0.mlp.fc2.bias": [
+384
+],
+"decoder.edge_decoder.0.mlp.fc2.weight": [
+384,
+1536
+],
+"decoder.edge_decoder.0.norm1.bias": [
+384
+],
+"decoder.edge_decoder.0.norm1.weight": [
+384
+],
+"decoder.edge_decoder.0.norm2.bias": [
+384
+],
+"decoder.edge_decoder.0.norm2.weight": [
+384
+],
+"decoder.edge_fc.bias": [
+213
+],
+"decoder.edge_fc.weight": [
+213,
+384
+],
+"decoder.pos_node_decoder.0.mixer.kv.bias": [
+768
+],
+"decoder.pos_node_decoder.0.mixer.kv.weight": [
+768,
+384
+],
+"decoder.pos_node_decoder.0.mixer.proj.bias": [
+384
+],
+"decoder.pos_node_decoder.0.mixer.proj.weight": [
+384,
+384
+],
+"decoder.pos_node_decoder.0.mixer.q.bias": [
+384
+],
+"decoder.pos_node_decoder.0.mixer.q.weight": [
+384,
+384
+],
+"decoder.pos_node_decoder.0.mlp.fc1.bias": [
+1536
+],
+"decoder.pos_node_decoder.0.mlp.fc1.weight": [
+1536,
+384
+],
+"decoder.pos_node_decoder.0.mlp.fc2.bias": [
+384
+],
+"decoder.pos_node_decoder.0.mlp.fc2.weight": [
+384,
+1536
+],
+"decoder.pos_node_decoder.0.norm1.bias": [
+384
+],
+"decoder.pos_node_decoder.0.norm1.weight": [
+384
+],
+"decoder.pos_node_decoder.0.norm2.bias": [
+384
+],
+"decoder.pos_node_decoder.0.norm2.weight": [
+384
+],
+"decoder.pos_node_decoder.1.mixer.kv.bias": [
+768
+],
+"decoder.pos_node_decoder.1.mixer.kv.weight": [
+768,
+384
+],
+"decoder.pos_node_decoder.1.mixer.proj.bias": [
+384
+],
+"decoder.pos_node_decoder.1.mixer.proj.weight": [
+384,
+384
+],
+"decoder.pos_node_decoder.1.mixer.q.bias": [
+384
+],
+"decoder.pos_node_decoder.1.mixer.q.weight": [
+384,
+384
+],
+"decoder.pos_node_decoder.1.mlp.fc1.bias": [
+1536
+],
+"decoder.pos_node_decoder.1.mlp.fc1.weight": [
+1536,
+384
+],
+"decoder.pos_node_decoder.1.mlp.fc2.bias": [
+384
+],
+"decoder.pos_node_decoder.1.mlp.fc2.weight": [
+384,
+1536
+],
+"decoder.pos_node_decoder.1.norm1.bias": [
+384
+],
+"decoder.pos_node_decoder.1.norm1.weight": [
+384
+],
+"decoder.pos_node_decoder.1.norm2.bias": [
+384
+],
+"decoder.pos_node_decoder.1.norm2.weight": [
+384
+],
+"decoder.pos_node_embed.embedding.weight": [
+141,
+384
+],
+"decoder.pos_node_fc1.bias": [
+141
+],
+"decoder.pos_node_fc1.weight": [
+141,
+384
+],
+"encoder.pope.patch_embed.0.conv.bias": [
+64
+],
+"encoder.pope.patch_embed.0.conv.weight": [
+64,
+3,
+3,
+3
+],
+"encoder.pope.patch_embed.0.norm.bias": [
+64
+],
+"encoder.pope.patch_embed.0.norm.num_batches_tracked": [],
+"encoder.pope.patch_embed.0.norm.running_mean": [
+64
+],
+"encoder.pope.patch_embed.0.norm.running_var": [
+64
+],
+"encoder.pope.patch_embed.0.norm.weight": [
+64
+],
+"encoder.pope.patch_embed.1.conv.bias": [
+128
+],
+"encoder.pope.patch_embed.1.conv.weight": [
+128,
+64,
+3,
+3
+],
+"encoder.pope.patch_embed.1.norm.bias": [
+128
+],
+"encoder.pope.patch_embed.1.norm.num_batches_tracked": [],
+"encoder.pope.patch_embed.1.norm.running_mean": [
+128
+],
+"encoder.pope.patch_embed.1.norm.running_var": [
+128
+],
+"encoder.pope.patch_embed.1.norm.weight": [
+128
+],
+"encoder.stages.0.blocks.0.mixer.0.bias": [
+128
+],
+"encoder.stages.0.blocks.0.mixer.0.weight": [
+128,
+32,
+5,
+5
+],
+"encoder.stages.0.blocks.0.mlp.fc1.bias": [
+512
+],
+"encoder.stages.0.blocks.0.mlp.fc1.weight": [
+512,
+128
+],
+"encoder.stages.0.blocks.0.mlp.fc2.bias": [
+128
+],
+"encoder.stages.0.blocks.0.mlp.fc2.weight": [
+128,
+512
+],
+"encoder.stages.0.blocks.0.norm1.bias": [
+128
+],
+"encoder.stages.0.blocks.0.norm1.weight": [
+128
+],
+"encoder.stages.0.blocks.0.norm2.bias": [
+128
+],
+"encoder.stages.0.blocks.0.norm2.weight": [
+128
+],
+"encoder.stages.0.blocks.1.mixer.0.bias": [
+128
+],
+"encoder.stages.0.blocks.1.mixer.0.weight": [
+128,
+32,
+5,
+5
+],
+"encoder.stages.0.blocks.1.mlp.fc1.bias": [
+512
+],
+"encoder.stages.0.blocks.1.mlp.fc1.weight": [
+512,
+128
+],
+"encoder.stages.0.blocks.1.mlp.fc2.bias": [
+128
+],
+"encoder.stages.0.blocks.1.mlp.fc2.weight": [
+128,
+512
+],
+"encoder.stages.0.blocks.1.norm1.bias": [
+128
+],
+"encoder.stages.0.blocks.1.norm1.weight": [
+128
+],
+"encoder.stages.0.blocks.1.norm2.bias": [
+128
+],
+"encoder.stages.0.blocks.1.norm2.weight": [
+128
+],
+"encoder.stages.0.blocks.2.mixer.0.bias": [
+128
+],
+"encoder.stages.0.blocks.2.mixer.0.weight": [
+128,
+32,
+5,
+5
+],
+"encoder.stages.0.blocks.2.mlp.fc1.bias": [
+512
+],
+"encoder.stages.0.blocks.2.mlp.fc1.weight": [
+512,
+128
+],
+"encoder.stages.0.blocks.2.mlp.fc2.bias": [
+128
+],
+"encoder.stages.0.blocks.2.mlp.fc2.weight": [
+128,
+512
+],
+"encoder.stages.0.blocks.2.norm1.bias": [
+128
+],
+"encoder.stages.0.blocks.2.norm1.weight": [
+128
+],
+"encoder.stages.0.blocks.2.norm2.bias": [
+128
+],
+"encoder.stages.0.blocks.2.norm2.weight": [
+128
+],
+"encoder.stages.0.blocks.3.mixer.0.bias": [
+128
+],
+"encoder.stages.0.blocks.3.mixer.0.weight": [
+128,
+32,
+5,
+5
+],
+"encoder.stages.0.blocks.3.mlp.fc1.bias": [
+512
+],
+"encoder.stages.0.blocks.3.mlp.fc1.weight": [
+512,
+128
+],
+"encoder.stages.0.blocks.3.mlp.fc2.bias": [
+128
+],
+"encoder.stages.0.blocks.3.mlp.fc2.weight": [
+128,
+512
+],
+"encoder.stages.0.blocks.3.norm1.bias": [
+128
+],
+"encoder.stages.0.blocks.3.norm1.weight": [
+128
+],
+"encoder.stages.0.blocks.3.norm2.bias": [
+128
+],
+"encoder.stages.0.blocks.3.norm2.weight": [
+128
+],
+"encoder.stages.0.blocks.4.mixer.0.bias": [
+128
+],
+"encoder.stages.0.blocks.4.mixer.0.weight": [
+128,
+32,
+5,
+5
+],
+"encoder.stages.0.blocks.4.mlp.fc1.bias": [
+512
+],
+"encoder.stages.0.blocks.4.mlp.fc1.weight": [
+512,
+128
+],
+"encoder.stages.0.blocks.4.mlp.fc2.bias": [
+128
+],
+"encoder.stages.0.blocks.4.mlp.fc2.weight": [
+128,
+512
+],
+"encoder.stages.0.blocks.4.norm1.bias": [
+128
+],
+"encoder.stages.0.blocks.4.norm1.weight": [
+128
+],
+"encoder.stages.0.blocks.4.norm2.bias": [
+128
+],
+"encoder.stages.0.blocks.4.norm2.weight": [
+128
+],
+"encoder.stages.0.blocks.5.mixer.0.bias": [
+128
+],
+"encoder.stages.0.blocks.5.mixer.0.weight": [
+128,
+32,
+5,
+5
+],
+"encoder.stages.0.blocks.5.mlp.fc1.bias": [
+512
+],
+"encoder.stages.0.blocks.5.mlp.fc1.weight": [
+512,
+128
+],
+"encoder.stages.0.blocks.5.mlp.fc2.bias": [
+128
+],
+"encoder.stages.0.blocks.5.mlp.fc2.weight": [
+128,
+512
+],
+"encoder.stages.0.blocks.5.norm1.bias": [
+128
+],
+"encoder.stages.0.blocks.5.norm1.weight": [
+128
+],
+"encoder.stages.0.blocks.5.norm2.bias": [
+128
+],
+"encoder.stages.0.blocks.5.norm2.weight": [
+128
+],
+"encoder.stages.0.downsample.conv.bias": [
+256
+],
+"encoder.stages.0.downsample.conv.weight": [
+256,
+128,
+3,
+3
+],
+"encoder.stages.0.downsample.norm.bias": [
+256
+],
+"encoder.stages.0.downsample.norm.weight": [
+256
+],
+"encoder.stages.1.blocks.0.mixer.0.bias": [
+256
+],
+"encoder.stages.1.blocks.0.mixer.0.weight": [
+256,
+32,
+5,
+5
+],
+"encoder.stages.1.blocks.0.mlp.fc1.bias": [
+1024
+],
+"encoder.stages.1.blocks.0.mlp.fc1.weight": [
+1024,
+256
+],
+"encoder.stages.1.blocks.0.mlp.fc2.bias": [
+256
+],
+"encoder.stages.1.blocks.0.mlp.fc2.weight": [
+256,
+1024
+],
+"encoder.stages.1.blocks.0.norm1.bias": [
+256
+],
+"encoder.stages.1.blocks.0.norm1.weight": [
+256
+],
+"encoder.stages.1.blocks.0.norm2.bias": [
+256
+],
+"encoder.stages.1.blocks.0.norm2.weight": [
+256
+],
+"encoder.stages.1.blocks.1.mixer.0.bias": [
+256
+],
+"encoder.stages.1.blocks.1.mixer.0.weight": [
+256,
+32,
+5,
+5
+],
+"encoder.stages.1.blocks.1.mlp.fc1.bias": [
+1024
+],
+"encoder.stages.1.blocks.1.mlp.fc1.weight": [
+1024,
+256
+],
+"encoder.stages.1.blocks.1.mlp.fc2.bias": [
+256
+],
+"encoder.stages.1.blocks.1.mlp.fc2.weight": [
+256,
+1024
+],
+"encoder.stages.1.blocks.1.norm1.bias": [
+256
+],
+"encoder.stages.1.blocks.1.norm1.weight": [
+256
+],
+"encoder.stages.1.blocks.1.norm2.bias": [
+256
+],
+"encoder.stages.1.blocks.1.norm2.weight": [
+256
+],
+"encoder.stages.1.blocks.3.mixer.proj.bias": [
+256
+],
+"encoder.stages.1.blocks.3.mixer.proj.weight": [
+256,
+256
+],
+"encoder.stages.1.blocks.3.mixer.qkv.bias": [
+768
+],
+"encoder.stages.1.blocks.3.mixer.qkv.weight": [
+768,
+256
+],
+"encoder.stages.1.blocks.3.mlp.fc1.bias": [
+1024
+],
+"encoder.stages.1.blocks.3.mlp.fc1.weight": [
+1024,
+256
+],
+"encoder.stages.1.blocks.3.mlp.fc2.bias": [
+256
+],
+"encoder.stages.1.blocks.3.mlp.fc2.weight": [
+256,
+1024
+],
+"encoder.stages.1.blocks.3.norm1.bias": [
+256
+],
+"encoder.stages.1.blocks.3.norm1.weight": [
+256
+],
+"encoder.stages.1.blocks.3.norm2.bias": [
+256
+],
+"encoder.stages.1.blocks.3.norm2.weight": [
+256
+],
+"encoder.stages.1.blocks.4.mixer.proj.bias": [
+256
+],
+"encoder.stages.1.blocks.4.mixer.proj.weight": [
+256,
+256
+],
+"encoder.stages.1.blocks.4.mixer.qkv.bias": [
+768
+],
+"encoder.stages.1.blocks.4.mixer.qkv.weight": [
+768,
+256
+],
+"encoder.stages.1.blocks.4.mlp.fc1.bias": [
+1024
+],
+"encoder.stages.1.blocks.4.mlp.fc1.weight": [
+1024,
+256
+],
+"encoder.stages.1.blocks.4.mlp.fc2.bias": [
+256
+],
+"encoder.stages.1.blocks.4.mlp.fc2.weight": [
+256,
+1024
+],
+"encoder.stages.1.blocks.4.norm1.bias": [
+256
+],
+"encoder.stages.1.blocks.4.norm1.weight": [
+256
+],
+"encoder.stages.1.blocks.4.norm2.bias": [
+256
+],
+"encoder.stages.1.blocks.4.norm2.weight": [
+256
+],
+"encoder.stages.1.blocks.5.mixer.proj.bias": [
+256
+],
+"encoder.stages.1.blocks.5.mixer.proj.weight": [
+256,
+256
+],
+"encoder.stages.1.blocks.5.mixer.qkv.bias": [
+768
+],
+"encoder.stages.1.blocks.5.mixer.qkv.weight": [
+768,
+256
+],
+"encoder.stages.1.blocks.5.mlp.fc1.bias": [
+1024
+],
+"encoder.stages.1.blocks.5.mlp.fc1.weight": [
+1024,
+256
+],
+"encoder.stages.1.blocks.5.mlp.fc2.bias": [
+256
+],
+"encoder.stages.1.blocks.5.mlp.fc2.weight": [
+256,
+1024
+],
+"encoder.stages.1.blocks.5.norm1.bias": [
+256
+],
+"encoder.stages.1.blocks.5.norm1.weight": [
+256
+],
+"encoder.stages.1.blocks.5.norm2.bias": [
+256
+],
+"encoder.stages.1.blocks.5.norm2.weight": [
+256
+],
+"encoder.stages.1.blocks.6.mixer.proj.bias": [
+256
+],
+"encoder.stages.1.blocks.6.mixer.proj.weight": [
+256,
+256
+],
+"encoder.stages.1.blocks.6.mixer.qkv.bias": [
+768
+],
+"encoder.stages.1.blocks.6.mixer.qkv.weight": [
+768,
+256
+],
+"encoder.stages.1.blocks.6.mlp.fc1.bias": [
+1024
+],
+"encoder.stages.1.blocks.6.mlp.fc1.weight": [
+1024,
+256
+],
+"encoder.stages.1.blocks.6.mlp.fc2.bias": [
+256
+],
+"encoder.stages.1.blocks.6.mlp.fc2.weight": [
+256,
+1024
+],
+"encoder.stages.1.blocks.6.norm1.bias": [
+256
+],
+"encoder.stages.1.blocks.6.norm1.weight": [
+256
+],
+"encoder.stages.1.blocks.6.norm2.bias": [
+256
+],
+"encoder.stages.1.blocks.6.norm2.weight": [
+256
+],
+"encoder.stages.1.downsample.conv.bias": [
+384
+],
+"encoder.stages.1.downsample.conv.weight": [
+384,
+256,
+3,
+3
+],
+"encoder.stages.1.downsample.norm.bias": [
+384
+],
+"encoder.stages.1.downsample.norm.weight": [
+384
+],
+"encoder.stages.2.blocks.0.mixer.proj.bias": [
+384
+],
+"encoder.stages.2.blocks.0.mixer.proj.weight": [
+384,
+384
+],
+"encoder.stages.2.blocks.0.mixer.qkv.bias": [
+1152
+],
+"encoder.stages.2.blocks.0.mixer.qkv.weight": [
+1152,
+384
+],
+"encoder.stages.2.blocks.0.mlp.fc1.bias": [
+1536
+],
+"encoder.stages.2.blocks.0.mlp.fc1.weight": [
+1536,
+384
+],
+"encoder.stages.2.blocks.0.mlp.fc2.bias": [
+384
+],
+"encoder.stages.2.blocks.0.mlp.fc2.weight": [
+384,
+1536
+],
+"encoder.stages.2.blocks.0.norm1.bias": [
+384
+],
+"encoder.stages.2.blocks.0.norm1.weight": [
+384
+],
+"encoder.stages.2.blocks.0.norm2.bias": [
+384
+],
+"encoder.stages.2.blocks.0.norm2.weight": [
+384
+],
+"encoder.stages.2.blocks.1.mixer.proj.bias": [
+384
+],
+"encoder.stages.2.blocks.1.mixer.proj.weight": [
+384,
+384
+],
+"encoder.stages.2.blocks.1.mixer.qkv.bias": [
+1152
+],
+"encoder.stages.2.blocks.1.mixer.qkv.weight": [
+1152,
+384
+],
+"encoder.stages.2.blocks.1.mlp.fc1.bias": [
+1536
+],
+"encoder.stages.2.blocks.1.mlp.fc1.weight": [
+1536,
+384
+],
+"encoder.stages.2.blocks.1.mlp.fc2.bias": [
+384
+],
+"encoder.stages.2.blocks.1.mlp.fc2.weight": [
+384,
+1536
+],
+"encoder.stages.2.blocks.1.norm1.bias": [
+384
+],
+"encoder.stages.2.blocks.1.norm1.weight": [
+384
+],
+"encoder.stages.2.blocks.1.norm2.bias": [
+384
+],
+"encoder.stages.2.blocks.1.norm2.weight": [
+384
+],
+"encoder.stages.2.blocks.2.mixer.proj.bias": [
+384
+],
+"encoder.stages.2.blocks.2.mixer.proj.weight": [
+384,
+384
+],
+"encoder.stages.2.blocks.2.mixer.qkv.bias": [
+1152
+],
+"encoder.stages.2.blocks.2.mixer.qkv.weight": [
+1152,
+384
+],
+"encoder.stages.2.blocks.2.mlp.fc1.bias": [
+1536
+],
+"encoder.stages.2.blocks.2.mlp.fc1.weight": [
+1536,
+384
+],
+"encoder.stages.2.blocks.2.mlp.fc2.bias": [
+384
+],
+"encoder.stages.2.blocks.2.mlp.fc2.weight": [
+384,
+1536
+],
+"encoder.stages.2.blocks.2.norm1.bias": [
+384
+],
+"encoder.stages.2.blocks.2.norm1.weight": [
+384
+],
+"encoder.stages.2.blocks.2.norm2.bias": [
+384
+],
+"encoder.stages.2.blocks.2.norm2.weight": [
+384
+],
+"encoder.stages.2.blocks.3.mixer.proj.bias": [
+384
+],
+"encoder.stages.2.blocks.3.mixer.proj.weight": [
+384,
+384
+],
+"encoder.stages.2.blocks.3.mixer.qkv.bias": [
+1152
+],
+"encoder.stages.2.blocks.3.mixer.qkv.weight": [
+1152,
+384
+],
+"encoder.stages.2.blocks.3.mlp.fc1.bias": [
+1536
+],
+"encoder.stages.2.blocks.3.mlp.fc1.weight": [
+1536,
+384
+],
+"encoder.stages.2.blocks.3.mlp.fc2.bias": [
+384
+],
+"encoder.stages.2.blocks.3.mlp.fc2.weight": [
+384,
+1536
+],
+"encoder.stages.2.blocks.3.norm1.bias": [
+384
+],
+"encoder.stages.2.blocks.3.norm1.weight": [
+384
+],
+"encoder.stages.2.blocks.3.norm2.bias": [
+384
+],
+"encoder.stages.2.blocks.3.norm2.weight": [
+384
+],
+"encoder.stages.2.blocks.4.mixer.proj.bias": [
+384
+],
+"encoder.stages.2.blocks.4.mixer.proj.weight": [
+384,
+384
+],
+"encoder.stages.2.blocks.4.mixer.qkv.bias": [
+1152
+],
+"encoder.stages.2.blocks.4.mixer.qkv.weight": [
+1152,
+384
+],
+"encoder.stages.2.blocks.4.mlp.fc1.bias": [
+1536
+],
+"encoder.stages.2.blocks.4.mlp.fc1.weight": [
+1536,
+384
+],
+"encoder.stages.2.blocks.4.mlp.fc2.bias": [
+384
+],
+"encoder.stages.2.blocks.4.mlp.fc2.weight": [
+384,
+1536
+],
+"encoder.stages.2.blocks.4.norm1.bias": [
+384
+],
+"encoder.stages.2.blocks.4.norm1.weight": [
+384
+],
+"encoder.stages.2.blocks.4.norm2.bias": [
+384
+],
+"encoder.stages.2.blocks.4.norm2.weight": [
+384
+],
+"encoder.stages.2.blocks.5.mixer.proj.bias": [
+384
+],
+"encoder.stages.2.blocks.5.mixer.proj.weight": [
+384,
+384
+],
+"encoder.stages.2.blocks.5.mixer.qkv.bias": [
+1152
+],
+"encoder.stages.2.blocks.5.mixer.qkv.weight": [
+1152,
+384
+],
+"encoder.stages.2.blocks.5.mlp.fc1.bias": [
+1536
+],
+"encoder.stages.2.blocks.5.mlp.fc1.weight": [
+1536,
+384
+],
+"encoder.stages.2.blocks.5.mlp.fc2.bias": [
+384
+],
+"encoder.stages.2.blocks.5.mlp.fc2.weight": [
+384,
+1536
+],
+"encoder.stages.2.blocks.5.norm1.bias": [
+384
+],
+"encoder.stages.2.blocks.5.norm1.weight": [
+384
+],
+"encoder.stages.2.blocks.5.norm2.bias": [
+384
+],
+"encoder.stages.2.blocks.5.norm2.weight": [
+384
+]
+},
+"rec_v3": {
+"decoder.ctc_decoder.char_token": [
+1,
+1,
+384
+],
+"decoder.ctc_decoder.fc.bias": [
+213
+],
+"decoder.ctc_decoder.fc.weight": [
+213,
+384
+],
+"decoder.ctc_decoder.fc_kv.bias": [
+768
+],
+"decoder.ctc_decoder.fc_kv.weight": [
+768,
+384
+],
+"decoder.ctc_decoder.w_atten_block.attn.proj.bias": [
+384
+],
+"decoder.ctc_decoder.w_atten_block.attn.proj.weight": [
+384,
+384
+],
+"decoder.ctc_decoder.w_atten_block.attn.qkv.weight": [
+1152,
+384
+],
+"decoder.ctc_decoder.w_atten_block.mlp.fc1.bias": [
+1536
+],
+"decoder.ctc_decoder.w_atten_block.mlp.fc1.weight": [
+1536,
+384
+],
+"decoder.ctc_decoder.w_atten_block.mlp.fc2.bias": [
+384
+],
+"decoder.ctc_decoder.w_atten_block.mlp.fc2.weight": [
+384,
+1536
+],
+"decoder.ctc_decoder.w_atten_block.norm1.bias": [
+384
+],
+"decoder.ctc_decoder.w_atten_block.norm1.weight": [
+384
+],
+"decoder.ctc_decoder.w_atten_block.norm2.bias": [
+384
+],
+"decoder.ctc_decoder.w_atten_block.norm2.weight": [
+384
+],
+"decoder.gtc_decoder.char_embed.embedding.weight": [
+217,
+384
+],
+"decoder.gtc_decoder.cmff_decoder.0.images_to_question_cross_attn.kv.bias": [
+768
+],
+"decoder.gtc_decoder.cmff_decoder.0.images_to_question_cross_attn.kv.weight": [
+768,
+384
+],
+"decoder.gtc_decoder.cmff_decoder.0.images_to_question_cross_attn.proj.bias": [
+384
+],
+"decoder.gtc_decoder.cmff_decoder.0.images_to_question_cross_attn.proj.weight": [
+384,
+384
+],
+"decoder.gtc_decoder.cmff_decoder.0.images_to_question_cross_attn.q.bias": [
+384
+],
+"decoder.gtc_decoder.cmff_decoder.0.images_to_question_cross_attn.q.weight": [
+384,
+384
+],
+"decoder.gtc_decoder.cmff_decoder.0.normkv1.bias": [
+384
+],
+"decoder.gtc_decoder.cmff_decoder.0.normkv1.weight": [
+384
+],
+"decoder.gtc_decoder.cmff_decoder.0.normkv2.bias": [
+384
+],
+"decoder.gtc_decoder.cmff_decoder.0.normkv2.weight": [
+384
+],
+"decoder.gtc_decoder.cmff_decoder.0.normq1.bias": [
+384
+],
+"decoder.gtc_decoder.cmff_decoder.0.normq1.weight": [
+384
+],
+"decoder.gtc_decoder.cmff_decoder.0.normq2.bias": [
+384
+],
+"decoder.gtc_decoder.cmff_decoder.0.normq2.weight": [
+384
+],
+"decoder.gtc_decoder.cmff_decoder.0.question_to_images_cross_attn.kv.bias": [
+768
+],
+"decoder.gtc_decoder.cmff_decoder.0.question_to_images_cross_attn.kv.weight": [
+768,
+384
+],
+"decoder.gtc_decoder.cmff_decoder.0.question_to_images_cross_attn.proj.bias": [
+384
+],
+"decoder.gtc_decoder.cmff_decoder.0.question_to_images_cross_attn.proj.weight": [
+384,
+384
+],
+"decoder.gtc_decoder.cmff_decoder.0.question_to_images_cross_attn.q.bias": [
+384
+],
+"decoder.gtc_decoder.cmff_decoder.0.question_to_images_cross_attn.q.weight": [
+384,
+384
+],
+"decoder.gtc_decoder.next_token": [
+1,
+1,
+1,
+384
+],
+"decoder.gtc_decoder.norm_pred.bias": [
+384
+],
+"decoder.gtc_decoder.norm_pred.weight": [
+384
+],
+"decoder.gtc_decoder.pre_token": [
+1,
+1,
+1,
+384
+],
+"decoder.gtc_decoder.prompt_next_embed": [
+1,
+1,
+6,
+384
+],
+"decoder.gtc_decoder.prompt_pre_embed": [
+1,
+1,
+6,
+384
+],
+"decoder.gtc_decoder.ques1_head.bias": [
+214
+],
+"decoder.gtc_decoder.ques1_head.weight": [
+214,
+384
+],
+"encoder.pope.patch_embed.0.conv.weight": [
+48,
+3,
+3,
+3
+],
+"encoder.pope.patch_embed.0.norm.bias": [
+48
+],
+"encoder.pope.patch_embed.0.norm.num_batches_tracked": [],
+"encoder.pope.patch_embed.0.norm.running_mean": [
+48
+],
+"encoder.pope.patch_embed.0.norm.running_var": [
+48
+],
+"encoder.pope.patch_embed.0.norm.weight": [
+48
+],
+"encoder.pope.patch_embed.1.conv.weight": [
+96,
+48,
+3,
+3
+],
+"encoder.pope.patch_embed.1.norm.bias": [
+96
+],
+"encoder.pope.patch_embed.1.norm.num_batches_tracked": [],
+"encoder.pope.patch_embed.1.norm.running_mean": [
+96
+],
+"encoder.pope.patch_embed.1.norm.running_var": [
+96
+],
+"encoder.pope.patch_embed.1.norm.weight": [
+96
+],
+"encoder.stages.0.blocks.0.mixer.0.bias": [
+96
+],
+"encoder.stages.0.blocks.0.mixer.0.weight": [
+96,
+32,
+3,
+3
+],
+"encoder.stages.0.blocks.0.mixer.1.bias": [
+96
+],
+"encoder.stages.0.blocks.0.mixer.1.weight": [
+96,
+32,
+3,
+3
+],
+"encoder.stages.0.blocks.0.mlp.fc1.bias": [
+384
+],
+"encoder.stages.0.blocks.0.mlp.fc1.weight": [
+384,
+96
+],
+"encoder.stages.0.blocks.0.mlp.fc2.bias": [
+96
+],
+"encoder.stages.0.blocks.0.mlp.fc2.weight": [
+96,
+384
+],
+"encoder.stages.0.blocks.0.norm1.bias": [
+96
+],
+"encoder.stages.0.blocks.0.norm1.weight": [
+96
+],
+"encoder.stages.0.blocks.0.norm2.bias": [
+96
+],
+"encoder.stages.0.blocks.0.norm2.weight": [
+96
+],
+"encoder.stages.0.blocks.1.mixer.0.bias": [
+96
+],
+"encoder.stages.0.blocks.1.mixer.0.weight": [
+96,
+32,
+3,
+3
+],
+"encoder.stages.0.blocks.1.mixer.1.bias": [
+96
+],
+"encoder.stages.0.blocks.1.mixer.1.weight": [
+96,
+32,
+3,
+3
+],
+"encoder.stages.0.blocks.1.mlp.fc1.bias": [
+384
+],
+"encoder.stages.0.blocks.1.mlp.fc1.weight": [
+384,
+96
+],
+"encoder.stages.0.blocks.1.mlp.fc2.bias": [
+96
+],
+"encoder.stages.0.blocks.1.mlp.fc2.weight": [
+96,
+384
+],
+"encoder.stages.0.blocks.1.norm1.bias": [
+96
+],
+"encoder.stages.0.blocks.1.norm1.weight": [
+96
+],
+"encoder.stages.0.blocks.1.norm2.bias": [
+96
+],
+"encoder.stages.0.blocks.1.norm2.weight": [
+96
+],
+"encoder.stages.0.blocks.2.mixer.0.bias": [
+96
+],
+"encoder.stages.0.blocks.2.mixer.0.weight": [
+96,
+32,
+3,
+3
+],
+"encoder.stages.0.blocks.2.mixer.1.bias": [
+96
+],
+"encoder.stages.0.blocks.2.mixer.1.weight": [
+96,
+32,
+3,
+3
+],
+"encoder.stages.0.blocks.2.mlp.fc1.bias": [
+384
+],
+"encoder.stages.0.blocks.2.mlp.fc1.weight": [
+384,
+96
+],
+"encoder.stages.0.blocks.2.mlp.fc2.bias": [
+96
+],
+"encoder.stages.0.blocks.2.mlp.fc2.weight": [
+96,
+384
+],
+"encoder.stages.0.blocks.2.norm1.bias": [
+96
+],
+"encoder.stages.0.blocks.2.norm1.weight": [
+96
+],
+"encoder.stages.0.blocks.2.norm2.bias": [
+96
+],
+"encoder.stages.0.blocks.2.norm2.weight": [
+96
+],
+"encoder.stages.0.downsample.conv.bias": [
+192
+],
+"encoder.stages.0.downsample.conv.weight": [
+192,
+96,
+3,
+3
+],
+"encoder.stages.0.downsample.norm.bias": [
+192
+],
+"encoder.stages.0.downsample.norm.weight": [
+192
+],
+"encoder.stages.1.blocks.0.mixer.0.bias": [
+192
+],
+"encoder.stages.1.blocks.0.mixer.0.weight": [
+192,
+32,
+3,
+3
+],
+"encoder.stages.1.blocks.0.mixer.1.bias": [
+192
+],
+"encoder.stages.1.blocks.0.mixer.1.weight": [
+192,
+32,
+3,
+3
+],
+"encoder.stages.1.blocks.0.mlp.fc1.bias": [
+768
+],
+"encoder.stages.1.blocks.0.mlp.fc1.weight": [
+768,
+192
+],
+"encoder.stages.1.blocks.0.mlp.fc2.bias": [
+192
+],
+"encoder.stages.1.blocks.0.mlp.fc2.weight": [
+192,
+768
+],
+"encoder.stages.1.blocks.0.norm1.bias": [
+192
+],
+"encoder.stages.1.blocks.0.norm1.weight": [
+192
+],
+"encoder.stages.1.blocks.0.norm2.bias": [
+192
+],
+"encoder.stages.1.blocks.0.norm2.weight": [
+192
+],
+"encoder.stages.1.blocks.1.mixer.0.bias": [
+192
+],
+"encoder.stages.1.blocks.1.mixer.0.weight": [
+192,
+32,
+3,
+3
+],
+"encoder.stages.1.blocks.1.mixer.1.bias": [
+192
+],
+"encoder.stages.1.blocks.1.mixer.1.weight": [
+192,
+32,
+3,
+3
+],
+"encoder.stages.1.blocks.1.mlp.fc1.bias": [
+768
+],
+"encoder.stages.1.blocks.1.mlp.fc1.weight": [
+768,
+192
+],
+"encoder.stages.1.blocks.1.mlp.fc2.bias": [
+192
+],
+"encoder.stages.1.blocks.1.mlp.fc2.weight": [
+192,
+768
+],
+"encoder.stages.1.blocks.1.norm1.bias": [
+192
+],
+"encoder.stages.1.blocks.1.norm1.weight": [
+192
+],
+"encoder.stages.1.blocks.1.norm2.bias": [
+192
+],
+"encoder.stages.1.blocks.1.norm2.weight": [
+192
+],
+"encoder.stages.1.blocks.2.mixer.0.bias": [
+192
+],
+"encoder.stages.1.blocks.2.mixer.0.weight": [
+192,
+32,
+3,
+3
+],
+"encoder.stages.1.blocks.2.mixer.1.bias": [
+192
+],
+"encoder.stages.1.blocks.2.mixer.1.weight": [
+192,
+32,
+3,
+3
+],
+"encoder.stages.1.blocks.2.mlp.fc1.bias": [
+768
+],
+"encoder.stages.1.blocks.2.mlp.fc1.weight": [
+768,
+192
+],
+"encoder.stages.1.blocks.2.mlp.fc2.bias": [
+192
+],
+"encoder.stages.1.blocks.2.mlp.fc2.weight": [
+192,
+768
+],
+"encoder.stages.1.blocks.2.norm1.bias": [
+192
+],
+"encoder.stages.1.blocks.2.norm1.weight": [
+192
+],
+"encoder.stages.1.blocks.2.norm2.bias": [
+192
+],
+"encoder.stages.1.blocks.2.norm2.weight": [
+192
+],
+"encoder.stages.1.blocks.4.mixer.proj.bias": [
+192
+],
+"encoder.stages.1.blocks.4.mixer.proj.weight": [
+192,
+192
+],
+"encoder.stages.1.blocks.4.mixer.qkv.bias": [
+576
+],
+"encoder.stages.1.blocks.4.mixer.qkv.weight": [
+576,
+192
+],
+"encoder.stages.1.blocks.4.mlp.fc1.bias": [
+768
+],
+"encoder.stages.1.blocks.4.mlp.fc1.weight": [
+768,
+192
+],
+"encoder.stages.1.blocks.4.mlp.fc2.bias": [
+192
+],
+"encoder.stages.1.blocks.4.mlp.fc2.weight": [
+192,
+768
+],
+"encoder.stages.1.blocks.4.norm1.bias": [
+192
+],
+"encoder.stages.1.blocks.4.norm1.weight": [
+192
+],
+"encoder.stages.1.blocks.4.norm2.bias": [
+192
+],
+"encoder.stages.1.blocks.4.norm2.weight": [
+192
+],
+"encoder.stages.1.blocks.5.mixer.proj.bias": [
+192
+],
+"encoder.stages.1.blocks.5.mixer.proj.weight": [
+192,
+192
+],
+"encoder.stages.1.blocks.5.mixer.qkv.bias": [
+576
+],
+"encoder.stages.1.blocks.5.mixer.qkv.weight": [
+576,
+192
+],
+"encoder.stages.1.blocks.5.mlp.fc1.bias": [
+768
+],
+"encoder.stages.1.blocks.5.mlp.fc1.weight": [
+768,
+192
+],
+"encoder.stages.1.blocks.5.mlp.fc2.bias": [
+192
+],
+"encoder.stages.1.blocks.5.mlp.fc2.weight": [
+192,
+768
+],
+"encoder.stages.1.blocks.5.norm1.bias": [
+192
+],
+"encoder.stages.1.blocks.5.norm1.weight": [
+192
+],
+"encoder.stages.1.blocks.5.norm2.bias": [
+192
+],
+"encoder.stages.1.blocks.5.norm2.weight": [
+192
+],
+"encoder.stages.1.blocks.6.mixer.proj.bias": [
+192
+],
+"encoder.stages.1.blocks.6.mixer.proj.weight": [
+192,
+192
+],
+"encoder.stages.1.blocks.6.mixer.qkv.bias": [
+576
+],
+"encoder.stages.1.blocks.6.mixer.qkv.weight": [
+576,
+192
+],
+"encoder.stages.1.blocks.6.mlp.fc1.bias": [
+768
+],
+"encoder.stages.1.blocks.6.mlp.fc1.weight": [
+768,
+192
+],
+"encoder.stages.1.blocks.6.mlp.fc2.bias": [
+192
+],
+"encoder.stages.1.blocks.6.mlp.fc2.weight": [
+192,
+768
+],
+"encoder.stages.1.blocks.6.norm1.bias": [
+192
+],
+"encoder.stages.1.blocks.6.norm1.weight": [
+192
+],
+"encoder.stages.1.blocks.6.norm2.bias": [
+192
+],
+"encoder.stages.1.blocks.6.norm2.weight": [
+192
+],
+"encoder.stages.1.downsample.conv.bias": [
+384
+],
+"encoder.stages.1.downsample.conv.weight": [
+384,
+192,
+3,
+3
+],
+"encoder.stages.1.downsample.norm.bias": [
+384
+],
+"encoder.stages.1.downsample.norm.weight": [
+384
+],
+"encoder.stages.2.blocks.0.mixer.proj.bias": [
+384
+],
+"encoder.stages.2.blocks.0.mixer.proj.weight": [
+384,
+384
+],
+"encoder.stages.2.blocks.0.mixer.qkv.bias": [
+1152
+],
+"encoder.stages.2.blocks.0.mixer.qkv.weight": [
+1152,
+384
+],
+"encoder.stages.2.blocks.0.mlp.fc1.bias": [
+1536
+],
+"encoder.stages.2.blocks.0.mlp.fc1.weight": [
+1536,
+384
+],
+"encoder.stages.2.blocks.0.mlp.fc2.bias": [
+384
+],
+"encoder.stages.2.blocks.0.mlp.fc2.weight": [
+384,
+1536
+],
+"encoder.stages.2.blocks.0.norm1.bias": [
+384
+],
+"encoder.stages.2.blocks.0.norm1.weight": [
+384
+],
+"encoder.stages.2.blocks.0.norm2.bias": [
+384
+],
+"encoder.stages.2.blocks.0.norm2.weight": [
+384
+],
+"encoder.stages.2.blocks.1.mixer.proj.bias": [
+384
+],
+"encoder.stages.2.blocks.1.mixer.proj.weight": [
+384,
+384
+],
+"encoder.stages.2.blocks.1.mixer.qkv.bias": [
+1152
+],
+"encoder.stages.2.blocks.1.mixer.qkv.weight": [
+1152,
+384
+],
+"encoder.stages.2.blocks.1.mlp.fc1.bias": [
+1536
+],
+"encoder.stages.2.blocks.1.mlp.fc1.weight": [
+1536,
+384
+],
+"encoder.stages.2.blocks.1.mlp.fc2.bias": [
+384
+],
+"encoder.stages.2.blocks.1.mlp.fc2.weight": [
+384,
+1536
+],
+"encoder.stages.2.blocks.1.norm1.bias": [
+384
+],
+"encoder.stages.2.blocks.1.norm1.weight": [
+384
+],
+"encoder.stages.2.blocks.1.norm2.bias": [
+384
+],
+"encoder.stages.2.blocks.1.norm2.weight": [
+384
+],
+"encoder.stages.2.blocks.2.mixer.proj.bias": [
+384
+],
+"encoder.stages.2.blocks.2.mixer.proj.weight": [
+384,
+384
+],
+"encoder.stages.2.blocks.2.mixer.qkv.bias": [
+1152
+],
+"encoder.stages.2.blocks.2.mixer.qkv.weight": [
+1152,
+384
+],
+"encoder.stages.2.blocks.2.mlp.fc1.bias": [
+1536
+],
+"encoder.stages.2.blocks.2.mlp.fc1.weight": [
+1536,
+384
+],
+"encoder.stages.2.blocks.2.mlp.fc2.bias": [
+384
+],
+"encoder.stages.2.blocks.2.mlp.fc2.weight": [
+384,
+1536
+],
+"encoder.stages.2.blocks.2.norm1.bias": [
+384
+],
+"encoder.stages.2.blocks.2.norm1.weight": [
+384
+],
+"encoder.stages.2.blocks.2.norm2.bias": [
+384
+],
+"encoder.stages.2.blocks.2.norm2.weight": [
+384
+]
+},
+"rec_v4": {
+"decoder.ctc_decoder.char_token": [
+1,
+1,
+384
+],
+"decoder.ctc_decoder.fc.bias": [
+213
+],
+"decoder.ctc_decoder.fc.weight": [
+213,
+384
+],
+"decoder.ctc_decoder.fc_kv.bias": [
+768
+],
+"decoder.ctc_decoder.fc_kv.weight": [
+768,
+384
+],
+"decoder.ctc_decoder.w_atten_block.attn.proj.bias": [
+384
+],
+"decoder.ctc_decoder.w_atten_block.attn.proj.weight": [
+384,
+384
+],
+"decoder.ctc_decoder.w_atten_block.attn.qkv.weight": [
+1152,
+384
+],
+"decoder.ctc_decoder.w_atten_block.mlp.fc1.bias": [
+1536
+],
+"decoder.ctc_decoder.w_atten_block.mlp.fc1.weight": [
+1536,
+384
+],
+"decoder.ctc_decoder.w_atten_block.mlp.fc2.bias": [
+384
+],
+"decoder.ctc_decoder.w_atten_block.mlp.fc2.weight": [
+384,
+1536
+],
+"decoder.ctc_decoder.w_atten_block.norm1.bias": [
+384
+],
+"decoder.ctc_decoder.w_atten_block.norm1.weight": [
+384
+],
+"decoder.ctc_decoder.w_atten_block.norm2.bias": [
+384
+],
+"decoder.ctc_decoder.w_atten_block.norm2.weight": [
+384
+],
+"decoder.gtc_decoder.char_embed.embedding.weight": [
+217,
+384
+],
+"decoder.gtc_decoder.cmff_decoder.0.images_to_question_cross_attn.kv.bias": [
+768
+],
+"decoder.gtc_decoder.cmff_decoder.0.images_to_question_cross_attn.kv.weight": [
+768,
+384
+],
+"decoder.gtc_decoder.cmff_decoder.0.images_to_question_cross_attn.proj.bias": [
+384
+],
+"decoder.gtc_decoder.cmff_decoder.0.images_to_question_cross_attn.proj.weight": [
+384,
+384
+],
+"decoder.gtc_decoder.cmff_decoder.0.images_to_question_cross_attn.q.bias": [
+384
+],
+"decoder.gtc_decoder.cmff_decoder.0.images_to_question_cross_attn.q.weight": [
+384,
+384
+],
+"decoder.gtc_decoder.cmff_decoder.0.normkv1.bias": [
+384
+],
+"decoder.gtc_decoder.cmff_decoder.0.normkv1.weight": [
+384
+],
+"decoder.gtc_decoder.cmff_decoder.0.normkv2.bias": [
+384
+],
+"decoder.gtc_decoder.cmff_decoder.0.normkv2.weight": [
+384
+],
+"decoder.gtc_decoder.cmff_decoder.0.normq1.bias": [
+384
+],
+"decoder.gtc_decoder.cmff_decoder.0.normq1.weight": [
+384
+],
+"decoder.gtc_decoder.cmff_decoder.0.normq2.bias": [
+384
+],
+"decoder.gtc_decoder.cmff_decoder.0.normq2.weight": [
+384
+],
+"decoder.gtc_decoder.cmff_decoder.0.question_to_images_cross_attn.kv.bias": [
+768
+],
+"decoder.gtc_decoder.cmff_decoder.0.question_to_images_cross_attn.kv.weight": [
+768,
+384
+],
+"decoder.gtc_decoder.cmff_decoder.0.question_to_images_cross_attn.proj.bias": [
+384
+],
+"decoder.gtc_decoder.cmff_decoder.0.question_to_images_cross_attn.proj.weight": [
+384,
+384
+],
+"decoder.gtc_decoder.cmff_decoder.0.question_to_images_cross_attn.q.bias": [
+384
+],
+"decoder.gtc_decoder.cmff_decoder.0.question_to_images_cross_attn.q.weight": [
+384,
+384
+],
+"decoder.gtc_decoder.next_token": [
+1,
+1,
+1,
+384
+],
+"decoder.gtc_decoder.norm_pred.bias": [
+384
+],
+"decoder.gtc_decoder.norm_pred.weight": [
+384
+],
+"decoder.gtc_decoder.pre_token": [
+1,
+1,
+1,
+384
+],
+"decoder.gtc_decoder.prompt_next_embed": [
+1,
+1,
+6,
+384
+],
+"decoder.gtc_decoder.prompt_pre_embed": [
+1,
+1,
+6,
+384
+],
+"decoder.gtc_decoder.ques1_head.bias": [
+214
+],
+"decoder.gtc_decoder.ques1_head.weight": [
+214,
+384
+],
+"encoder.pope.patch_embed.0.conv.bias": [
+64
+],
+"encoder.pope.patch_embed.0.conv.weight": [
+64,
+3,
+3,
+3
+],
+"encoder.pope.patch_embed.0.norm.bias": [
+64
+],
+"encoder.pope.patch_embed.0.norm.num_batches_tracked": [],
+"encoder.pope.patch_embed.0.norm.running_mean": [
+64
+],
+"encoder.pope.patch_embed.0.norm.running_var": [
+64
+],
+"encoder.pope.patch_embed.0.norm.weight": [
+64
+],
+"encoder.pope.patch_embed.1.conv.bias": [
+128
+],
+"encoder.pope.patch_embed.1.conv.weight": [
+128,
+64,
+3,
+3
+],
+"encoder.pope.patch_embed.1.norm.bias": [
+128
+],
+"encoder.pope.patch_embed.1.norm.num_batches_tracked": [],
+"encoder.pope.patch_embed.1.norm.running_mean": [
+128
+],
+"encoder.pope.patch_embed.1.norm.running_var": [
+128
+],
+"encoder.pope.patch_embed.1.norm.weight": [
+128
+],
+"encoder.stages.0.blocks.0.mixer.0.bias": [
+128
+],
+"encoder.stages.0.blocks.0.mixer.0.weight": [
+128,
+32,
+5,
+5
+],
+"encoder.stages.0.blocks.0.mlp.fc1.bias": [
+512
+],
+"encoder.stages.0.blocks.0.mlp.fc1.weight": [
+512,
+128
+],
+"encoder.stages.0.blocks.0.mlp.fc2.bias": [
+128
+],
+"encoder.stages.0.blocks.0.mlp.fc2.weight": [
+128,
+512
+],
+"encoder.stages.0.blocks.0.norm1.bias": [
+128
+],
+"encoder.stages.0.blocks.0.norm1.weight": [
+128
+],
+"encoder.stages.0.blocks.0.norm2.bias": [
+128
+],
+"encoder.stages.0.blocks.0.norm2.weight": [
+128
+],
+"encoder.stages.0.blocks.1.mixer.0.bias": [
+128
+],
+"encoder.stages.0.blocks.1.mixer.0.weight": [
+128,
+32,
+5,
+5
+],
+"encoder.stages.0.blocks.1.mlp.fc1.bias": [
+512
+],
+"encoder.stages.0.blocks.1.mlp.fc1.weight": [
+512,
+128
+],
+"encoder.stages.0.blocks.1.mlp.fc2.bias": [
+128
+],
+"encoder.stages.0.blocks.1.mlp.fc2.weight": [
+128,
+512
+],
+"encoder.stages.0.blocks.1.norm1.bias": [
+128
+],
+"encoder.stages.0.blocks.1.norm1.weight": [
+128
+],
+"encoder.stages.0.blocks.1.norm2.bias": [
+128
+],
+"encoder.stages.0.blocks.1.norm2.weight": [
+128
+],
+"encoder.stages.0.blocks.2.mixer.0.bias": [
+128
+],
+"encoder.stages.0.blocks.2.mixer.0.weight": [
+128,
+32,
+5,
+5
+],
+"encoder.stages.0.blocks.2.mlp.fc1.bias": [
+512
+],
+"encoder.stages.0.blocks.2.mlp.fc1.weight": [
+512,
+128
+],
+"encoder.stages.0.blocks.2.mlp.fc2.bias": [
+128
+],
+"encoder.stages.0.blocks.2.mlp.fc2.weight": [
+128,
+512
+],
+"encoder.stages.0.blocks.2.norm1.bias": [
+128
+],
+"encoder.stages.0.blocks.2.norm1.weight": [
+128
+],
+"encoder.stages.0.blocks.2.norm2.bias": [
+128
+],
+"encoder.stages.0.blocks.2.norm2.weight": [
+128
+],
+"encoder.stages.0.blocks.3.mixer.0.bias": [
+128
+],
+"encoder.stages.0.blocks.3.mixer.0.weight": [
+128,
+32,
+5,
+5
+],
+"encoder.stages.0.blocks.3.mlp.fc1.bias": [
+512
+],
+"encoder.stages.0.blocks.3.mlp.fc1.weight": [
+512,
+128
+],
+"encoder.stages.0.blocks.3.mlp.fc2.bias": [
+128
+],
+"encoder.stages.0.blocks.3.mlp.fc2.weight": [
+128,
+512
+],
+"encoder.stages.0.blocks.3.norm1.bias": [
+128
+],
+"encoder.stages.0.blocks.3.norm1.weight": [
+128
+],
+"encoder.stages.0.blocks.3.norm2.bias": [
+128
+],
+"encoder.stages.0.blocks.3.norm2.weight": [
+128
+],
+"encoder.stages.0.blocks.4.mixer.0.bias": [
+128
+],
+"encoder.stages.0.blocks.4.mixer.0.weight": [
+128,
+32,
+5,
+5
+],
+"encoder.stages.0.blocks.4.mlp.fc1.bias": [
+512
+],
+"encoder.stages.0.blocks.4.mlp.fc1.weight": [
+512,
+128
+],
+"encoder.stages.0.blocks.4.mlp.fc2.bias": [
+128
+],
+"encoder.stages.0.blocks.4.mlp.fc2.weight": [
+128,
+512
+],
+"encoder.stages.0.blocks.4.norm1.bias": [
+128
+],
+"encoder.stages.0.blocks.4.norm1.weight": [
+128
+],
+"encoder.stages.0.blocks.4.norm2.bias": [
+128
+],
+"encoder.stages.0.blocks.4.norm2.weight": [
+128
+],
+"encoder.stages.0.blocks.5.mixer.0.bias": [
+128
+],
+"encoder.stages.0.blocks.5.mixer.0.weight": [
+128,
+32,
+5,
+5
+],
+"encoder.stages.0.blocks.5.mlp.fc1.bias": [
+512
+],
+"encoder.stages.0.blocks.5.mlp.fc1.weight": [
+512,
+128
+],
+"encoder.stages.0.blocks.5.mlp.fc2.bias": [
+128
+],
+"encoder.stages.0.blocks.5.mlp.fc2.weight": [
+128,
+512
+],
+"encoder.stages.0.blocks.5.norm1.bias": [
+128
+],
+"encoder.stages.0.blocks.5.norm1.weight": [
+128
+],
+"encoder.stages.0.blocks.5.norm2.bias": [
+128
+],
+"encoder.stages.0.blocks.5.norm2.weight": [
+128
+],
+"encoder.stages.0.downsample.conv.bias": [
+256
+],
+"encoder.stages.0.downsample.conv.weight": [
+256,
+128,
+3,
+3
+],
+"encoder.stages.0.downsample.norm.bias": [
+256
+],
+"encoder.stages.0.downsample.norm.weight": [
+256
+],
+"encoder.stages.1.blocks.0.mixer.0.bias": [
+256
+],
+"encoder.stages.1.blocks.0.mixer.0.weight": [
+256,
+32,
+5,
+5
+],
+"encoder.stages.1.blocks.0.mlp.fc1.bias": [
+1024
+],
+"encoder.stages.1.blocks.0.mlp.fc1.weight": [
+1024,
+256
+],
+"encoder.stages.1.blocks.0.mlp.fc2.bias": [
+256
+],
+"encoder.stages.1.blocks.0.mlp.fc2.weight": [
+256,
+1024
+],
+"encoder.stages.1.blocks.0.norm1.bias": [
+256
+],
+"encoder.stages.1.blocks.0.norm1.weight": [
+256
+],
+"encoder.stages.1.blocks.0.norm2.bias": [
+256
+],
+"encoder.stages.1.blocks.0.norm2.weight": [
+256
+],
+"encoder.stages.1.blocks.1.mixer.0.bias": [
+256
+],
+"encoder.stages.1.blocks.1.mixer.0.weight": [
+256,
+32,
+5,
+5
+],
+"encoder.stages.1.blocks.1.mlp.fc1.bias": [
+1024
+],
+"encoder.stages.1.blocks.1.mlp.fc1.weight": [
+1024,
+256
+],
+"encoder.stages.1.blocks.1.mlp.fc2.bias": [
+256
+],
+"encoder.stages.1.blocks.1.mlp.fc2.weight": [
+256,
+1024
+],
+"encoder.stages.1.blocks.1.norm1.bias": [
+256
+],
+"encoder.stages.1.blocks.1.norm1.weight": [
+256
+],
+"encoder.stages.1.blocks.1.norm2.bias": [
+256
+],
+"encoder.stages.1.blocks.1.norm2.weight": [
+256
+],
+"encoder.stages.1.blocks.3.mixer.proj.bias": [
+256
+],
+"encoder.stages.1.blocks.3.mixer.proj.weight": [
+256,
+256
+],
+"encoder.stages.1.blocks.3.mixer.qkv.bias": [
+768
+],
+"encoder.stages.1.blocks.3.mixer.qkv.weight": [
+768,
+256
+],
+"encoder.stages.1.blocks.3.mlp.fc1.bias": [
+1024
+],
+"encoder.stages.1.blocks.3.mlp.fc1.weight": [
+1024,
+256
+],
+"encoder.stages.1.blocks.3.mlp.fc2.bias": [
+256
+],
+"encoder.stages.1.blocks.3.mlp.fc2.weight": [
+256,
+1024
+],
+"encoder.stages.1.blocks.3.norm1.bias": [
+256
+],
+"encoder.stages.1.blocks.3.norm1.weight": [
+256
+],
+"encoder.stages.1.blocks.3.norm2.bias": [
+256
+],
+"encoder.stages.1.blocks.3.norm2.weight": [
+256
+],
+"encoder.stages.1.blocks.4.mixer.proj.bias": [
+256
+],
+"encoder.stages.1.blocks.4.mixer.proj.weight": [
+256,
+256
+],
+"encoder.stages.1.blocks.4.mixer.qkv.bias": [
+768
+],
+"encoder.stages.1.blocks.4.mixer.qkv.weight": [
+768,
+256
+],
+"encoder.stages.1.blocks.4.mlp.fc1.bias": [
+1024
+],
+"encoder.stages.1.blocks.4.mlp.fc1.weight": [
+1024,
+256
+],
+"encoder.stages.1.blocks.4.mlp.fc2.bias": [
+256
+],
+"encoder.stages.1.blocks.4.mlp.fc2.weight": [
+256,
+1024
+],
+"encoder.stages.1.blocks.4.norm1.bias": [
+256
+],
+"encoder.stages.1.blocks.4.norm1.weight": [
+256
+],
+"encoder.stages.1.blocks.4.norm2.bias": [
+256
+],
+"encoder.stages.1.blocks.4.norm2.weight": [
+256
+],
+"encoder.stages.1.blocks.5.mixer.proj.bias": [
+256
+],
+"encoder.stages.1.blocks.5.mixer.proj.weight": [
+256,
+256
+],
+"encoder.stages.1.blocks.5.mixer.qkv.bias": [
+768
+],
+"encoder.stages.1.blocks.5.mixer.qkv.weight": [
+768,
+256
+],
+"encoder.stages.1.blocks.5.mlp.fc1.bias": [
+1024
+],
+"encoder.stages.1.blocks.5.mlp.fc1.weight": [
+1024,
+256
+],
+"encoder.stages.1.blocks.5.mlp.fc2.bias": [
+256
+],
+"encoder.stages.1.blocks.5.mlp.fc2.weight": [
+256,
+1024
+],
+"encoder.stages.1.blocks.5.norm1.bias": [
+256
+],
+"encoder.stages.1.blocks.5.norm1.weight": [
+256
+],
+"encoder.stages.1.blocks.5.norm2.bias": [
+256
+],
+"encoder.stages.1.blocks.5.norm2.weight": [
+256
+],
+"encoder.stages.1.blocks.6.mixer.proj.bias": [
+256
+],
+"encoder.stages.1.blocks.6.mixer.proj.weight": [
+256,
+256
+],
+"encoder.stages.1.blocks.6.mixer.qkv.bias": [
+768
+],
+"encoder.stages.1.blocks.6.mixer.qkv.weight": [
+768,
+256
+],
+"encoder.stages.1.blocks.6.mlp.fc1.bias": [
+1024
+],
+"encoder.stages.1.blocks.6.mlp.fc1.weight": [
+1024,
+256
+],
+"encoder.stages.1.blocks.6.mlp.fc2.bias": [
+256
+],
+"encoder.stages.1.blocks.6.mlp.fc2.weight": [
+256,
+1024
+],
+"encoder.stages.1.blocks.6.norm1.bias": [
+256
+],
+"encoder.stages.1.blocks.6.norm1.weight": [
+256
+],
+"encoder.stages.1.blocks.6.norm2.bias": [
+256
+],
+"encoder.stages.1.blocks.6.norm2.weight": [
+256
+],
+"encoder.stages.1.downsample.conv.bias": [
+384
+],
+"encoder.stages.1.downsample.conv.weight": [
+384,
+256,
+3,
+3
+],
+"encoder.stages.1.downsample.norm.bias": [
+384
+],
+"encoder.stages.1.downsample.norm.weight": [
+384
+],
+"encoder.stages.2.blocks.0.mixer.proj.bias": [
+384
+],
+"encoder.stages.2.blocks.0.mixer.proj.weight": [
+384,
+384
+],
+"encoder.stages.2.blocks.0.mixer.qkv.bias": [
+1152
+],
+"encoder.stages.2.blocks.0.mixer.qkv.weight": [
+1152,
+384
+],
+"encoder.stages.2.blocks.0.mlp.fc1.bias": [
+1536
+],
+"encoder.stages.2.blocks.0.mlp.fc1.weight": [
+1536,
+384
+],
+"encoder.stages.2.blocks.0.mlp.fc2.bias": [
+384
+],
+"encoder.stages.2.blocks.0.mlp.fc2.weight": [
+384,
+1536
+],
+"encoder.stages.2.blocks.0.norm1.bias": [
+384
+],
+"encoder.stages.2.blocks.0.norm1.weight": [
+384
+],
+"encoder.stages.2.blocks.0.norm2.bias": [
+384
+],
+"encoder.stages.2.blocks.0.norm2.weight": [
+384
+],
+"encoder.stages.2.blocks.1.mixer.proj.bias": [
+384
+],
+"encoder.stages.2.blocks.1.mixer.proj.weight": [
+384,
+384
+],
+"encoder.stages.2.blocks.1.mixer.qkv.bias": [
+1152
+],
+"encoder.stages.2.blocks.1.mixer.qkv.weight": [
+1152,
+384
+],
+"encoder.stages.2.blocks.1.mlp.fc1.bias": [
+1536
+],
+"encoder.stages.2.blocks.1.mlp.fc1.weight": [
+1536,
+384
+],
+"encoder.stages.2.blocks.1.mlp.fc2.bias": [
+384
+],
+"encoder.stages.2.blocks.1.mlp.fc2.weight": [
+384,
+1536
+],
+"encoder.stages.2.blocks.1.norm1.bias": [
+384
+],
+"encoder.stages.2.blocks.1.norm1.weight": [
+384
+],
+"encoder.stages.2.blocks.1.norm2.bias": [
+384
+],
+"encoder.stages.2.blocks.1.norm2.weight": [
+384
+],
+"encoder.stages.2.blocks.2.mixer.proj.bias": [
+384
+],
+"encoder.stages.2.blocks.2.mixer.proj.weight": [
+384,
+384
+],
+"encoder.stages.2.blocks.2.mixer.qkv.bias": [
+1152
+],
+"encoder.stages.2.blocks.2.mixer.qkv.weight": [
+1152,
+384
+],
+"encoder.stages.2.blocks.2.mlp.fc1.bias": [
+1536
+],
+"encoder.stages.2.blocks.2.mlp.fc1.weight": [
+1536,
+384
+],
+"encoder.stages.2.blocks.2.mlp.fc2.bias": [
+384
+],
+"encoder.stages.2.blocks.2.mlp.fc2.weight": [
+384,
+1536
+],
+"encoder.stages.2.blocks.2.norm1.bias": [
+384
+],
+"encoder.stages.2.blocks.2.norm1.weight": [
+384
+],
+"encoder.stages.2.blocks.2.norm2.bias": [
+384
+],
+"encoder.stages.2.blocks.2.norm2.weight": [
+384
+],
+"encoder.stages.2.blocks.3.mixer.proj.bias": [
+384
+],
+"encoder.stages.2.blocks.3.mixer.proj.weight": [
+384,
+384
+],
+"encoder.stages.2.blocks.3.mixer.qkv.bias": [
+1152
+],
+"encoder.stages.2.blocks.3.mixer.qkv.weight": [
+1152,
+384
+],
+"encoder.stages.2.blocks.3.mlp.fc1.bias": [
+1536
+],
+"encoder.stages.2.blocks.3.mlp.fc1.weight": [
+1536,
+384
+],
+"encoder.stages.2.blocks.3.mlp.fc2.bias": [
+384
+],
+"encoder.stages.2.blocks.3.mlp.fc2.weight": [
+384,
+1536
+],
+"encoder.stages.2.blocks.3.norm1.bias": [
+384
+],
+"encoder.stages.2.blocks.3.norm1.weight": [
+384
+],
+"encoder.stages.2.blocks.3.norm2.bias": [
+384
+],
+"encoder.stages.2.blocks.3.norm2.weight": [
+384
+],
+"encoder.stages.2.blocks.4.mixer.proj.bias": [
+384
+],
+"encoder.stages.2.blocks.4.mixer.proj.weight": [
+384,
+384
+],
+"encoder.stages.2.blocks.4.mixer.qkv.bias": [
+1152
+],
+"encoder.stages.2.blocks.4.mixer.qkv.weight": [
+1152,
+384
+],
+"encoder.stages.2.blocks.4.mlp.fc1.bias": [
+1536
+],
+"encoder.stages.2.blocks.4.mlp.fc1.weight": [
+1536,
+384
+],
+"encoder.stages.2.blocks.4.mlp.fc2.bias": [
+384
+],
+"encoder.stages.2.blocks.4.mlp.fc2.weight": [
+384,
+1536
+],
+"encoder.stages.2.blocks.4.norm1.bias": [
+384
+],
+"encoder.stages.2.blocks.4.norm1.weight": [
+384
+],
+"encoder.stages.2.blocks.4.norm2.bias": [
+384
+],
+"encoder.stages.2.blocks.4.norm2.weight": [
+384
+],
+"encoder.stages.2.blocks.5.mixer.proj.bias": [
+384
+],
+"encoder.stages.2.blocks.5.mixer.proj.weight": [
+384,
+384
+],
+"encoder.stages.2.blocks.5.mixer.qkv.bias": [
+1152
+],
+"encoder.stages.2.blocks.5.mixer.qkv.weight": [
+1152,
+384
+],
+"encoder.stages.2.blocks.5.mlp.fc1.bias": [
+1536
+],
+"encoder.stages.2.blocks.5.mlp.fc1.weight": [
+1536,
+384
+],
+"encoder.stages.2.blocks.5.mlp.fc2.bias": [
+384
+],
+"encoder.stages.2.blocks.5.mlp.fc2.weight": [
+384,
+1536
+],
+"encoder.stages.2.blocks.5.norm1.bias": [
+384
+],
+"encoder.stages.2.blocks.5.norm1.weight": [
+384
+],
+"encoder.stages.2.blocks.5.norm2.bias": [
+384
+],
+"encoder.stages.2.blocks.5.norm2.weight": [
+384
+]
+}
+},
+"v4_encoder": {
+"depths": [
+6,
+6,
+6
+],
+"dims": [
+128,
+256,
+384
+],
+"feat2d": true,
+"kernel_sizes": [
+[
+5,
+5,
+5,
+5,
+5,
+5
+],
+[
+5,
+5,
+5,
+5,
+5,
+5
+],
+[
+-1
+]
+],
+"last_stage": false,
+"mixer": [
+[
+"Conv",
+"Conv",
+"Conv",
+"Conv",
+"Conv",
+"Conv"
+],
+[
+"Conv",
+"Conv",
+"FGlobal",
+"Global",
+"Global",
+"Global"
+],
+[
+"Global",
+"Global",
+"Global",
+"Global",
+"Global",
+"Global"
+]
+],
+"name": "SVTRv2LNConvTwo33",
+"num_convs": [
+[
+1,
+1,
+1,
+1,
+1,
+1
+],
+[
+1,
+1,
+1,
+1,
+1,
+1
+],
+[
+-1
+]
+],
+"num_heads": [
+4,
+8,
+12
+],
+"pope_bias": true,
+"sub_k": [
+[
+1,
+1
+],
+[
+2,
+1
+],
+[
+-1,
+-1
+]
+],
+"use_pos_embed": false
+}
+}

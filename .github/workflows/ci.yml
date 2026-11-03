@@ -1,0 +1,83 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    - cron: "17 5 * * 1"          # weekly: new advisories against unchanged dependencies
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ["3.11", "3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2 # v10.3.3
+      - name: Install (CPU torch)
+        run: |
+          uv venv -p ${{ matrix.python }}
+          uv pip install torch --index-url https://download.pytorch.org/whl/cpu
+          uv pip install -e ".[all]" pytest onnx onnxscript   # onnx*: export + onnx backend tests
+      - run: .venv/bin/python -m pytest
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2 # v10.3.3
+      - run: uvx ruff check src tests tools
+      - run: uvx ruff format --check src tests tools
+      - name: Lock file matches pyproject
+        run: uv lock --check
+
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2 # v10.3.3
+      - name: Locked dependencies (runtime, extras, dev)
+        run: uv export --frozen --all-extras --all-groups --no-hashes --no-emit-project -o locked.txt
+      - name: Lowest versions pyproject allows
+        run: |
+          mkdir lowest && cp pyproject.toml README.md lowest/ && cp -r src lowest/
+          (cd lowest && uv lock --resolution lowest-direct -q &&
+           uv export --frozen --all-extras --all-groups --no-hashes --no-emit-project -o ../lowest.txt)
+      - name: pip-audit (PyPI and OSV advisories)
+        run: |
+          for req in locked.txt lowest.txt; do
+            for svc in pypi osv; do
+              echo "== $req / $svc"
+              uvx pip-audit -r "$req" --no-deps --disable-pip -s "$svc" --desc on
+            done
+          done
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2 # v10.3.3
+      - run: uv build
+      - run: uvx twine check --strict dist/*
+      - name: Wheel installs and runs in a clean environment (default install, no PyTorch)
+        run: |
+          uv venv /tmp/clean
+          uv pip install --python /tmp/clean dist/*.whl
+          /tmp/clean/bin/anaksor --version
+          /tmp/clean/bin/python -c "import anaksor, anaksor.models as m; print(m.load_spec('rec-svtrv2-v3').name)"
+          /tmp/clean/bin/python -c "import anaksor.runtime as r; assert not r.have_torch() and r.choose_backend() == 'onnx'"
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: dist
+          path: dist/

@@ -1,0 +1,51 @@
+# Khmer text-line recognition v3: SVTRv2 encoder, CTC head (+ SMTR head, unused by default).
+# Architecture block as in Alpha-OCR configs/svtrv2_khmer_v3.yml (training-only keys are ignored).
+# The SMTR vocabulary is </s> + the dict + <s>, <INF>, <INB>, <pad>; the CTC one is blank + the dict.
+name: rec-svtrv2-v3
+kind: rec
+weights:
+  file: khmer_rec_svtrv2_v3.safetensors
+  sha256: null            # set when the release weights are published
+  onnx: khmer_rec_svtrv2_v3.onnx      # tools/export_onnx.py; the default (torch-free) install runs this
+  onnx_sha256: null
+charset:
+  dict: khmer_dict_v3.txt
+  use_space_char: true
+  max_text_length: 140
+input:                    # same shape buckets as training (RatioDataSetTVResize, no padding)
+  base_h: 48
+  base_shape: [[64, 64], [96, 48], [144, 48], [192, 48]]
+  max_ratio: 20
+crop:                     # margin around each detected line, fraction of its height
+  pad_y: 0.22             # live sweep, 12 pages, CER: 0.04 -> 3.9%, 0.22/0.20 -> 0.34%
+  pad_x: 0.20
+architecture:
+  model_type: rec
+  algorithm: BGPD
+  in_channels: 3
+  Transform:
+  Encoder:
+    name: SVTRv2LNConvTwo33
+    use_pos_embed: false
+    out_channels: 256
+    dims: [96, 192, 384]
+    depths: [3, 6, 3]
+    num_heads: [3, 6, 12]
+    mixer: [[Conv, Conv, Conv], [Conv, Conv, Conv, FGlobal, Global, Global], [Global, Global, Global]]
+    local_k: [[5, 5], [5, 5], [-1, -1]]
+    sub_k: [[1, 1], [2, 1], [-1, -1]]
+    last_stage: false
+    feat2d: true
+  Decoder:
+    name: GTCDecoder
+    infer_gtc: true
+    detach: false
+    gtc_decoder:
+      name: SMTRDecoder
+      num_layer: 1
+      ds: true
+      max_len: 140
+      next_mode: true
+      sub_str_len: 5
+    ctc_decoder:
+      name: RCTCDecoder

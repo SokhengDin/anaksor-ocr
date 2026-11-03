@@ -1,0 +1,57 @@
+# Khmer text-line recognition v4: SVTRv2-B encoder, CTC head (+ SMTR head, unused by default;
+# the counting head only trained the encoder). Made with tools/spec_from_config.py from the
+# training config published as rec_latest.yml at Sokheng/anaksor-ocr, tag rec-v4-det-v3.
+name: rec-svtrv2-v4
+kind: rec
+weights:
+  file: khmer_rec_svtrv2_latest.safetensors     # as published (Hub commit 5c9f76c)
+  sha256: 2aead8175ed67ce8492363ae8664963643f1dc2108b74c663ed224b2b648f41d
+  onnx: khmer_rec_svtrv2_latest.onnx      # the default (torch-free) install runs this
+  onnx_sha256: afe130ebd442b35cff553efc91213219d33afc5f1c1883a0ddad402a8d1c96ec
+charset: {dict: khmer_dict_v3.txt, use_space_char: true, max_text_length: 140}
+input:
+  base_h: 48
+  base_shape:
+  - [64, 64]
+  - [96, 48]
+  - [144, 48]
+  - [192, 48]
+  max_ratio: 20
+crop: {pad_y: 0.16, pad_x: 0.1}
+architecture:
+  model_type: rec
+  algorithm: BGPD
+  in_channels: 3
+  Encoder:
+    name: SVTRv2LNConvTwo33
+    use_pos_embed: false
+    dims: [128, 256, 384]
+    depths: [6, 6, 6]
+    num_heads: [4, 8, 12]
+    mixer:
+    - [Conv, Conv, Conv, Conv, Conv, Conv]
+    - [Conv, Conv, FGlobal, Global, Global, Global]
+    - [Global, Global, Global, Global, Global, Global]
+    kernel_sizes:
+    - [5, 5, 5, 5, 5, 5]
+    - [5, 5, 5, 5, 5, 5]
+    - [-1]
+    num_convs:
+    - [1, 1, 1, 1, 1, 1]
+    - [1, 1, 1, 1, 1, 1]
+    - [-1]
+    pope_bias: true
+    sub_k:
+    - [1, 1]
+    - [2, 1]
+    - [-1, -1]
+    last_stage: false
+    feat2d: true
+  Decoder:
+    name: GTCCountDecoder
+    infer_gtc: true
+    detach: false
+    count_head: {max_len: 140, count_bins: 32, num_layer: 2}
+    gtc_decoder: {name: SMTRDecoder, num_layer: 1, ds: true, max_len: 140, next_mode: true,
+      sub_str_len: 5}
+    ctc_decoder: {name: RCTCDecoder}

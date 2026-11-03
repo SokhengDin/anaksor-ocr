@@ -1,0 +1,22 @@
+# Khmer text detection v3: RepViT backbone + DBNet (KhmerST, synthetic pages and signs,
+# HierText English on photos). Made with tools/spec_from_config.py from the training config
+# published as det_latest.yml at Sokheng/anaksor-ocr, tag rec-v4-det-v3.
+name: det-repvit-db-v3
+kind: det
+weights:
+  file: khmer_det_repvit_db_latest.safetensors     # as published (Hub commit 5c9f76c)
+  sha256: 94d633392ec4be36b679a272bcb741524e003649bcdcbaf3b81ab77a504dca2c
+  onnx: khmer_det_repvit_db_latest.onnx   # the default (torch-free) install runs this
+  onnx_sha256: 5d5fdff595e644a4cc95f8c23e8b455a7a003293b35476212c0b09820c304440
+input:
+  limit_side_len: 1280
+  min_side_len: 736
+  mean: [0.485, 0.456, 0.406]
+  std: [0.229, 0.224, 0.225]
+architecture:
+  algorithm: DB_mobile
+  Backbone: {name: RepSVTR_det}
+  Neck: {name: RSEFPN, out_channels: 96, shortcut: true}
+  Head: {name: DBHead, k: 50}
+postprocess: {name: DBPostProcess, thresh: 0.3, box_thresh: 0.5, max_candidates: 1000,
+  unclip_ratio: 1.5, score_mode: slow, use_dilation: false}

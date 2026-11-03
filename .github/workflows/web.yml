@@ -1,0 +1,134 @@
+# The website (web/), on Bun: lint, typecheck, a static build and the browser smoke test on every change, a
+# dependency scan, and on main a deploy to the server behind ocr.sokhengdin.dev (web/deploy/README.md).
+#
+# This repository is public, so:
+# - pull requests (forks too) run the checks only: no secrets, read-only token, no deploy;
+# - the deploy job runs only for pushes to main, in the `production` environment (restricted to main), whose
+#   secrets fork code never sees;
+# - the server builds the commit itself after checking it is on main: the SSH key can name a commit, nothing else.
+# Actions are pinned to full commit SHAs.
+name: web
+
+on:
+  push:
+    branches: [main]
+    paths: ["web/**", ".github/workflows/web.yml"]
+  pull_request:
+    paths: ["web/**", ".github/workflows/web.yml"]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: web-${{ github.ref }}
+  # Never cancel a main run: it may be deploying.
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: web
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+        with:
+          bun-version-file: web/package.json
+      # As on the server: the lockfile only, no install scripts.
+      - run: bun install --frozen-lockfile --ignore-scripts
+      - run: bun run lint
+      - run: bun run typecheck
+      - run: bun run build:local   # the smoke test's mock API is on the site's own origin
+        env:
+          NEXT_TELEMETRY_DISABLED: "1"
+      - run: bunx playwright install --with-deps chromium-headless-shell
+      - run: bun run e2e
+      - name: The production build too
+        run: bun run build && test -f .next/standalone/server.js
+        env:
+          NEXT_TELEMETRY_DISABLED: "1"
+
+  scan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      OSV_VERSION: v2.7.0
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Install osv-scanner (checksum-verified)
+        run: |
+          base=https://github.com/google/osv-scanner/releases/download/$OSV_VERSION
+          curl -fsSLO "$base/osv-scanner_linux_amd64"
+          curl -fsSLO "$base/osv-scanner_SHA256SUMS"
+          grep ' osv-scanner_linux_amd64$' osv-scanner_SHA256SUMS | sha256sum -c
+          install -m 755 osv-scanner_linux_amd64 /usr/local/bin/osv-scanner
+          rm osv-scanner_linux_amd64 osv-scanner_SHA256SUMS
+      # Known CVEs in every npm package of the site; CVSS >= MIN_CVSS (or unscored) blocks the deploy.
+      - name: Scan web/bun.lock
+        env:
+          MIN_CVSS: "5"
+        run: |
+          mkdir -p osv-report
+          set +e
+          osv-scanner scan source --lockfile web/bun.lock --format json --output-file osv-report/osv.json
+          code=$?
+          osv-scanner scan source --lockfile web/bun.lock --format markdown --output-file osv-report/osv.md
+          set -e
+          cat osv-report/osv.md >> "$GITHUB_STEP_SUMMARY"
+          # 0 clean, 1 vulnerabilities found, anything else the scan itself failed.
+          [ "$code" -le 1 ] || exit "$code"
+          jq -r --argjson min "$MIN_CVSS" '
+            .results[]?.packages[]? as $p | $p.groups[]?
+            | select(.max_severity == "" or (.max_severity | tonumber) >= $min)
+            | "\(.ids | join(",")) \($p.package.name)@\($p.package.version) cvss=\(if .max_severity == "" then "unknown" else .max_severity end)"
+          ' osv-report/osv.json > osv-report/blocking.txt
+          if [ -s osv-report/blocking.txt ]; then
+            echo "::error::Vulnerabilities at CVSS >= $MIN_CVSS (see the osv-report artifact):"
+            cat osv-report/blocking.txt
+            exit 1
+          fi
+          echo "No vulnerability at CVSS >= $MIN_CVSS."
+      - name: Upload report
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: osv-report
+          path: osv-report/
+          if-no-files-found: ignore
+          retention-days: 30
+
+  deploy:
+    needs: [build, scan]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment: production
+    timeout-minutes: 30
+    concurrency:
+      group: deploy-site
+      cancel-in-progress: false
+    steps:
+      - name: Deploy over SSH
+        env:
+          SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+          SSH_KNOWN_HOSTS: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
+          SSH_HOST: ${{ secrets.DEPLOY_HOST }}
+          SSH_PORT: ${{ secrets.DEPLOY_PORT }}
+          SSH_USER: ${{ secrets.DEPLOY_USER }}
+        run: |
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$SSH_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          printf '%s\n' "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+          ssh -i ~/.ssh/deploy_key -p "${SSH_PORT:-22}" \
+            -o IdentitiesOnly=yes -o BatchMode=yes -o StrictHostKeyChecking=yes \
+            -o ServerAliveInterval=30 -o ServerAliveCountMax=6 \
+            "$SSH_USER@$SSH_HOST" "deploy $GITHUB_SHA"
+      - name: Remove key
+        if: always()
+        run: rm -f ~/.ssh/deploy_key

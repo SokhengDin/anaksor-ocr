@@ -1,0 +1,7 @@
+anaksor-ocr
+Copyright 2026 Sokheng Din
+
+The networks in src/anaksor/nets are written for anaksor from the papers they implement
+(DBNet, RepViT, SVTRv2, SMTR, CPPD; see README.md). Their layer layout and tensor names follow
+the OpenOCR implementations (https://github.com/Topdu/OpenOCR, Apache License 2.0) that
+the released models were trained with, so those checkpoints load unchanged.

@@ -1,0 +1,14 @@
+# Advisories the `scan` job in .github/workflows/web.yml lets through; osv-scanner reads this
+# file because it sits next to bun.lock. Each one needs a reason and an expiry date: after
+# `ignoreUntil` it blocks CI again, so it gets looked at again.
+
+# minimatch: DoS through glob-pattern amplification (fixed only in 11.0.1, 2026-10-30).
+# Reached only by ESLint (eslint, @eslint/*, eslint-plugin-*, typescript-eslint) at lint time,
+# on the globs in our own eslint config; nothing from it is in the built site.
+# Forcing 11.x via `overrides` breaks eslint-plugin-import, whose rules call
+# `require("minimatch").default(...)` and 11.x has no default export.
+# Drop this entry once eslint and typescript-eslint depend on minimatch >= 11.0.1.
+[[IgnoredVulns]]
+id          = "GHSA-g3hv-75wg-m249"
+ignoreUntil = 2027-01-31
+reason      = "dev-only (ESLint), patterns come from our own config, not in the built site"

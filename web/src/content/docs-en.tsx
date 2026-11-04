@@ -1,5 +1,6 @@
 import { CodeBlock, dedent } from "@/components/CodeBlock";
 import type { DocSection } from "@/components/Docs";
+import { BenchCharts } from "@/components/BenchCharts";
 import { Icon } from "@/components/Icon";
 import { REPO_URL } from "@/lib/config";
 
@@ -23,7 +24,8 @@ export const sections: DocSection[] = [
             $ pip install "anaksor-ocr[all]"
           `} />
         <p>
-          Needs Python 3.11 or newer. The model weights, about 95 MB, download to <code>~/.cache/anaksor</code> the first time you read a page.
+          Needs Python 3.11 or newer. The model weights (about 95 MB for ONNX Runtime, 113 MB for PyTorch) download to <code>~/.cache/anaksor</code> the
+          first time you read a page.
         </p>
         <div className="table">
           <table>
@@ -50,6 +52,11 @@ export const sections: DocSection[] = [
                 <td>CPU, CUDA, Apple MPS</td>
               </tr>
               <tr>
+                <td>Speed on CPU</td>
+                <td>slower</td>
+                <td>about twice as fast</td>
+              </tr>
+              <tr>
                 <td>Reading heads</td>
                 <td>CTC (the default), CPPD</td>
                 <td>
@@ -60,8 +67,8 @@ export const sections: DocSection[] = [
           </table>
         </div>
         <p>
-          Both read pages identically. anaksor uses PyTorch when it is installed and ONNX Runtime otherwise; choose with <code>backend=&quot;torch&quot;</code>{" "}
-          or <code>&quot;onnx&quot;</code>, or <code>--backend</code>. On a CPU, PyTorch is a little faster.
+          Both backends give the same boxes and the same text. anaksor uses PyTorch if it is installed, and ONNX Runtime otherwise. To choose, pass{" "}
+          <code>backend=&quot;onnx&quot;</code> or <code>backend=&quot;torch&quot;</code> (<code>--backend</code> on the command line).
         </p>
       </>
     ),
@@ -367,9 +374,18 @@ export const sections: DocSection[] = [
   },
   {
     id: "accuracy",
-    title: "Accuracy and limitations",
+    title: "Accuracy, speed and limitations",
     body: (
       <>
+        <BenchCharts
+          alt={[
+            "Bar chart: text-line detection F1 of v3, v2 and a Chinese baseline",
+            "Bar chart: text-line recognition accuracy of v4 and v3, by script",
+            "Bar chart: seconds per image for ONNX Runtime and PyTorch on an Apple M4 Max",
+          ]}
+          accuracyNote="All accuracy numbers were measured on an NVIDIA GeForce RTX 5090 (32 GB)."
+          speedNote="Speed was measured on an Apple M4 Max, once the models were loaded; your machine will differ."
+        />
         <div className="table">
           <table>
             <thead>
@@ -397,7 +413,7 @@ export const sections: DocSection[] = [
               </tr>
               <tr>
                 <td>Recognition v4</td>
-                <td>3,878 real validation lines: Khmer, Latin and mixed</td>
+                <td>3,878 real validation lines (Khmer, Latin, mixed and other)</td>
                 <td>86.7% exactly right, 1.38% character error</td>
               </tr>
               <tr>
@@ -409,12 +425,14 @@ export const sections: DocSection[] = [
           </table>
         </div>
         <p>
-          KhmerST labels only some of the text in each photo, so for detection, unlabelled text found by another detector counts as &quot;don&apos;t
-          care&quot;; that flatters precision a little.
+          KhmerST labels only some of the text in each photo. When detection is scored, text that has no label but was found by another detector is ignored
+          (&quot;don&apos;t care&quot;), which makes precision look slightly better than it is.
         </p>
         <ul>
-          <li>Printed Khmer, documents, receipts and signs read best.</li>
-          <li>English and other Latin text on photos is weaker: the detector can miss it on signs, and the recogniser has seen little real English.</li>
+          <li>Printed Khmer reads best: documents, receipts and signs.</li>
+          <li>
+            English and other Latin text on photos is weaker: the detector can miss it on signs, and the recogniser saw little real English during training.
+          </li>
           <li>
             Handwriting and decorative lettering are weak. Check each line&apos;s <code>rec_score</code>, or use <code>--highlight-low</code> for Word
             output.
@@ -428,24 +446,53 @@ export const sections: DocSection[] = [
     title: "Weights",
     body: (
       <>
-        <p>
-          Each model comes as an ONNX graph (<code>.onnx</code>, for ONNX Runtime) and as PyTorch weights (<code>.safetensors</code>); only the files your
-          backend needs are downloaded, from the first of:
-        </p>
+        <p>Each model comes as two files. Only the one for your backend is downloaded:</p>
+        <div className="table">
+          <table>
+            <thead>
+              <tr>
+                <th>Backend</th>
+                <th>File</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>ONNX Runtime</td>
+                <td>
+                  ONNX graph (<code>.onnx</code>)
+                </td>
+              </tr>
+              <tr>
+                <td>PyTorch</td>
+                <td>
+                  PyTorch weights (<code>.safetensors</code>)
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p>anaksor looks for them in this order and uses the first it finds:</p>
         <ol className="steps">
           <li>
-            the path you passed (<code>det_weights=</code>, <code>rec_weights=</code>, or <code>--det-weights</code>);
+            a path you pass: <code>det_weights=</code> / <code>rec_weights=</code> (or <code>--det-weights</code> / <code>--rec-weights</code>);
           </li>
           <li>
-            a file in the folder named by <code>ANAKSOR_WEIGHTS_DIR</code>;
+            the folder in <code>ANAKSOR_WEIGHTS_DIR</code>;
           </li>
           <li>
-            the cache in <code>~/.cache/anaksor</code> (or <code>ANAKSOR_HOME</code>), downloaded once from Hugging Face and checked against its SHA-256.
+            the cache, <code>~/.cache/anaksor</code> (or <code>ANAKSOR_HOME</code>), filled on first use from the Hugging Face repo{" "}
+            <a href="https://huggingface.co/Sokheng/anaksor-ocr">Sokheng/anaksor-ocr</a>.
           </li>
         </ol>
+        <p>Downloads are safe and repeatable:</p>
+        <ul>
+          <li>each file is checked against the SHA-256 in its model spec before it is used, and a file without one is never downloaded;</li>
+          <li>neither format can run code when it is loaded;</li>
+          <li>files come from the Hub commit this release was built for, so a later upload never changes your results.</li>
+        </ul>
         <p>
-          Neither format can run code when it is loaded. On a machine without internet access, run <code>anaksor --fetch-models</code> elsewhere and copy
-          the two files for your backend into <code>ANAKSOR_WEIGHTS_DIR</code>.
+          <strong>Offline machines:</strong> run <code>anaksor --fetch-models</code> on a machine with internet, then copy the two files for your backend
+          into <code>ANAKSOR_WEIGHTS_DIR</code> on the offline one.
         </p>
       </>
     ),
@@ -456,8 +503,8 @@ export const sections: DocSection[] = [
     body: (
       <>
         <p>
-          Models trained with OpenOCR-style configs (the format these models were trained with) run with a spec made from the training config. The tools are
-          in the repository, not the installed package, so run them from a clone:
+          You can also run your own models trained with OpenOCR-style configs, the format used to train these models. Make a spec from the training config.
+          The tools are in the repository, not the installed package, so run them from a clone:
         </p>
         <CodeBlock lang="bash" {...cb} code={dedent`
             $ git clone ${REPO_URL} && cd anaksor-ocr
@@ -471,7 +518,7 @@ export const sections: DocSection[] = [
           `} />
         <p>
           Supported: detection RepViT + DBNet; recognition SVTRv2 (any size) with RCTC + SMTR heads, RCTC alone, or CPPD. <code>.pth</code> checkpoints load
-          as they are, without running code.
+          as they are, with <code>weights_only</code>, so no code runs.
         </p>
       </>
     ),

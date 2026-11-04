@@ -1,0 +1,72 @@
+{
+ "evaluated_on": "NVIDIA GeForce RTX 5090, 32 GB",
+ "detection": {
+  "metric": "F1 (hmean) of text-line detection",
+  "gpu_fps": 276.85,
+  "datasets": {
+   "khmerst_val": "KhmerST photos",
+   "hiertext_val": "HierText photos (English)",
+   "synth_val": "Synthetic pages"
+  },
+  "models": {
+   "v3": {
+    "label": "anaksor v3 (released)",
+    "khmerst_val": {"precision": 0.7509130752373996, "recall": 0.7932098765432098, "hmean": 0.7714821763602251},
+    "synth_val": {"precision": 0.9982461268634902, "recall": 0.9982461268634902, "hmean": 0.9982461268634902},
+    "hiertext_val": {"precision": 0.7551306354570181, "recall": 0.6878894811922817, "hmean": 0.7199434229137199}
+   },
+   "v2_baseline": {
+    "label": "anaksor v2",
+    "khmerst_val": {"precision": 0.6812339331619537, "recall": 0.4089506172839506, "hmean": 0.5110896817743491},
+    "synth_val": {"precision": 0.9973676513600468, "recall": 0.9967845659163987, "hmean": 0.9970760233918129},
+    "hiertext_val": {"precision": 0.529174697739618, "recall": 0.22674374953074555, "hmean": 0.3174603174603175}
+   },
+   "chinese_baseline": {
+    "label": "Chinese pretrained baseline",
+    "khmerst_val": {"precision": 0.7956204379562044, "recall": 0.9251543209876543, "hmean": 0.8555119514805565},
+    "synth_val": {"precision": 0.744093567251462, "recall": 0.9298450745396083, "hmean": 0.8266632016632017},
+    "hiertext_val": {"precision": 0.5263614040156002, "recall": 0.5471882273443952, "hmean": 0.5365727958770476}
+   }
+  }
+ },
+ "recognition": {
+  "metric": "lines read exactly right",
+  "gpu_fps": 477.99,
+  "set": "real validation lines",
+  "scripts": {"khmer": "Khmer", "latin": "Latin", "mixed": "Mixed", "other": "Other", "all": "All"},
+  "models": {
+   "v4": {
+    "label": "anaksor v4 (released)",
+    "val": {
+     "all": {"n": 3878, "acc": 0.8674574522949974, "cer": 0.013788270695287461},
+     "khmer": {"n": 2497, "acc": 0.9006808169803765, "cer": 0.007302538133761502},
+     "latin": {"n": 982, "acc": 0.7637474541751528, "cer": 0.04289428076256499},
+     "mixed": {"n": 331, "acc": 0.9546827794561934, "cer": 0.0034497944803288313},
+     "other": {"n": 68, "acc": 0.7205882352941176, "cer": 0.1452513966480447}
+    },
+    "synth_val": {"n": 3000, "acc": 0.9833333333333333, "cer": 0.003853432969777379}
+   },
+   "v3_baseline": {
+    "label": "anaksor v3",
+    "val": {
+     "all": {"n": 3878, "acc": 0.8478597215059309, "cer": 0.018271004441513205},
+     "khmer": {"n": 2497, "acc": 0.9110933119743693, "cer": 0.006252701784721793},
+     "latin": {"n": 982, "acc": 0.6690427698574338, "cer": 0.06975736568457538},
+     "mixed": {"n": 331, "acc": 0.9637462235649547, "cer": 0.002422196124486201},
+     "other": {"n": 68, "acc": 0.5441176470588235, "cer": 0.26256983240223464}
+    },
+    "synth_val": {"n": 3000, "acc": 0.978, "cer": 0.004497297719157903}
+   }
+  }
+ },
+ "speed": {
+  "machine": "Apple M4 Max, 36 GB, anaksor-ocr 0.1.1, torch 2.15.0, onnxruntime 1.21.0",
+  "unit": "seconds per image, after the models are loaded",
+  "images": {"document": "Letter (35 lines)", "receipt": "Receipt (38 lines)", "sign": "Road sign (7 lines)"},
+  "backends": {
+   "onnx_cpu": {"label": "ONNX Runtime, CPU (default install)", "document": 10.97, "receipt": 4.27, "sign": 0.84},
+   "torch_cpu": {"label": "PyTorch, CPU", "document": 4.65, "receipt": 2.30, "sign": 0.34},
+   "torch_mps": {"label": "PyTorch, Apple GPU (MPS)", "document": 1.25, "receipt": 0.56, "sign": 0.20}
+  }
+ }
+}

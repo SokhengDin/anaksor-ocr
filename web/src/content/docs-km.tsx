@@ -1,3 +1,4 @@
+import { BenchCharts } from "@/components/BenchCharts";
 import { CodeBlock, dedent } from "@/components/CodeBlock";
 import type { DocSection } from "@/components/Docs";
 import { REPO_URL } from "@/lib/config";
@@ -22,7 +23,8 @@ export const sections: DocSection[] = [
             $ pip install "anaksor-ocr[all]"
           `} />
         <p>
-          ត្រូវការ Python 3.11 ឬថ្មីជាងនេះ។ Weights របស់ម៉ូដែល (ប្រហែល 95 MB) download ទៅ <code>~/.cache/anaksor</code> នៅពេលអ្នកអានទំព័រដំបូង។
+          ត្រូវការ Python 3.11 ឬថ្មីជាងនេះ។ Weights របស់ម៉ូដែល (ប្រហែល 95 MB សម្រាប់ ONNX Runtime និង 113 MB សម្រាប់ PyTorch) ត្រូវបានទាញយកទៅ{" "}
+          <code>~/.cache/anaksor</code> នៅពេលអ្នកអានទំព័រដំបូង។
         </p>
         <div className="table">
           <table>
@@ -49,6 +51,11 @@ export const sections: DocSection[] = [
                 <td>CPU, CUDA, Apple MPS</td>
               </tr>
               <tr>
+                <td>ល្បឿនលើ CPU</td>
+                <td>យឺតជាង</td>
+                <td>លឿនជាងប្រហែលពីរដង</td>
+              </tr>
+              <tr>
                 <td>ក្បាលអាន</td>
                 <td>CTC (លំនាំដើម), CPPD</td>
                 <td>
@@ -61,7 +68,7 @@ export const sections: DocSection[] = [
         <p>
           Backend ទាំងពីរឲ្យលទ្ធផលដូចគ្នាទាំងស្រុង ទាំងប្រអប់បន្ទាត់ (box) និងអត្ថបទ។ ប្រសិនបើអ្នកបាន install PyTorch រួចហើយ anaksor នឹងប្រើ PyTorch។
           បើមិនទាន់មានទេ វានឹងប្រើ ONNX Runtime ជំនួសវិញ។ អ្នកក៏អាចកំណត់ backend ដោយខ្លួនឯងបាន តាមរយៈ <code>backend=&quot;torch&quot;</code> ឬ{" "}
-          <code>&quot;onnx&quot;</code> (ឬ <code>--backend</code> នៅក្នុង command line)។ ពេល run លើ CPU, PyTorch លឿនជាង ONNX Runtime បន្តិច។
+          <code>&quot;onnx&quot;</code> (ឬ <code>--backend</code> នៅក្នុង command line)។
         </p>
       </>
     ),
@@ -322,9 +329,18 @@ export const sections: DocSection[] = [
   },
   {
     id: "accuracy",
-    title: "ភាពត្រឹមត្រូវ និងដែនកំណត់",
+    title: "ភាពត្រឹមត្រូវ ល្បឿន និងដែនកំណត់",
     body: (
       <>
+        <BenchCharts
+          alt={[
+            "ក្រាហ្វ៖ F1 នៃការរកបន្ទាត់ (detection) របស់ v3, v2 និង Chinese baseline",
+            "ក្រាហ្វ៖ ភាពត្រឹមត្រូវនៃការអានបន្ទាត់ (recognition) របស់ v4 និង v3 តាមប្រភេទអក្សរ",
+            "ក្រាហ្វ៖ ចំនួនវិនាទីក្នុងមួយរូបភាព សម្រាប់ ONNX Runtime និង PyTorch លើ Apple M4 Max",
+          ]}
+          accuracyNote="លេខភាពត្រឹមត្រូវទាំងអស់ ត្រូវបានវាស់លើ NVIDIA GeForce RTX 5090 (32 GB)។"
+          speedNote="ល្បឿនត្រូវបានវាស់លើ Apple M4 Max បន្ទាប់ពីម៉ូដែលត្រូវបាន load រួច។ ម៉ាស៊ីនរបស់អ្នកអាចខុសពីនេះ។"
+        />
         <div className="table">
           <table>
             <thead>
@@ -352,7 +368,7 @@ export const sections: DocSection[] = [
               </tr>
               <tr>
                 <td>ការអានអក្សរ (recognition) v4</td>
-                <td>បន្ទាត់ពិត ៣៨៧៨ សម្រាប់ផ្ទៀងផ្ទាត់៖ ខ្មែរ ឡាតាំង និងចម្រុះ (mixed)</td>
+                <td>បន្ទាត់ពិត ៣៨៧៨ សម្រាប់ផ្ទៀងផ្ទាត់ (ខ្មែរ ឡាតាំង ចម្រុះ (mixed) និងផ្សេងៗ)</td>
                 <td>ត្រឹមត្រូវទាំងស្រុង ៨៦.៧% កំហុសតួអក្សរ ១.៣៨%</td>
               </tr>
               <tr>
@@ -391,14 +407,16 @@ export const sections: DocSection[] = [
         </p>
         <ol className="steps">
           <li>
-            path ដែលអ្នកបានកំណត់ផ្ទាល់ (<code>det_weights=</code>, <code>rec_weights=</code> ឬ <code>--det-weights</code>);
+            path ដែលអ្នកបានកំណត់ផ្ទាល់ (<code>det_weights=</code> / <code>rec_weights=</code> ឬ <code>--det-weights</code> /{" "}
+            <code>--rec-weights</code>);
           </li>
           <li>
             folder ដែលបានកំណត់ក្នុង <code>ANAKSOR_WEIGHTS_DIR</code>;
           </li>
           <li>
             cache នៅក្នុង <code>~/.cache/anaksor</code> (ឬ <code>ANAKSOR_HOME</code>)។ ឯកសារត្រូវបានទាញយកពី Hugging Face តែម្តងគត់
-            ហើយត្រូវបានផ្ទៀងផ្ទាត់ជាមួយ SHA-256 មុនពេលប្រើ។
+            ហើយត្រូវបានផ្ទៀងផ្ទាត់ជាមួយ SHA-256 មុនពេលប្រើ។ ឯកសារទាំងនេះមកពី commit ដែល release នេះត្រូវបានបង្កើតឡើង ដូច្នេះការ upload
+            ថ្មីៗនៅពេលក្រោយ មិនប្តូរលទ្ធផលរបស់អ្នកឡើយ។
           </li>
         </ol>
         <p>

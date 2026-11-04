@@ -10,8 +10,8 @@
 puts them in reading order (columns, receipts, paragraphs) and exports plain text, JSON, a
 searchable PDF or a Word file.
 
-**[Try it in the browser →](https://ocr.sokhengdin.dev)** Drop a photo or PDF and see every line it
-finds. Documentation in [Khmer](https://ocr.sokhengdin.dev/docs/) and
+**[Try it in your browser →](https://ocr.sokhengdin.dev)**: drop a photo or PDF and see every
+line it finds. The documentation is in [Khmer](https://ocr.sokhengdin.dev/docs/) and
 [English](https://ocr.sokhengdin.dev/en/docs/).
 
 ```bash
@@ -21,8 +21,8 @@ anaksor photo.jpg
 
 ## What it reads
 
-Real pages read by the released models. Each box is one detected line; red marks a line read
-with low confidence.
+These are real pages read by the released models. Each box is one detected line, and red marks
+a line read with low confidence.
 
 <table>
   <tr>
@@ -31,9 +31,9 @@ with low confidence.
     <td width="33%"><img src="https://raw.githubusercontent.com/SokhengDin/anaksor-ocr/master/docs/images/sign.jpg" alt="A green road sign in Khmer and English with each place name boxed"></td>
   </tr>
   <tr>
-    <td>A scanned letter: 35 lines, in reading order, in about 1 s</td>
+    <td>A scanned letter: 35 lines, in reading order</td>
     <td>A receipt photo: 38 lines; printed text reads well, handwriting less so</td>
-    <td>A road sign: 7 lines, Khmer and English, in 0.2 s</td>
+    <td>A road sign: 7 lines, in Khmer and English</td>
   </tr>
 </table>
 
@@ -62,13 +62,46 @@ ANLONG VENG
 ចំការឫស្សី ផាយ សុខុម
 ```
 
+## Accuracy, speed and limitations
+
+All accuracy numbers were measured on an NVIDIA GeForce RTX 5090 (32 GB).
+
+<img src="https://raw.githubusercontent.com/SokhengDin/anaksor-ocr/master/docs/images/bench-detection.png" alt="Bar chart: text-line detection F1 of v3, v2 and a Chinese baseline">
+
+<img src="https://raw.githubusercontent.com/SokhengDin/anaksor-ocr/master/docs/images/bench-recognition.png" alt="Bar chart: text-line recognition accuracy of v4 and v3, by script">
+
+<img src="https://raw.githubusercontent.com/SokhengDin/anaksor-ocr/master/docs/images/bench-speed.png" alt="Bar chart: seconds per image for ONNX Runtime and PyTorch on an Apple M4 Max">
+
+Speed was measured on an Apple M4 Max, once the models were loaded; your machine will differ.
+
+| Part | Measured on | Result |
+|---|---|---|
+| Detection v3 | KhmerST validation photos | precision 0.75, recall 0.79 |
+| Detection v3 | HierText validation: English on photos | precision 0.76, recall 0.69 |
+| Detection v3 | synthetic pages | precision 0.998, recall 0.998 |
+| Recognition v4 | 3,878 real validation lines (Khmer, Latin, mixed and other) | 86.7% exactly right, 1.38% character error |
+| Recognition v4 | the 2,497 Khmer-only lines among them | 90.1% exactly right, 0.73% character error |
+
+KhmerST labels only some of the text in each photo. When detection is scored, text that has
+no label but was found by another detector is ignored ("don't care"), which makes precision
+look slightly better than it is.
+
+- Printed Khmer reads best: documents, receipts and signs.
+- English and other Latin text on photos is weaker: the detector can miss it on signs, and the
+  recogniser saw little real English during training.
+- Handwriting and decorative lettering are weak. Check each line's `rec_score`, or use
+  `--highlight-low` for Word output.
+
+Training data and its licences are listed in the model card on
+[Hugging Face](https://huggingface.co/Sokheng/anaksor-ocr).
+
 ## How it works
 
 | | |
 |---|---|
 | Detection | DBNet with a RepViT backbone, trained on KhmerST photos and synthetic pages |
 | Recognition | SVTRv2 with a CTC head, trained on public Khmer datasets and synthetic lines |
-| Layout | deskew, column detection, line growing, paragraphs, long lines read in stitched windows |
+| Layout | straightens tilted pages, finds columns, groups words into lines and paragraphs; long lines are read in overlapping windows and joined |
 | Runs on | ONNX Runtime (CPU, CUDA) by default; PyTorch (CPU, CUDA, Apple MPS) with `[torch]` |
 
 ## Install
@@ -81,27 +114,24 @@ pip install "anaksor-ocr[all]"      # PyTorch + PDF input + Word export
 
 Python 3.11+. For a specific CUDA build of PyTorch, install `torch` from
 [pytorch.org](https://pytorch.org/get-started/locally/) first; for ONNX Runtime on CUDA,
-`pip install onnxruntime-gpu`. The weights (about 95 MB for ONNX Runtime, 113 MB for PyTorch) download to `~/.cache/anaksor`
-on first use.
+`pip install onnxruntime-gpu`. The weights (about 95 MB for ONNX Runtime, 113 MB for
+PyTorch) download to `~/.cache/anaksor` on first use.
 
 ### Backends
 
-| | `onnx` (default install) | `torch` (`[torch]`) |
+anaksor runs on one of two backends. Both give the same boxes and the same text.
+
+| | ONNX Runtime | PyTorch |
 |---|---|---|
-| Install | no PyTorch (with CUDA, PyTorch is several GB) | PyTorch |
+| Install | `pip install anaksor-ocr` (small, the default) | `pip install "anaksor-ocr[torch]"` (several GB with CUDA) |
 | Devices | CPU; CUDA with `onnxruntime-gpu` | CPU, CUDA, Apple MPS |
-| Weights | exported `.onnx` graphs | `.safetensors`, `.pth` checkpoints |
-| Heads | CTC, CPPD | CTC, SMTR (`decoder="gtc"` / `"auto"`), CPPD |
+| Speed on CPU | slower | about twice as fast |
+| Weights | `.onnx` graphs | `.safetensors` and `.pth` checkpoints |
+| Recognition heads | CTC, CPPD | CTC, SMTR (`decoder="gtc"`), CPPD |
 
-`backend="auto"` (also `--backend` on the command line) uses PyTorch when it is installed,
-else ONNX Runtime; an `.onnx` weights file always runs in ONNX Runtime. Both give the same
-boxes and text. On PyTorch the batch norms are folded into the convolutions when a model
-loads (`fuse=True`): same output, detection about 2.5x faster on CPU.
-
-On CPU the two are close; PyTorch is a little faster (6 bench pages, rec v3: 79 s and
-0.7 GB peak memory on PyTorch, 99 s and 0.9 GB on ONNX Runtime). ONNX Runtime's gain is the
-install. Wide crops are recognised in smaller batches on both, as attention memory grows
-with the square of the width.
+anaksor uses PyTorch if it is installed, and ONNX Runtime otherwise. To choose, pass
+`backend="onnx"` or `backend="torch"` (`--backend` on the command line). An `.onnx` weights
+file always runs in ONNX Runtime.
 
 ## Command line
 
@@ -131,58 +161,49 @@ open("scan.pdf", "wb").write(anaksor.export.to_pdf(pages))
 open("scan.docx", "wb").write(anaksor.export.to_docx(pages))
 ```
 
-`ocr(image)` takes a path, bytes, a PIL image or an RGB numpy array. Useful options:
+`ocr(image)` takes a path, bytes, a PIL image or an RGB NumPy array. Useful options:
 
 | Option | Default | Effect |
 |---|---|---|
 | `pad_y`, `pad_x` | 0.16, 0.10 | margin around each line before reading, as a fraction of its height |
 | `min_rec_score` | 0.5 | drop lines read with less confidence |
-| `unclip_ratio` | 1.5 | how much detected boxes are grown (bigger joins more) |
+| `unclip_ratio` | 1.5 | how much each detected box is enlarged; larger values merge more boxes |
 | `scales` | `(1.0,)` | extra detection scales, e.g. `(1.0, 1.6)` for small text |
 
 The detector and recogniser can be used on their own: `anaksor.Detector().detect(img)` and
 `anaksor.Recognizer().recognize([crop, ...])`.
 
-## Accuracy and limitations
-
-| Part | Evaluated on | Result |
-|---|---|---|
-| Detection v3 | KhmerST validation photos | precision 0.75, recall 0.79 |
-| Detection v3 | HierText validation: English on photos | precision 0.76, recall 0.69 |
-| Detection v3 | synthetic pages | precision 0.998, recall 0.998 |
-| Recognition v4 | 3,878 real validation lines: Khmer, Latin and mixed | 86.7% exactly right, 1.38% character error |
-| Recognition v4 | the 2,497 Khmer-only lines among them | 90.1% exactly right, 0.73% character error |
-
-KhmerST labels only some of the text in each photo; for detection, unlabelled text found by
-another detector counts as "don't care", which flatters precision a little.
-
-- Printed Khmer, documents, receipts and signs read best.
-- English and other Latin text on photos is weaker: the detector can miss it on signs, and the
-  recogniser has seen little real English.
-- Handwriting and decorative lettering are weak. Check each line's `rec_score`, or use
-  `--highlight-low` for Word output.
-
-Training data and its licences are listed in the model card on
-[Hugging Face](https://huggingface.co/Sokheng/anaksor-ocr).
-
 ## Weights
 
-Each model has two files: an ONNX graph (`.onnx`, used by the onnx backend) and PyTorch
-weights (`.safetensors`, used by the torch backend). Only the files the chosen backend needs
-are fetched, from the first of: an explicit `det_weights=` / `rec_weights=` path,
-`$ANAKSOR_WEIGHTS_DIR`, then the cache (`$ANAKSOR_HOME`, default `~/.cache/anaksor`), which
-is filled from the Hugging Face repo `Sokheng/anaksor-ocr` and checked against the
-SHA-256 in the model spec before it is used; a file whose spec has no SHA-256 is not
-downloaded at all. Neither format can run code when loaded. Files come from the Hub commit
-of the release the package was built for (rec v4 + det v3, `5c9f76c`), not from `main`,
-where the `_latest` files move on with each release; `ANAKSOR_HF_REVISION` picks another. Offline machines: copy
-the two files for your backend into `$ANAKSOR_WEIGHTS_DIR` (`anaksor --fetch-models`
-downloads them ahead of time).
+Each model comes as two files. Only the one for your backend is downloaded:
+
+| Backend | File |
+|---|---|
+| `onnx` | ONNX graph (`.onnx`) |
+| `torch` | PyTorch weights (`.safetensors`) |
+
+anaksor looks for them in this order and uses the first it finds:
+
+1. a path you pass: `det_weights=` / `rec_weights=` (or `--det-weights` / `--rec-weights`);
+2. the folder in `$ANAKSOR_WEIGHTS_DIR`;
+3. the cache, `~/.cache/anaksor` (or `$ANAKSOR_HOME`), filled on first use from the
+   Hugging Face repo [`Sokheng/anaksor-ocr`](https://huggingface.co/Sokheng/anaksor-ocr).
+
+Downloads are safe and repeatable:
+
+- each file is checked against the SHA-256 in its model spec before it is used, and a file
+  without one is never downloaded;
+- neither format can run code when it is loaded;
+- files come from the Hub commit this release was built for (rec v4 + det v3, `5c9f76c`), so
+  a later upload never changes your results. `ANAKSOR_HF_REVISION` picks another commit.
+
+**Offline machines:** run `anaksor --fetch-models` on a machine with internet, then copy the
+two files for your backend into `$ANAKSOR_WEIGHTS_DIR` on the offline one.
 
 ### Other models
 
-Models trained with OpenOCR-style configs (the format these models were trained with) run
-with a spec made from the training config. The tools are in the repository, not the
+You can also run your own models trained with OpenOCR-style configs, the format used to train
+these models. Make a spec from the training config. The tools are in the repository, not the
 installed package, so run them from a clone:
 
 ```bash
@@ -204,8 +225,8 @@ python tools/export_onnx.py --rec best.pth --rec-spec specs/rec-svtrv2-cppd-khme
 
 Supported: detection RepViT + DBNet; recognition SVTRv2 (any size) with RCTC + SMTR heads
 (`GTCDecoder`, also with the training-only count head), RCTC alone, or CPPD. The `.pth`
-checkpoints load as they are (no code runs: `weights_only`); `tools/convert_weights.py`
-turns them into `.safetensors`. A CPPD head has no per-column output, so lines wider than
+checkpoints load as they are, with `weights_only`, so no code runs;
+`tools/convert_weights.py` turns them into `.safetensors`. A CPPD head has no per-column output, so lines wider than
 its input are read in overlapping windows joined where their texts overlap, instead of by
 CTC character positions.
 
@@ -225,7 +246,7 @@ ANAKSOR_TEST_WEIGHTS=/path/to/weights pytest -m weights
 ruff check src tests tools && ruff format --check src tests tools
 ```
 
-The website (landing page, demo, documentation) is a Next.js app in `web/`, see
+The website (landing page, demo, documentation) is a Next.js app in `web/`; see
 [web/README.md](web/README.md).
 
 Layout of the package:
@@ -247,18 +268,7 @@ Layout of the package:
 | `db_boxes.py` | text boxes from the detector's probability map |
 | `decoding.py` | charsets, CTC, SMTR and CPPD decoding |
 
-### Releasing
-
-1. New weights only: `python tools/convert_weights.py best.pth` for each model, then
-   `python tools/export_onnx.py --det ... --rec ...`; upload the `.safetensors` and `.onnx`
-   files to the Hugging Face repo and put the printed SHA-256s into `src/anaksor/data/*.yml`
-   (`weights.sha256`, `weights.onnx_sha256`). Update the model card on the Hugging Face repo:
-   training data, its licences, and the evaluation results above.
-2. Bump the version (`uv version --bump patch`), update `CHANGELOG.md`, commit and push.
-3. Tag and push: `git tag -a vX.Y.Z -m "anaksor-ocr X.Y.Z" && git push origin vX.Y.Z`.
-   The release workflow checks the tag against the version, audits the dependencies, builds,
-   then waits for approval of the `pypi` environment before publishing through trusted
-   publishing.
+Releasing a new version: see [RELEASING.md](RELEASING.md).
 
 ## Credits and licence
 

@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "anaksor-ocr"
-version = "0.1.2"
+version = "0.1.3"
 description = "Khmer OCR: photos, scans and PDFs to Khmer text, with layout, searchable PDF and Word export"
 readme = "README.md"
 license = "Apache-2.0"
@@ -40,7 +40,7 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-torch = ["torch>=2.13", "safetensors>=0.4.5"]
+torch = ["torch>=2.13", "torchvision>=0.28", "safetensors>=0.4.5"]
 export = ["anaksor-ocr[torch]", "onnx>=1.22", "onnxscript>=0.2"]
 pdf = ["pypdfium2>=4.30"]
 docx = ["python-docx>=1.1.2"]

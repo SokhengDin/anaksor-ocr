@@ -1,0 +1,21 @@
+# Khmer text detection, mobile DBNet++: det v3 (RepViT + RSEFPN + DB head) + ASF, all-angle
+# training. Made with tools/spec_from_config.py from Alpha-OCR configs/repvit_dbpp_khmer.yml.
+name: det-repvit-dbpp-v1
+kind: det
+weights:
+  file: khmer_det_repvit_dbpp_latest.safetensors
+  sha256: 6720db50ed8756f1286653c8154493d0a5420c0d0636091645829fa80f0fbe11
+  onnx: khmer_det_repvit_dbpp_latest.onnx
+  onnx_sha256: 9568bd2e1c410d86bd75b32a2c57ad5b4168650341e11d872c06b2b017e34c9c
+input:
+  limit_side_len: 1280
+  min_side_len: 736
+  mean: [0.485, 0.456, 0.406]
+  std: [0.229, 0.224, 0.225]
+architecture:
+  algorithm: DB_mobile++
+  Backbone: {name: RepSVTR_det}
+  Neck: {name: RSEFPN, out_channels: 96, shortcut: true, use_asf: true}
+  Head: {name: DBHead, k: 50}
+postprocess: {name: DBPostProcess, thresh: 0.3, box_thresh: 0.5, max_candidates: 1000,
+  unclip_ratio: 1.5, score_mode: slow, use_dilation: false}

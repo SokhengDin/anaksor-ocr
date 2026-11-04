@@ -28,7 +28,7 @@ jobs:
       - name: Install (CPU torch)
         run: |
           uv venv -p ${{ matrix.python }}
-          uv pip install torch --index-url https://download.pytorch.org/whl/cpu
+          uv pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
           uv pip install -e ".[all]" pytest onnx onnxscript   # onnx*: export + onnx backend tests
       - run: .venv/bin/python -m pytest
 

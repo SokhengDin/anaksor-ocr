@@ -19,6 +19,7 @@ from torch import nn
 from .dbnet import _ProbHead
 from .layers import ConvBN, ConvBNAct
 from .repvit import RepDWConv
+from .resnet_dcn import Bottleneck, ModulatedDeformConv, ResNetDCN
 
 
 def _bn_affine(bn: nn.BatchNorm2d) -> tuple[torch.Tensor, torch.Tensor]:
@@ -73,6 +74,25 @@ def fold_convt_bn(conv: nn.ConvTranspose2d, bn: nn.BatchNorm2d) -> nn.ConvTransp
 
 
 @torch.no_grad()
+def fold_dcn_bn(conv: ModulatedDeformConv, bn: nn.BatchNorm2d) -> ModulatedDeformConv:
+    """One deformable conv computing bn(dcn(x, offset, mask))."""
+    scale, shift = _bn_affine(bn)
+    out = ModulatedDeformConv(conv.weight.shape[1], conv.weight.shape[0], conv.weight.shape[2], conv.stride, conv.padding)
+    out.to(device=conv.weight.device, dtype=conv.weight.dtype)
+    out.weight.copy_(conv.weight * scale.reshape(-1, 1, 1, 1))
+    bias = conv.bias if conv.bias is not None else torch.zeros_like(shift)
+    out.bias = nn.Parameter(bias * scale + shift)
+    return out
+
+
+def _fold_pair(m: nn.Module, conv: str, bn: str) -> None:
+    c, b = getattr(m, conv), getattr(m, bn)
+    if isinstance(b, nn.BatchNorm2d):
+        setattr(m, conv, fold_dcn_bn(c, b) if isinstance(c, ModulatedDeformConv) else fold_conv_bn(c, b))
+        setattr(m, bn, nn.Identity())
+
+
+@torch.no_grad()
 def fuse_rep_dw(m: RepDWConv) -> nn.Conv2d:
     """bn(dw3x3(x) + dw1x1(x) + x) as one 3x3 depthwise conv."""
     k3 = fold_conv_bn(m.conv.c, m.conv.bn)
@@ -101,6 +121,13 @@ def fuse(model: nn.Module) -> nn.Module:
     if isinstance(model, ConvBNAct) and isinstance(model.norm, nn.BatchNorm2d):
         model.conv = fold_conv_bn(model.conv, model.norm)
         model.norm = nn.Identity()
+    elif isinstance(model, ResNetDCN):
+        _fold_pair(model, "conv1", "bn1")
+    elif isinstance(model, Bottleneck):
+        for i in (1, 2, 3):
+            _fold_pair(model, f"conv{i}", f"bn{i}")
+        if model.downsample is not None and isinstance(model.downsample[-1], nn.BatchNorm2d):
+            model.downsample = nn.Sequential(fold_conv_bn(model.downsample[0], model.downsample[1]))
     elif isinstance(model, _ProbHead) and isinstance(model.conv_bn1, nn.BatchNorm2d):
         model.conv1 = fold_conv_bn(model.conv1, model.conv_bn1)
         model.conv_bn1 = nn.Identity()

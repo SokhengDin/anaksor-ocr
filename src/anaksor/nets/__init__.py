@@ -1,7 +1,7 @@
 """anaksor's networks, written for inference, from the papers.
 
-Implemented: RepViT + DBNet (detection); SVTRv2 with RCTC + SMTR heads, RCTC alone, or a
-CPPD head (recognition).
+Implemented: DBNet and DBNet++ with a RepViT or ResNet-50-DCN backbone (detection); SVTRv2
+with RCTC + SMTR heads, RCTC alone, or a CPPD head (recognition).
 
 The model specs (``anaksor/data/*.yml``) describe architectures in the same terms as the
 Alpha-OCR training configs, so an ``Architecture`` block can be copied from a training
@@ -15,7 +15,7 @@ from .textline import TextLineNet
 
 __all__ = ["DBNet", "TextLineNet", "build_detector", "build_recognizer"]
 
-_DET_PARTS = {"Backbone": ("RepSVTR_det",), "Neck": ("RSEFPN",), "Head": ("DBHead",)}
+_DET_PARTS = {"Backbone": ("RepSVTR_det", "ResNet_DCN"), "Neck": ("RSEFPN", "DBFPN"), "Head": ("DBHead",)}
 _ENCODERS = ("SVTRv2LNConvTwo33",)
 _GTC = ("GTCDecoder", "GTCCountDecoder")  # the count head is training-only
 
@@ -30,9 +30,16 @@ def _part(arch: dict, key: str, names: tuple[str, ...]) -> dict:
 
 
 def build_detector(arch: dict) -> DBNet:
-    """DBNet from a spec's ``architecture`` block."""
+    """DBNet / DBNet++ from a spec's ``architecture`` block."""
     parts = {k: _part(arch, k, names) for k, names in _DET_PARTS.items()}
-    return DBNet(parts["Backbone"], parts["Neck"], parts["Head"], in_channels=arch.get("in_channels", 3))
+    return DBNet(
+        parts["Backbone"],
+        parts["Neck"],
+        parts["Head"],
+        in_channels=arch.get("in_channels", 3),
+        backbone_name=arch["Backbone"]["name"],
+        neck_name=arch["Neck"]["name"],
+    )
 
 
 def build_recognizer(

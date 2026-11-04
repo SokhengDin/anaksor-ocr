@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "anaksor-ocr"
-version = "0.1.1"
+version = "0.1.2"
 description = "Khmer OCR: photos, scans and PDFs to Khmer text, with layout, searchable PDF and Word export"
 readme = "README.md"
 license = "Apache-2.0"

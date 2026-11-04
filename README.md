@@ -6,8 +6,6 @@
 [![License](https://img.shields.io/pypi/l/anaksor-ocr)](LICENSE)
 [![Models](https://img.shields.io/badge/%F0%9F%A4%97%20models-Sokheng%2Fanaksor--ocr-yellow)](https://huggingface.co/Sokheng/anaksor-ocr)
 [![Downloads](https://static.pepy.tech/badge/anaksor-ocr)](https://pepy.tech/projects/anaksor-ocr)
-[![Model downloads](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fhuggingface.co%2Fapi%2Fmodels%2FSokheng%2Fanaksor-ocr%3Fexpand%3DdownloadsAllTime&query=%24.downloadsAllTime&label=%F0%9F%A4%97%20downloads&color=yellow)](https://huggingface.co/Sokheng/anaksor-ocr)
-
 **អានអក្សរ**: Khmer OCR for photos, scans and PDFs. It finds the text lines, reads them,
 puts them in reading order (columns, receipts, paragraphs) and exports plain text, JSON, a
 searchable PDF or a Word file.

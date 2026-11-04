@@ -9,4 +9,5 @@
 3. Tag and push: `git tag -a vX.Y.Z -m "anaksor-ocr X.Y.Z" && git push origin vX.Y.Z`.
    The release workflow checks the tag against the version, audits the dependencies, builds,
    then waits for approval of the `pypi` environment before publishing through trusted
-   publishing.
+   publishing. After that it creates the GitHub release, with the notes from that version's
+   section in `CHANGELOG.md` and the built `.whl` and `.tar.gz` attached.

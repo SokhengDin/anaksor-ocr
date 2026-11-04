@@ -58,6 +58,7 @@ export const km: Dict = {
     download: "ទាញយក .txt",
     exportDocx: "ឯកសារ Word",
     exportPdf: "Searchable PDF",
+    exportPdfHint: "Searchable PDF មើលទៅដូចឯកសារដើម ប៉ុន្តែមាន text layer ដែលមើលមិនឃើញនៅពីក្រោយ ដូច្នេះអ្នកអាច search, select និង copy អត្ថបទបាន។ បើចង់ edit អត្ថបទ សូម export ជាឯកសារ Word។",
     exporting: "កំពុងរៀបចំ…",
     seconds: (s) => `${kh(s.toFixed(2))} វិនាទី`,
     linesCount: (n) => `${kh(n)} បន្ទាត់`,

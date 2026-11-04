@@ -411,6 +411,7 @@ export function Demo({ lang }: { lang: Lang }) {
                 {exporting === "pdf" ? d.exporting : d.exportPdf}
               </button>
             </div>
+            <p className="hint">{d.exportPdfHint}</p>
             {source.kind === "file" && !busy ? (
               <p className="hint">
                 <button type="button" className="btn quiet" onClick={() => input.current?.click()}>

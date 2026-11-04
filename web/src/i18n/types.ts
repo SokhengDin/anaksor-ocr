@@ -37,6 +37,7 @@ export interface Dict {
     download: string;
     exportDocx: string;
     exportPdf: string;
+    exportPdfHint: string;
     exporting: string;
     seconds: (s: number) => string;
     linesCount: (n: number) => string;

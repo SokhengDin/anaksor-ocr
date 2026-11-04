@@ -45,6 +45,7 @@ export const en: Dict = {
     download: "Download .txt",
     exportDocx: "Word file",
     exportPdf: "Searchable PDF",
+    exportPdfHint: "The searchable PDF looks like the original page, with the text it read hidden underneath: you can search it, select it and copy it. For the text as editable content, take the Word file.",
     exporting: "Preparing…",
     seconds: (s) => `${s.toFixed(2)} s`,
     linesCount: (n) => (n === 1 ? "1 line" : `${n} lines`),

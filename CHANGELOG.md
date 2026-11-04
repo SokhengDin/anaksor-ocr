@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.1.4 (2026-11-04)
+
+- Mobile DBNet++ (`det-repvit-dbpp-v1`) is the default detector: `anaksor.OCR()` uses it with
+  no setup. Upright text is on par with det v3; rotated text is better (hmean on HierText val:
+  45° 0.30 → 0.42, 90° 0.47 → 0.59, 135° 0.31 → 0.47).
+- Weights come from Hub commit `7b88e65` (tag `rec-v4-det-dbpp-v1`).
+- Det v3 stays available as `Detector("det-repvit-db-v3")`. A spec can pin its own Hub commit
+  with `weights.revision`, which wins over `ANAKSOR_HF_REVISION`.
+
 ## 0.1.1 (2026-11-03)
 
 No code changes: the package is the same as 0.1.0.

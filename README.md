@@ -100,7 +100,7 @@ Training data and its licences are listed in the model card on
 
 | | |
 |---|---|
-| Detection | DBNet with a RepViT backbone, trained on KhmerST photos and synthetic pages |
+| Detection | Mobile DBNet++ (RepViT backbone, Adaptive Scale Fusion), trained on KhmerST photos and synthetic pages, at every angle |
 | Recognition | SVTRv2 with a CTC head, trained on public Khmer datasets and synthetic lines |
 | Layout | straightens tilted pages, finds columns, groups words into lines and paragraphs; long lines are read in overlapping windows and joined |
 | Runs on | ONNX Runtime (CPU, CUDA) by default; PyTorch (CPU, CUDA, Apple MPS) with `[torch]` |
@@ -195,8 +195,10 @@ Downloads are safe and repeatable:
 - each file is checked against the SHA-256 in its model spec before it is used, and a file
   without one is never downloaded;
 - neither format can run code when it is loaded;
-- files come from the Hub commit this release was built for (rec v4 + det v3, `5c9f76c`), so
-  a later upload never changes your results. `ANAKSOR_HF_REVISION` picks another commit.
+- files come from the Hub commit this release was built for (rec v4 + mobile DBNet++,
+  `7b88e65`), so a later upload never changes your results. `ANAKSOR_HF_REVISION` picks another
+  commit. The earlier detector stays available as `Detector("det-repvit-db-v3")`, from its own
+  commit (`5c9f76c`).
 
 **Offline machines:** run `anaksor --fetch-models` on a machine with internet, then copy the
 two files for your backend into `$ANAKSOR_WEIGHTS_DIR` on the offline one.
@@ -224,7 +226,8 @@ For the onnx backend, export the weights (needs `[export]`); the spec already na
 python tools/export_onnx.py --rec best.pth --rec-spec specs/rec-svtrv2-cppd-khmer.yml --out onnx/
 ```
 
-Supported: detection RepViT + DBNet; recognition SVTRv2 (any size) with RCTC + SMTR heads
+Supported: detection DBNet and DBNet++ with RepViT, and DBNet++ with ResNet-50-DCN (PyTorch
+backend only); recognition SVTRv2 (any size) with RCTC + SMTR heads
 (`GTCDecoder`, also with the training-only count head), RCTC alone, or CPPD. The `.pth`
 checkpoints load as they are, with `weights_only`, so no code runs;
 `tools/convert_weights.py` turns them into `.safetensors`. A CPPD head has no per-column output, so lines wider than
@@ -265,7 +268,7 @@ Layout of the package:
 | `models.py` | model specs, weights download, checksum and safe loading |
 | `runtime.py` | where the networks run: PyTorch or ONNX Runtime |
 | `onnx_export.py` | ONNX export (fused, dynamic shapes, checked against PyTorch) |
-| `nets/` | the networks: RepViT + DBNet, SVTRv2 with RCTC, SMTR or CPPD heads; `fuse.py` folds batch norms |
+| `nets/` | the networks: DBNet / DBNet++ (RepViT, ResNet-50-DCN), SVTRv2 with RCTC, SMTR or CPPD heads; `fuse.py` folds batch norms |
 | `db_boxes.py` | text boxes from the detector's probability map |
 | `decoding.py` | charsets, CTC, SMTR and CPPD decoding |
 
@@ -278,6 +281,7 @@ tensor names of the [OpenOCR](https://github.com/Topdu/OpenOCR) implementations 
 were trained with (see [NOTICE](NOTICE)).
 
 - DBNet: Liao et al., *Real-time Scene Text Detection with Differentiable Binarization*, AAAI 2020
+- DBNet++: Liao et al., *Real-Time Scene Text Detection with Differentiable Binarization and Adaptive Scale Fusion*, TPAMI 2022
 - RepViT: Wang et al., *RepViT: Revisiting Mobile CNN From ViT Perspective*, CVPR 2024
 - SVTRv2: Du et al., *SVTRv2: CTC Beats Encoder-Decoder Models in Scene Text Recognition*, ICCV 2025
 - SMTR: Du et al., *Out of Length Text Recognition with Sub-String Matching*, AAAI 2025

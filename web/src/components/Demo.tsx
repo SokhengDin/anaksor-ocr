@@ -313,6 +313,7 @@ export function Demo({ lang }: { lang: Lang }) {
           )}
           {busy ? (
             <span className="meta" aria-live="polite">
+              <span className="spinner" aria-hidden="true" />
               {source.kind === "file" && source.isPdf && total ? d.readingPage(Math.min(done + 1, total), total) : d.reading}{" "}
               <button type="button" className="btn quiet" onClick={() => inflight.current?.abort()} style={{ minHeight: "2rem" }}>
                 {d.cancel}
@@ -421,10 +422,6 @@ export function Demo({ lang }: { lang: Lang }) {
             ) : null}
           </div>
         </div>
-      ) : busy ? (
-        <p className="hint" aria-live="polite">
-          {d.reading}
-        </p>
       ) : null}
     </section>
   );

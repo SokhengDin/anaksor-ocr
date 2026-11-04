@@ -94,9 +94,10 @@ def test_load_into_requires_every_tensor(tmp_path):
 
 
 def test_defaults_are_the_published_release():
-    """v4 / v3 from Sokheng/anaksor-ocr, every file pinned by its SHA-256."""
-    assert (models.DET_DEFAULT, models.REC_DEFAULT) == ("det-repvit-db-v3", "rec-svtrv2-v4")
+    """rec v4 / mobile DBNet++ from Sokheng/anaksor-ocr, every file pinned by its SHA-256."""
+    assert (models.DET_DEFAULT, models.REC_DEFAULT) == ("det-repvit-dbpp-v1", "rec-svtrv2-v4")
     assert models.HF_REPO == "Sokheng/anaksor-ocr"
+    assert load_spec(models.DET_DEFAULT).architecture["Neck"]["use_asf"] is True
     for name in (models.DET_DEFAULT, models.REC_DEFAULT):
         spec = load_spec(name)
         for file, sha in ((spec.weights_file, spec.sha256), (spec.onnx_file, spec.onnx_sha256)):
@@ -119,7 +120,7 @@ def test_unverified_weights_are_not_downloaded(tmp_path, monkeypatch):
     monkeypatch.setenv("ANAKSOR_ALLOW_UNVERIFIED", "1")
     resolve_weights(load_spec("rec-svtrv2-v3"))
     assert called == [
-        "https://huggingface.co/Sokheng/anaksor-ocr/resolve/5c9f76c7ff6b5dd51c9e83c7ec69c63be5f5611d/khmer_rec_svtrv2_v3.safetensors"
+        "https://huggingface.co/Sokheng/anaksor-ocr/resolve/7b88e650814bb93a7a1b78524f980631d5806df8/khmer_rec_svtrv2_v3.safetensors"
     ]
 
 
@@ -133,7 +134,24 @@ def test_published_weights_download_from_the_release(tmp_path, monkeypatch):
     resolve_weights(spec, fmt="onnx")
     assert seen == [
         (
-            "https://huggingface.co/Sokheng/anaksor-ocr/resolve/5c9f76c7ff6b5dd51c9e83c7ec69c63be5f5611d/khmer_rec_svtrv2_latest.onnx",
+            "https://huggingface.co/Sokheng/anaksor-ocr/resolve/7b88e650814bb93a7a1b78524f980631d5806df8/khmer_rec_svtrv2_latest.onnx",
             spec.onnx_sha256,
         )
     ]
+
+
+@pytest.mark.parametrize("env", [None, "rec-v4-det-dbpp-v1"])
+def test_det_v3_downloads_from_its_own_commit(tmp_path, monkeypatch, env):
+    monkeypatch.setenv("ANAKSOR_HOME", str(tmp_path))
+    monkeypatch.delenv("ANAKSOR_WEIGHTS_DIR", raising=False)
+    if env:
+        monkeypatch.setenv("ANAKSOR_HF_REVISION", env)
+    else:
+        monkeypatch.delenv("ANAKSOR_HF_REVISION", raising=False)
+    seen = []
+    monkeypatch.setattr(models, "_download", lambda url, dest, sha: seen.append(url))
+    path = resolve_weights(load_spec("det-repvit-db-v3"))
+    assert seen == [
+        "https://huggingface.co/Sokheng/anaksor-ocr/resolve/5c9f76c7ff6b5dd51c9e83c7ec69c63be5f5611d/khmer_det_repvit_db_latest.safetensors"
+    ]
+    assert path.parent.name == "5c9f76c7ff6b5dd51c9e83c7ec69c63be5f5611d"

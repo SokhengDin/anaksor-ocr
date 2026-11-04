@@ -4,6 +4,7 @@
 name: det-repvit-db-v3
 kind: det
 weights:
+  revision: 5c9f76c7ff6b5dd51c9e83c7ec69c63be5f5611d   # later commits don't have these files
   file: khmer_det_repvit_db_latest.safetensors     # as published (Hub commit 5c9f76c)
   sha256: 94d633392ec4be36b679a272bcb741524e003649bcdcbaf3b81ab77a504dca2c
   onnx: khmer_det_repvit_db_latest.onnx   # the default (torch-free) install runs this

@@ -1,4 +1,4 @@
-"""Text detection: DBNet (RepViT backbone) to line boxes."""
+"""Text detection: DBNet / DBNet++ to line boxes."""
 
 from __future__ import annotations
 
@@ -16,9 +16,9 @@ from .runtime import check_meta as _check_meta
 
 
 class Detector:
-    """DBNet text detector.
+    """DBNet / DBNet++ text detector.
 
-        det = Detector()                       # bundled det-repvit-db-v3, weights from the cache
+        det = Detector()                       # bundled det-repvit-dbpp-v1, weights from the cache
         det.detect(image)                      # {"boxes": [[[x, y] * 4], ...], "scores": [...], "time": s}
 
     limit_side_len: the long side is resized down to this. Small document text needs

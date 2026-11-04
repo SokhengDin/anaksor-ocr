@@ -5,7 +5,8 @@ Weights are resolved in this order:
 1. an explicit path (``OCR(det_weights=..., rec_weights=...)``);
 2. ``$ANAKSOR_WEIGHTS_DIR/<file>``;
 3. the cache, ``$ANAKSOR_HOME`` (default ``~/.cache/anaksor``), filled on first use by a
-   download from the Hugging Face repo ``$ANAKSOR_HF_REPO`` at ``$ANAKSOR_HF_REVISION``.
+   download from the Hugging Face repo ``$ANAKSOR_HF_REPO`` at ``$ANAKSOR_HF_REVISION``
+   (a spec's ``weights.revision``, when it has one, wins).
 
 A spec names a PyTorch weights file (``weights.file``) and, optionally, the exported ONNX
 graph (``weights.onnx``) for the onnx backend, each with its SHA-256. A file is only
@@ -32,19 +33,20 @@ from pathlib import Path
 
 import yaml
 
-DET_DEFAULT = "det-repvit-db-v3"
+DET_DEFAULT = "det-repvit-dbpp-v1"
 REC_DEFAULT = "rec-svtrv2-v4"
 _BUNDLED = {
-    DET_DEFAULT: "det_repvit_db_v3.yml",
+    DET_DEFAULT: "det_repvit_dbpp_v1.yml",
     REC_DEFAULT: "rec_svtrv2_v4.yml",
+    "det-repvit-db-v3": "det_repvit_db_v3.yml",  # pinned to its own Hub commit (weights.revision)
     "det-repvit-db-v2": "det_repvit_db_v2.yml",  # earlier models: their weights aren't published
     "rec-svtrv2-v3": "rec_svtrv2_v3.yml",
 }
 
 HF_ENDPOINT = "https://huggingface.co"
 HF_REPO = "Sokheng/anaksor-ocr"
-# The Hub commit of the rec v4 + det v3 release: its _latest files, never main's moving ones.
-HF_REVISION = "5c9f76c7ff6b5dd51c9e83c7ec69c63be5f5611d"
+# The Hub commit of the rec v4 + mobile DBNet++ release: its _latest files, never main's moving ones.
+HF_REVISION = "7b88e650814bb93a7a1b78524f980631d5806df8"
 
 
 def _hub() -> tuple[str, str, str]:
@@ -70,6 +72,7 @@ class ModelSpec:
     source: str = ""  # file the spec was read from
     onnx_file: str = ""  # exported graph for the onnx backend
     onnx_sha256: str | None = None
+    revision: str | None = None  # Hub commit of its files, when not the release's
 
     @property
     def architecture(self) -> dict:
@@ -82,7 +85,7 @@ def data_path(name: str) -> Path:
 
 
 def load_spec(name_or_path: str | os.PathLike | ModelSpec) -> ModelSpec:
-    """A bundled spec by name (``det-repvit-db-v3``, ``rec-svtrv2-v4``, or the earlier v2 / v3) or a spec YAML file."""
+    """A bundled spec by name (``det-repvit-dbpp-v1``, ``rec-svtrv2-v4``, or the earlier ones) or a spec YAML file."""
     if isinstance(name_or_path, ModelSpec):
         return name_or_path
     key = str(name_or_path)
@@ -102,6 +105,7 @@ def load_spec(name_or_path: str | os.PathLike | ModelSpec) -> ModelSpec:
         source=str(path),
         onnx_file=w.get("onnx", "") or "",
         onnx_sha256=w.get("onnx_sha256"),
+        revision=w.get("revision"),
     )
 
 
@@ -134,6 +138,7 @@ def resolve_weights(spec: ModelSpec, weights: str | os.PathLike | None = None, d
     if local and (Path(local).expanduser() / name).is_file():
         return Path(local).expanduser() / name
     endpoint, repo, revision = _hub()
+    revision = spec.revision or revision
     cached = cache_dir() / revision / name
     if cached.is_file():
         return cached

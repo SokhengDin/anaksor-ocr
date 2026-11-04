@@ -203,6 +203,10 @@ a.shot-link:hover .shot-meta { text-decoration: underline; }
 .panel h3 { margin: 0; font-size: 1.05rem; }
 .panel-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: .25rem 1rem; }
 .panel-head .meta { font-size: .875rem; color: var(--ink-soft); }
+.spinner { display: inline-block; width: .9em; height: .9em; margin-right: .45em; vertical-align: -.1em; border: 2px solid var(--hairline);
+           border-top-color: var(--jade); border-radius: 50%; animation: spin .8s linear infinite; }
+@media (prefers-reduced-motion: reduce) { .spinner { animation-duration: 2.4s; } }
+@keyframes spin { to { transform: rotate(360deg); } }
 .tools { display: flex; flex-wrap: wrap; gap: .5rem; }
 /* the result's buttons: an even grid instead of a ragged last row */
 .tools.exports { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 11.5rem), 1fr)); }

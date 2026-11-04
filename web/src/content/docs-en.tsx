@@ -3,6 +3,7 @@ import type { DocSection } from "@/components/Docs";
 import { BenchCharts } from "@/components/BenchCharts";
 import { Icon } from "@/components/Icon";
 import { REPO_URL } from "@/lib/config";
+import { fields, note, steps, tableWrap, tdNum } from "@/lib/ui";
 
 const cb = { copyLabel: "Copy code", copiedLabel: "Copied" };
 
@@ -27,7 +28,7 @@ export const sections: DocSection[] = [
           Needs Python 3.11 or newer. The model weights (about 95 MB for ONNX Runtime, 113 MB for PyTorch) download to <code>~/.cache/anaksor</code> the
           first time you read a page.
         </p>
-        <div className="table">
+        <div className={tableWrap}>
           <table>
             <thead>
               <tr>
@@ -123,7 +124,7 @@ export const sections: DocSection[] = [
               "width": 1654, "height": 2339
             }
           `} />
-        <dl className="fields">
+        <dl className={fields}>
           <dt>
             <code>text</code>
           </dt>
@@ -175,7 +176,7 @@ export const sections: DocSection[] = [
             paragraphs, and receipt prices aligned on a right tab stop. <code>highlight_low</code> marks lines read with low confidence.
           </li>
         </ul>
-        <div className="note">
+        <div className={note}>
           <Icon name="info" />
           <p>
             PDF pages are always rendered and read as images, never taken from the PDF&apos;s own text layer. Khmer PDFs often store text in legacy font
@@ -193,7 +194,7 @@ export const sections: DocSection[] = [
         <h3>
           When creating <code>anaksor.OCR(...)</code>
         </h3>
-        <div className="table">
+        <div className={tableWrap}>
           <table>
             <thead>
               <tr>
@@ -229,14 +230,14 @@ export const sections: DocSection[] = [
                 <td>
                   <code>pad_y</code>, <code>pad_x</code>
                 </td>
-                <td className="num">0.16, 0.10</td>
+                <td className={tdNum}>0.16, 0.10</td>
                 <td>Margin added around each line before it is read, as a fraction of the line height. Too little cuts off subscripts.</td>
               </tr>
               <tr>
                 <td>
                   <code>min_rec_score</code>
                 </td>
-                <td className="num">0.5</td>
+                <td className={tdNum}>0.5</td>
                 <td>Lines read with less confidence are left out</td>
               </tr>
               <tr>
@@ -254,7 +255,7 @@ export const sections: DocSection[] = [
         <h3>
           For one page: <code>ocr(image, ...)</code>
         </h3>
-        <div className="table">
+        <div className={tableWrap}>
           <table>
             <thead>
               <tr>
@@ -268,14 +269,14 @@ export const sections: DocSection[] = [
                 <td>
                   <code>unclip_ratio</code>
                 </td>
-                <td className="num">1.5</td>
+                <td className={tdNum}>1.5</td>
                 <td>How far detected boxes are grown; larger values join more text into one box</td>
               </tr>
               <tr>
                 <td>
                   <code>box_thresh</code>, <code>thresh</code>
                 </td>
-                <td className="num">0.5, 0.3</td>
+                <td className={tdNum}>0.5, 0.3</td>
                 <td>Detection confidence: per box, and per pixel</td>
               </tr>
               <tr>
@@ -311,7 +312,7 @@ export const sections: DocSection[] = [
             # download the weights ahead of time
             $ anaksor --fetch-models
           `} />
-        <div className="table">
+        <div className={tableWrap}>
           <table>
             <thead>
               <tr>
@@ -386,7 +387,7 @@ export const sections: DocSection[] = [
           accuracyNote="All accuracy numbers were measured on an NVIDIA GeForce RTX 5090 (32 GB)."
           speedNote="Speed was measured on an Apple M4 Max, once the models were loaded; your machine will differ."
         />
-        <div className="table">
+        <div className={tableWrap}>
           <table>
             <thead>
               <tr>
@@ -447,7 +448,7 @@ export const sections: DocSection[] = [
     body: (
       <>
         <p>Each model comes as two files. Only the one for your backend is downloaded:</p>
-        <div className="table">
+        <div className={tableWrap}>
           <table>
             <thead>
               <tr>
@@ -472,7 +473,7 @@ export const sections: DocSection[] = [
           </table>
         </div>
         <p>anaksor looks for them in this order and uses the first it finds:</p>
-        <ol className="steps">
+        <ol className={steps}>
           <li>
             a path you pass: <code>det_weights=</code> / <code>rec_weights=</code> (or <code>--det-weights</code> / <code>--rec-weights</code>);
           </li>

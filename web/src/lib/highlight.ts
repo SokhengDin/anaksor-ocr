@@ -91,7 +91,7 @@ const khmer: ShikiTransformer = {
       return child.value.split(KHMER_RUN).flatMap((part, i): ElementContent[] => {
         if (!part)     return [];
         if (i % 2 === 0) return [{ type: "text", value: part }];
-        return [{ type: "element", tagName: "span", properties: { className: ["km"], lang: "km" }, children: [{ type: "text", value: part }] }];
+        return [{ type: "element", tagName: "span", properties: { className: ["font-text"], lang: "km" }, children: [{ type: "text", value: part }] }];
       });
     });
   },
@@ -103,7 +103,7 @@ function prompts(lines: Set<number>): ShikiTransformer {
     name: "anaksor:prompts",
     line(node: Element, line: number) {
       if (lines.has(line)) {
-        node.children.unshift({ type: "element", tagName: "span", properties: { className: ["p"], ariaHidden: "true" }, children: [{ type: "text", value: "$ " }] });
+        node.children.unshift({ type: "element", tagName: "span", properties: { className: ["text-ink-soft", "select-none"], ariaHidden: "true" }, children: [{ type: "text", value: "$ " }] });
       }
     },
   };

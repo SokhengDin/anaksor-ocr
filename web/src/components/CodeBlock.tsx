@@ -11,21 +11,24 @@ export async function CodeBlock({
   caption,
   copyLabel,
   copiedLabel,
-  className,
+  slim = false,
 }: {
   code: string;
   lang: CodeLang;
   caption?: string;
   copyLabel: string;
   copiedLabel: string;
-  className?: string;
+  slim?: boolean;
 }) {
   const { html, text } = await highlight(code, lang);
+  const place = slim
+    ? "right-[.35rem] top-1/2 size-[1.9rem] -translate-y-1/2"
+    : `right-2 size-[2.2rem] ${caption ? "top-[2.15rem]" : "top-2"}`;
   return (
-    <figure className={`code${className ? ` ${className}` : ""}`}>
-      {caption ? <figcaption>{caption}</figcaption> : null}
+    <figure className={`relative ${slim ? "m-0 min-w-[min(100%,17rem)] [&_pre]:text-[.875rem] [&_pre]:py-[.6rem] [&_pre]:pr-11" : "mb-5"}`}>
+      {caption ? <figcaption className="text-[.9rem] text-ink-soft mb-[.35rem]">{caption}</figcaption> : null}
       <div dangerouslySetInnerHTML={{ __html: html }} />
-      <CopyButton text={text} copyLabel={copyLabel} copiedLabel={copiedLabel} />
+      <CopyButton text={text} copyLabel={copyLabel} copiedLabel={copiedLabel} className={place} />
     </figure>
   );
 }

@@ -24,12 +24,16 @@ export function Toc({ items, label }: { items: { id: string; title: string }[]; 
   }, [items]);
 
   return (
-    <nav className="toc" aria-label={label}>
-      <p>{label}</p>
-      <ol>
+    <nav className="sticky top-20 self-start text-[.95rem] max-md:hidden" aria-label={label}>
+      <p className="mb-2 text-ink-soft">{label}</p>
+      <ol className="list-none m-0 p-0 border-l border-hairline">
         {items.map((i) => (
           <li key={i.id}>
-            <a href={`#${i.id}`} aria-current={current === i.id ? "true" : undefined}>
+            <a
+              className="block py-[.3rem] pl-4 -ml-px border-l-2 border-transparent text-ink no-underline hover:text-jade-deep aria-[current=true]:border-l-jade aria-[current=true]:text-jade-deep aria-[current=true]:font-bold"
+              href={`#${i.id}`}
+              aria-current={current === i.id ? "true" : undefined}
+            >
               {i.title}
             </a>
           </li>

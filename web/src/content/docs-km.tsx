@@ -2,6 +2,7 @@ import { BenchCharts } from "@/components/BenchCharts";
 import { CodeBlock, dedent } from "@/components/CodeBlock";
 import type { DocSection } from "@/components/Docs";
 import { REPO_URL } from "@/lib/config";
+import { steps, tableWrap, tdNum } from "@/lib/ui";
 
 const cb = { copyLabel: "ចម្លងកូដ", copiedLabel: "បានចម្លង" };
 
@@ -26,7 +27,7 @@ export const sections: DocSection[] = [
           ត្រូវការ Python 3.11 ឬថ្មីជាងនេះ។ Weights របស់ម៉ូដែល (ប្រហែល 95 MB សម្រាប់ ONNX Runtime និង 113 MB សម្រាប់ PyTorch) ត្រូវបានទាញយកទៅ{" "}
           <code>~/.cache/anaksor</code> នៅពេលអ្នកអានទំព័រដំបូង។
         </p>
-        <div className="table">
+        <div className={tableWrap}>
           <table>
             <thead>
               <tr>
@@ -148,7 +149,7 @@ export const sections: DocSection[] = [
         <h3>
           ពេលបង្កើត <code>anaksor.OCR(...)</code>
         </h3>
-        <div className="table">
+        <div className={tableWrap}>
           <table>
             <thead>
               <tr>
@@ -184,14 +185,14 @@ export const sections: DocSection[] = [
                 <td>
                   <code>pad_y</code>, <code>pad_x</code>
                 </td>
-                <td className="num">0.16, 0.10</td>
+                <td className={tdNum}>0.16, 0.10</td>
                 <td>គែមដែលបន្ថែមជុំវិញបន្ទាត់ពាក្យនីមួយៗមុនពេលអាន ជាប្រភាគនៃកម្ពស់បន្ទាត់។ តិចពេក នឹងអាចកាត់ជើងអក្សរ។</td>
               </tr>
               <tr>
                 <td>
                   <code>min_rec_score</code>
                 </td>
-                <td className="num">0.5</td>
+                <td className={tdNum}>0.5</td>
                 <td>អប្បរមាប្រសិទ្ធភាព</td>
               </tr>
               <tr>
@@ -209,7 +210,7 @@ export const sections: DocSection[] = [
         <h3>
           សម្រាប់ទំព័រមួយ៖ <code>ocr(image, ...)</code>
         </h3>
-        <div className="table">
+        <div className={tableWrap}>
           <table>
             <thead>
               <tr>
@@ -223,14 +224,14 @@ export const sections: DocSection[] = [
                 <td>
                   <code>unclip_ratio</code>
                 </td>
-                <td className="num">1.5</td>
+                <td className={tdNum}>1.5</td>
                 <td>ប្រអប់ដែលរកឃើញត្រូវបានពង្រីកប៉ុណ្ណា; តម្លៃធំ អាចភ្ជាប់អត្ថបទច្រើនចូលគ្នា ជាប្រអប់តែមួយ</td>
               </tr>
               <tr>
                 <td>
                   <code>box_thresh</code>, <code>thresh</code>
                 </td>
-                <td className="num">0.5, 0.3</td>
+                <td className={tdNum}>0.5, 0.3</td>
                 <td>ភាពជឿជាក់នៃការរកឃើញ៖ ក្នុងមួយប្រអប់ និងក្នុងមួយភីកសែល</td>
               </tr>
               <tr>
@@ -266,7 +267,7 @@ export const sections: DocSection[] = [
             # download weights ទុកជាមុន
             $ anaksor --fetch-models
           `} />
-        <div className="table">
+        <div className={tableWrap}>
           <table>
             <thead>
               <tr>
@@ -341,7 +342,7 @@ export const sections: DocSection[] = [
           accuracyNote="លេខភាពត្រឹមត្រូវទាំងអស់ ត្រូវបានវាស់លើ NVIDIA GeForce RTX 5090 (32 GB)។"
           speedNote="ល្បឿនត្រូវបានវាស់លើ Apple M4 Max បន្ទាប់ពីម៉ូដែលត្រូវបាន load រួច។ ម៉ាស៊ីនរបស់អ្នកអាចខុសពីនេះ។"
         />
-        <div className="table">
+        <div className={tableWrap}>
           <table>
             <thead>
               <tr>
@@ -405,7 +406,7 @@ export const sections: DocSection[] = [
           ម៉ូដែលនីមួយៗមានឯកសារពីរប្រភេទ៖ ONNX graph (<code>.onnx</code> សម្រាប់ ONNX Runtime) និង PyTorch weights (<code>.safetensors</code>)។
           anaksor ទាញយកតែឯកសារដែល backend របស់អ្នកត្រូវការប៉ុណ្ណោះ ហើយស្វែងរកវាតាមលំដាប់ខាងក្រោម៖
         </p>
-        <ol className="steps">
+        <ol className={steps}>
           <li>
             path ដែលអ្នកបានកំណត់ផ្ទាល់ (<code>det_weights=</code> / <code>rec_weights=</code> ឬ <code>--det-weights</code> /{" "}
             <code>--rec-weights</code>);

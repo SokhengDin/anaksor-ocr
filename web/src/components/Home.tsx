@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { type Dict, localePath } from "@/i18n";
+import { hint, tableWrap, wrap } from "@/lib/ui";
 import { CodeBlock, dedent } from "./CodeBlock";
 import { Demo } from "./Demo";
 import { HeroName } from "./HeroName";
@@ -10,6 +11,8 @@ import { SiteFooter } from "./SiteFooter";
 import { SiteHeader } from "./SiteHeader";
 import { StructuredData } from "./StructuredData";
 
+const band = "py-12 border-t border-hairline";
+
 export function Home({ t }: { t: Dict }) {
   const copy = { copyLabel: t.copyCode, copiedLabel: t.copiedCode };
   return (
@@ -17,14 +20,17 @@ export function Home({ t }: { t: Dict }) {
       <StructuredData t={t} />
       <SiteHeader t={t} page="home" />
       <main id="content">
-        <div className="wrap hero">
-          <div className="hero-text">
+        <div
+          data-hero=""
+          className={`${wrap} group/hero grid grid-cols-[minmax(0,1fr)_minmax(0,26rem)] gap-10 items-start pt-7 pb-6 max-lg:grid-cols-[minmax(0,1fr)] max-lg:gap-6 max-md:pt-11`}
+        >
+          <div>
             <HeroName />
-            <p className="reading">{t.hero.reading}</p>
-            <p className="lead">{t.hero.lead}</p>
-            <div className="actions">
-              <CodeBlock lang="bash" className="install" {...copy} code="$ pip install anaksor-ocr" />
-              <Link href={localePath(t.lang, "/docs/")}>
+            <p className="mt-[.6rem] mb-0 text-ink-soft text-[.95rem]">{t.hero.reading}</p>
+            <p className="max-w-[42ch] mt-[.9rem] mb-5 text-[clamp(1.05rem,1.8vw,1.25rem)]/[1.6] km:leading-[1.85] km:max-w-[38ch]">{t.hero.lead}</p>
+            <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
+              <CodeBlock lang="bash" slim {...copy} code="$ pip install anaksor-ocr" />
+              <Link className="inline-flex items-center gap-[.45rem] text-[.95rem]" href={localePath(t.lang, "/docs/")}>
                 <Icon name="file" />
                 {t.hero.readDocs}
               </Link>
@@ -36,22 +42,22 @@ export function Home({ t }: { t: Dict }) {
         {/* The upload comes right after the hero: most visitors come to read a page. */}
         <Demo lang={t.lang} />
 
-        <section className="band" aria-labelledby="h-features">
-          <div className="wrap">
+        <section className={band} data-testid="band" aria-labelledby="h-features">
+          <div className={wrap}>
             <h2 id="h-features">{t.features.title}</h2>
-            <dl className="features">
+            <dl className="grid grid-cols-2 gap-x-12 gap-y-6 m-0 max-md:grid-cols-1">
               {t.features.items.map((f) => (
-                <div key={f.term}>
-                  <dt>{f.term}</dt>
-                  <dd>{f.text}</dd>
+                <div key={f.term} className="pl-4 border-l-2 border-jade">
+                  <dt className="font-bold text-[1.1rem] mb-[.2rem]">{f.term}</dt>
+                  <dd className="m-0 text-ink-soft">{f.text}</dd>
                 </div>
               ))}
             </dl>
           </div>
         </section>
 
-        <section className="band" aria-labelledby="h-quickstart">
-          <div className="wrap two">
+        <section className={band} data-testid="band" aria-labelledby="h-quickstart">
+          <div className={`${wrap} grid grid-cols-2 gap-10 items-start max-lg:grid-cols-1 max-lg:gap-4`}>
             {t.accuracy ? <Accuracy accuracy={t.accuracy} /> : <QuickstartText t={t} />}
             <div>
               {t.accuracy ? <QuickstartText t={t} /> : null}
@@ -99,7 +105,7 @@ function Accuracy({ accuracy }: { accuracy: NonNullable<Dict["accuracy"]> }) {
   return (
     <div>
       <h2>{accuracy.title}</h2>
-      <div className="table">
+      <div className={tableWrap}>
         <table>
           <thead>
             <tr>
@@ -119,7 +125,7 @@ function Accuracy({ accuracy }: { accuracy: NonNullable<Dict["accuracy"]> }) {
           </tbody>
         </table>
       </div>
-      <p className="hint">{accuracy.note}</p>
+      <p className={hint}>{accuracy.note}</p>
     </div>
   );
 }

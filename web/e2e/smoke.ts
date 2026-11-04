@@ -84,6 +84,14 @@ function check(name: string, ok: boolean | undefined, extra = "") {
   console.log(`${ok ? "PASS" : "FAIL"}  ${name}${extra ? `  (${extra})` : ""}`);
 }
 
+const VIEWER     = "[data-testid=viewer]";
+const LINE       = `${VIEWER} [data-testid=line]`;
+const BOX        = `${LINE} polygon`;
+const ROWS       = "[data-testid=lines] > li";
+const ROW        = "[data-testid=line-row]";
+const FULLTEXT   = "[data-testid=fulltext]";
+const BAND_TABLE = "[data-testid=band] table";
+
 const browser = await chromium.launch();
 try {
   const ctx           = await browser.newContext({ acceptDownloads: true, viewport: { width: 1360, height: 1000 } });
@@ -100,43 +108,42 @@ try {
 
   // Khmer landing page with the sample result
   await page.goto(`${BASE}/`);
-  await page.waitForSelector(".viewer .line polygon");
+  await page.waitForSelector(BOX);
   check("html lang is km", (await page.getAttribute("html", "lang")) === "km");
   check("result opens as text, page without numbers",
-    (await page.locator(".fulltext").count()) === 1 && (await page.locator(".viewer .num").count()) === 0);
+    (await page.locator(FULLTEXT).count()) === 1 && (await page.locator(`${VIEWER} [data-testid=line-marker]`).count()) === 0);
   await page.click('button[aria-pressed]:has-text("បន្ទាត់")');
   check("sample: 11 boxes and 11 rows",
-    (await page.locator(".viewer g.line").count()) === 11 && (await page.locator(".lines li").count()) === 11);
-  await page.waitForSelector('.status[data-state="ok"]', { timeout: 10000 });
-  check("API status: ready", (await page.textContent(".status"))?.includes("រួចរាល់"));
-  check("line numbers in Khmer digits", (await page.textContent(".lines li:nth-child(11) .line-num"))?.trim() === "១១");
+    (await page.locator(LINE).count()) === 11 && (await page.locator(ROWS).count()) === 11);
+  await page.waitForSelector('[role=status][data-state="ok"]', { timeout: 10000 });
+  check("API status: ready", (await page.textContent("[role=status]"))?.includes("រួចរាល់"));
+  check("line numbers in Khmer digits", (await page.textContent(`${ROWS}:nth-child(11) [data-testid=line-num]`))?.trim() === "១១");
 
-  await page.hover(".lines li:nth-child(3) .line-row");
-  check("hovering row 3 highlights box 3",
-    await page.locator(".viewer g.line").nth(2).evaluate((g) => g.classList.contains("active")));
-  await page.locator(".viewer g.line").nth(6).locator("polygon").first().hover({ force: true });
+  await page.hover(`${ROWS}:nth-child(3) ${ROW}`);
+  check("hovering row 3 highlights box 3", (await page.locator(LINE).nth(2).getAttribute("data-active")) === "");
+  await page.locator(LINE).nth(6).locator("polygon").first().hover({ force: true });
   check("hovering box 7 highlights row 7",
-    (await page.locator(".lines li:nth-child(7) .line-row").getAttribute("data-active")) === "");
+    (await page.locator(`${ROWS}:nth-child(7) ${ROW}`).getAttribute("data-active")) === "");
 
   // the rest of the Khmer page: real pages, no accuracy table, highlighted code
-  check("hero: 3 real-page prints", (await page.locator(".hero-shots > li").count()) === 3);
-  check("hero: the prints show their detected lines", (await page.locator(".shot-photo polygon").count()) > 50);
+  check("hero: 3 real-page prints", (await page.locator("[data-testid=shots] > li").count()) === 3);
+  check("hero: the prints show their detected lines", (await page.locator("[data-testid=shots] polygon").count()) > 50);
   // a print opens in the demo with its recorded result (no API call)
   const receiptLines = (JSON.parse(readFileSync(join(web, "public/showcase/receipt.json"), "utf8")) as { lines: unknown[] }).lines.length;
-  await page.click(".shot-receipt a.shot-link");
-  await page.waitForFunction((n) => document.querySelectorAll(".lines li").length === n, receiptLines, { timeout: 5000 });
-  check(`print opens in the demo: receipt, ${receiptLines} rows`, /\/showcase\/receipt\.jpg\?v=[0-9a-f]{12}$/.test((await page.locator(".viewer img").getAttribute("src")) ?? ""));
-  check("Khmer page has no accuracy table", (await page.locator("#h-features ~ * table, .band table").count()) === 0);
+  await page.click("[data-testid=shot-receipt] [data-testid=shot-link]");
+  await page.waitForFunction(([sel, n]) => document.querySelectorAll(sel as string).length === n, [ROWS, receiptLines] as const, { timeout: 5000 });
+  check(`print opens in the demo: receipt, ${receiptLines} rows`, /\/showcase\/receipt\.jpg\?v=[0-9a-f]{12}$/.test((await page.locator(`${VIEWER} img`).getAttribute("src")) ?? ""));
+  check("Khmer page has no accuracy table", (await page.locator(BAND_TABLE).count()) === 0);
   check("code is highlighted", (await page.locator("pre.shiki span[style*=color]").count()) > 5);
 
   // reading an image, then its text and downloads
   await page.setInputFiles('input[type="file"]', SAMPLE);
-  await page.waitForSelector(".sample-note", { state: "detached", timeout: 10000 });
-  await page.waitForSelector(".viewer .line polygon", { timeout: 60000 });
-  check("uploaded image: result shown", (await page.locator(".lines li").count()) > 0);
+  await page.waitForSelector("[data-testid=sample-note]", { state: "detached", timeout: 10000 });
+  await page.waitForSelector(BOX, { timeout: 60000 });
+  check("uploaded image: result shown", (await page.locator(ROWS).count()) > 0);
 
   await page.click('button[aria-pressed]:has-text("អត្ថបទ")');
-  check("text view shows the page text", (await page.textContent(".fulltext"))?.includes("ព្រះរាជាណាចក្រកម្ពុជា"));
+  check("text view shows the page text", (await page.textContent(FULLTEXT))?.includes("ព្រះរាជាណាចក្រកម្ពុជា"));
   await page.click('button[aria-pressed]:has-text("បន្ទាត់")');
 
   const [txt] = await Promise.all([page.waitForEvent("download"), page.click('button:has-text("ទាញយក .txt")')]);
@@ -146,31 +153,31 @@ try {
 
   // a PDF streams page by page
   await page.setInputFiles('input[type="file"]', { name: "two-pages.pdf", mimeType: "application/pdf", buffer: blankPdf(2) });
-  await page.waitForFunction(() => document.querySelectorAll(".pages button").length === 2, null, { timeout: 60000 });
+  await page.waitForFunction(() => document.querySelectorAll("[data-testid=pages] button").length === 2, null, { timeout: 60000 });
   await page.waitForSelector('button:has-text("បញ្ឈប់")', { state: "detached", timeout: 60000 });
-  check("PDF: two streamed pages", (await page.locator(".pages button").count()) === 2);
+  check("PDF: two streamed pages", (await page.locator("[data-testid=pages] button").count()) === 2);
 
   // errors are explained
   await page.setInputFiles('input[type="file"]', { name: "notes.txt", mimeType: "text/plain", buffer: Buffer.from("hello") });
-  check("unsupported file explained", (await page.textContent(".notice.error"))?.includes("សូមជ្រើសរើសរូបភាព"));
+  check("unsupported file explained", (await page.textContent("[role=alert]"))?.includes("សូមជ្រើសរើសរូបភាព"));
   await page.route("**/ocr?**", (r) => r.fulfill({ status: 429, contentType: "application/json", body: '{"detail":"Too many"}' }));
   await page.setInputFiles('input[type="file"]', SAMPLE);
-  await page.waitForSelector(".notice.error", { timeout: 10000 });
-  check("429 explained", (await page.textContent(".notice.error"))?.includes("សំណើច្រើនពេក"));
+  await page.waitForSelector("[role=alert]", { timeout: 10000 });
+  check("429 explained", (await page.textContent("[role=alert]"))?.includes("សំណើច្រើនពេក"));
   await page.unroute("**/ocr?**");
 
   // English and the docs
   await page.goto(`${BASE}/en/`);
-  await page.waitForSelector(".viewer .line polygon");
+  await page.waitForSelector(BOX);
   check("English page", (await page.getAttribute("html", "lang")) === "en" && (await page.textContent("#h-demo")) === "Read a page");
-  check("English page has the accuracy table", (await page.locator(".band table").count()) === 1);
+  check("English page has the accuracy table", (await page.locator(BAND_TABLE).count()) === 1);
   for (const [path, h1] of [["/docs/", "ឯកសារណែនាំ"], ["/en/docs/", "Documentation"]] as const) {
     await page.goto(`${BASE}${path}`);
-    check(`docs ${path}`, (await page.textContent("h1")) === h1 && (await page.locator(".doc section").count()) > 0);
+    check(`docs ${path}`, (await page.textContent("h1")) === h1 && (await page.locator("[data-testid=doc-section]").count()) > 0);
   }
   check("Khmer in code is set in Battambang",
-    await page.locator("pre .km").first().evaluate((el) => getComputedStyle(el).fontFamily.toLowerCase().includes("battambang")));
-  await page.locator("#install .copy").first().click();
+    await page.locator("pre [lang=km]").first().evaluate((el) => getComputedStyle(el).fontFamily.toLowerCase().includes("battambang")));
+  await page.locator("#install [data-testid=copy]").first().click();
   const copied = await page.evaluate(() => navigator.clipboard.readText());
   check("copy leaves out the $ prompts", copied.includes("pip install anaksor-ocr") && !copied.includes("$ "), JSON.stringify(copied.slice(0, 60)));
 

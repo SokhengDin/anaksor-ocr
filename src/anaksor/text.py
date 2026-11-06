@@ -13,11 +13,11 @@ through `normalize()` to one canonical spelling.
 import re
 import unicodedata
 
-# ── code points ──────────────────────────────────────────────────────────────
+# ── code points
 COENG = "្"
 RO = "រ"
 ROBAT = "៌"
-SHIFTERS = {"៉", "៊"}  # muusikatoan, triisap
+SHIFTERS = {"៉", "៊"}  # triisap
 DEP_VOWELS = {chr(c) for c in range(0x17B6, 0x17C6)}  # ា .. ៅ
 SIGNS = {chr(c) for c in (0x17C6, 0x17C7, 0x17C8, 0x17CB, 0x17CD, 0x17CE, 0x17CF, 0x17D0, 0x17D1, 0x17D3, 0x17DD)}
 CONSONANTS = {chr(c) for c in range(0x1780, 0x17A3)}
@@ -35,9 +35,9 @@ _VOWEL_COMPOSE = {
 _INVISIBLE = dict.fromkeys(map(ord, "​‌‍⁠﻿­឴឵"), None)
 
 _CHAR_MAP = {
-    "ឣ": "អ",  # deprecated ឣ → អ
-    "ឤ": "អា",  # deprecated ឤ → អា
-    "៘": "។ល។",  # deprecated ៘ → ។ល។
+    "ឣ": "អ",  # deprecated ឣ -> អ
+    "ឤ": "អា",  # deprecated ឤ -> អា
+    "៘": "។ល។",  # deprecated ៘ -> ។ល។
     " ": " ",
     " ": " ",
     " ": " ",
@@ -62,7 +62,7 @@ _CHAR_MAP = {
     "‒": "-",
     "−": "-",
     "·": "•",
-    "●": "•",  # middle dot / black circle → bullet
+    "●": "•",  # middle dot / black circle -> bullet
     "…": "...",
 }
 _CHAR_TABLE = str.maketrans(_CHAR_MAP)
@@ -167,7 +167,7 @@ def normalize(text: str, unify_da: bool = True) -> str:
     if not text:
         return ""
     text = unicodedata.normalize("NFC", text)
-    # fullwidth ASCII (common in scraped CJK-adjacent data) → ASCII
+    # fullwidth ASCII (common in scraped CJK-adjacent data) -> ASCII
     text = "".join(chr(ord(c) - 0xFEE0) if "！" <= c <= "～" else c for c in text)
     text = text.translate(_INVISIBLE).translate(_CHAR_TABLE)
     if any(_is_khmer(c) for c in text):

@@ -47,7 +47,7 @@ def layout(items: list[dict]) -> list[list[dict]]:
     return _paragraphs(lines)
 
 
-# ── regions (XY-cut) ─────────────────────────────────────────────────────────
+# ── regions (XY-cut)
 def _gaps(lo, hi):
     """Empty intervals of a projection [(gap, cut position)], largest first."""
     order = np.argsort(lo)
@@ -118,7 +118,7 @@ def _regions(items, mh, depth=0):
     return [items]
 
 
-# ── lines ────────────────────────────────────────────────────────────────────
+# ── lines
 def _vertical_overlap(a, b) -> float:
     """Overlap of y-ranges relative to the smaller height."""
     inter = min(a[3], b[3]) - max(a[1], b[1])
@@ -189,7 +189,7 @@ def _line(boxes) -> dict:
     }
 
 
-# ── paragraphs ───────────────────────────────────────────────────────────────
+# ── paragraphs
 def _paragraphs(lines):
     """Consecutive lines (reading order) to paragraphs."""
     blocks = []

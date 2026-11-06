@@ -63,7 +63,7 @@ class OCR:
         self.try_vertical = try_vertical
         self.try_180 = try_180
 
-    # ── recognition of the detected boxes ───────────────────────────────────
+    # ── recognition of the detected boxes
     def _crops(self, img, quads, pad_y, pad_x):
         """[(line index, orientation, windows, stitches)] to recognise."""
         jobs = []
@@ -109,7 +109,7 @@ class OCR:
                 out[li] = ((text, score, name), key)
         return {li: v for li, (v, _) in out.items()}
 
-    # ── one image ───────────────────────────────────────────────────────────
+    # ── one image
     def __call__(
         self, image, *, box_thresh=None, thresh=None, unclip_ratio=None, scales=(1.0,), min_rec_score=None, pad_y=None, pad_x=None
     ) -> dict:
@@ -143,7 +143,7 @@ class OCR:
         )
         return result
 
-    # ── documents ───────────────────────────────────────────────────────────
+    # ── documents
     def read_pdf(
         self, src, pages=None, dpi: int = PDF_DPI, password: str | None = None, keep_images: bool = False, **kwargs
     ) -> Iterator[dict]:

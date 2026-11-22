@@ -24,7 +24,7 @@ server-side calls to other containers.
      directory, the deploy user also needs to pass through it: `sudo setfacl -m u:deploy:x /home/<user>`.
    - It keeps the compose project of the running `anaksor-web` container, so the first deploy replaces it.
    - It refuses a user that already serves another gate (e.g. my-website's `deploy` on the same server): use
-     `--user anaksor-deploy` there.
+     `--user anaksor-deploy` there. A user it creates has `/var/lib/anaksor-deploy` as its home, nothing in `/home`.
    - The production settings go in `<checkout>/web/.env` (optional; owner deploy, mode 600).
 4. In GitHub > Settings > Environments, create `production`. Restrict it to `master`. Add these secrets:
 

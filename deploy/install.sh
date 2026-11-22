@@ -56,7 +56,7 @@ fi
 
 say "user $DEPLOY_USER"
 if ! id "$DEPLOY_USER" >/dev/null 2>&1; then
-  useradd --system --create-home --shell /bin/bash "$DEPLOY_USER"
+  useradd --system --home-dir "$STATE_DIR" --no-create-home --shell /bin/bash "$DEPLOY_USER"
 fi
 passwd -l "$DEPLOY_USER" >/dev/null
 usermod -aG docker "$DEPLOY_USER"

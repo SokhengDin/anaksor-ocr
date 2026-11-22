@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: [master]
+    branches: [master, main]
   pull_request:
   schedule:
     - cron: "17 5 * * 1"          # weekly: new advisories against unchanged dependencies
@@ -13,7 +13,8 @@ permissions:
 
 concurrency:
   group: ci-${{ github.ref }}
-  cancel-in-progress: true
+  # Never cancel a run on the default branch: it may be deploying.
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   test:
@@ -81,3 +82,114 @@ jobs:
         with:
           name: dist
           path: dist/
+
+  web:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: web
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+        with:
+          bun-version-file: web/package.json
+      - run: bun install --frozen-lockfile --ignore-scripts
+      - run: bun run lint
+      - run: bun run typecheck
+      - run: bun run build:local   # the smoke test's mock API is on the site's own origin
+        env:
+          NEXT_TELEMETRY_DISABLED: "1"
+      - run: bunx playwright install --with-deps chromium-headless-shell
+      - run: bun run e2e
+      - name: The production build too
+        run: bun run build && test -f .next/standalone/server.js
+        env:
+          NEXT_TELEMETRY_DISABLED: "1"
+
+  scan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      OSV_VERSION: v2.7.0
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Install osv-scanner (checksum-verified)
+        run: |
+          base=https://github.com/google/osv-scanner/releases/download/$OSV_VERSION
+          curl -fsSLO "$base/osv-scanner_linux_amd64"
+          curl -fsSLO "$base/osv-scanner_SHA256SUMS"
+          grep ' osv-scanner_linux_amd64$' osv-scanner_SHA256SUMS | sha256sum -c
+          install -m 755 osv-scanner_linux_amd64 /usr/local/bin/osv-scanner
+          rm osv-scanner_linux_amd64 osv-scanner_SHA256SUMS
+      # Known CVEs in every Python and npm package; a finding of CVSS >= MIN_CVSS (or unscored) blocks the deploy.
+      - name: Scan dependencies
+        env:
+          MIN_CVSS: "5"
+        run: |
+          mkdir -p osv-report
+          set +e
+          osv-scanner scan source --lockfile uv.lock --lockfile web/bun.lock \
+            --format json --output-file osv-report/osv.json
+          code=$?
+          osv-scanner scan source --lockfile uv.lock --lockfile web/bun.lock \
+            --format markdown --output-file osv-report/osv.md
+          set -e
+          cat osv-report/osv.md >> "$GITHUB_STEP_SUMMARY"
+          # 0 clean, 1 vulnerabilities found, anything else the scan itself failed.
+          [ "$code" -le 1 ] || exit "$code"
+          # Go advisories in code that is never called are skipped, as osv-scanner itself does.
+          jq -r --argjson min "$MIN_CVSS" '
+            .results[]?.packages[]? as $p | $p.groups[]?
+            | select([.ids[] as $id | .experimental_analysis[$id].called] | any(. == false) | not)
+            | select(.max_severity == "" or (.max_severity | tonumber) >= $min)
+            | "\(.ids | join(",")) \($p.package.name)@\($p.package.version) cvss=\(if .max_severity == "" then "unknown" else .max_severity end)"
+          ' osv-report/osv.json > osv-report/blocking.txt
+          if [ -s osv-report/blocking.txt ]; then
+            echo "::error::Vulnerabilities at CVSS >= $MIN_CVSS (see the osv-report artifact):"
+            cat osv-report/blocking.txt
+            exit 1
+          fi
+          echo "No vulnerability at CVSS >= $MIN_CVSS."
+      - name: Upload report
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: osv-report
+          path: osv-report/
+          if-no-files-found: ignore
+          retention-days: 30
+
+  deploy:
+    needs: [test, lint, audit, build, web, scan]
+    if: github.event_name == 'push' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
+    runs-on: ubuntu-latest
+    environment: production
+    timeout-minutes: 40
+    concurrency:
+      group: deploy-production
+      cancel-in-progress: false
+    steps:
+      - name: Deploy over SSH
+        env:
+          SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+          SSH_KNOWN_HOSTS: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
+          SSH_HOST: ${{ secrets.DEPLOY_HOST }}
+          SSH_PORT: ${{ secrets.DEPLOY_PORT }}
+          SSH_USER: ${{ secrets.DEPLOY_USER }}
+        run: |
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$SSH_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          printf '%s\n' "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+          ssh -i ~/.ssh/deploy_key -p "${SSH_PORT:-22}" \
+            -o IdentitiesOnly=yes -o BatchMode=yes -o StrictHostKeyChecking=yes \
+            -o ServerAliveInterval=30 -o ServerAliveCountMax=6 \
+            "$SSH_USER@$SSH_HOST" "deploy $GITHUB_SHA"
+      - name: Remove key
+        if: always()
+        run: rm -f ~/.ssh/deploy_key

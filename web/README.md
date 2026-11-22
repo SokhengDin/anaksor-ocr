@@ -93,10 +93,10 @@ The demo uses `GET /health`, `POST /ocr?return_image=true`, `POST /ocr/pdf?previ
 
 ## Deploying
 
-A push to `main` deploys the site: the `web` workflow checks it, then the server builds that commit as the
-`anaksor-web` Docker image and swaps the container behind ocr.sokhengdin.dev. Setup, secrets and what keeps it
-safe: [`deploy/README.md`](deploy/README.md). To run the production image on your machine:
-`docker compose up -d --build` here, then http://127.0.0.1:8088.
+A push to `master` deploys the site: the `CI` workflow checks it, then the server checks out that commit, builds
+the `anaksor-web` Docker image and swaps the container behind ocr.sokhengdin.dev. Setup, secrets and what keeps
+it safe: [`../deploy/README.md`](../deploy/README.md). To run the production image on your machine:
+`docker network create proxy_network` (once), `docker compose up -d --build` here, then http://127.0.0.1:8088.
 The demo calls the OCR API at `https://ocr-api.sokhengdin.dev` (Alpha-OCR's `app.py`), which answers only the
 origins in its `ALLOWED_ORIGINS`. A site on another address needs both: `NEXT_PUBLIC_API_URL` here, and its
 origin in the API's `ALLOWED_ORIGINS`.

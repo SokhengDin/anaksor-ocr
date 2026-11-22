@@ -1,4 +1,4 @@
-# Advisories the `scan` job in .github/workflows/web.yml lets through; osv-scanner reads this
+# Advisories the `scan` job in .github/workflows/ci.yml lets through; osv-scanner reads this
 # file because it sits next to bun.lock. Each one needs a reason and an expiry date: after
 # `ignoreUntil` it blocks CI again, so it gets looked at again.
 

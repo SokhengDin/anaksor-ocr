@@ -29,3 +29,8 @@ services:
         max-file: "3"
 
     restart: always
+    networks: [proxy_network]
+
+networks:
+  proxy_network:
+    external: true

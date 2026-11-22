@@ -12,3 +12,4 @@ weights/
 *.pth
 *.safetensors
 .tmp/
+.DS_Store
